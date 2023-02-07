@@ -28,10 +28,10 @@
 #include "ScriptParser.h"
 #include "DirtyRect.h"
 #include "ButtonLink.h"
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include "renderer/gles_renderer.h"
 
 #if defined(USE_SMPEG)
@@ -85,7 +85,7 @@ public:
     void setDLLFile(const char *filename);
     void setArchivePath(const char *path);
     void setSaveDir(const char *path);
-    void setFullscreenMode();
+    void setFullscreenMode(int mode=0);
     void setWindowMode();
     void setVsyncOff();
     void setFontCache();
@@ -337,6 +337,7 @@ private:
     char *wm_icon_string;
     char wm_edit_string[256];
     bool fullscreen_mode;
+    bool stretch_mode;
     bool window_mode;
 
     // start-up options

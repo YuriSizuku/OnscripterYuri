@@ -47,6 +47,27 @@ namespace utils{
 	inline void printInfo(const char *format, ...){
 		va_list ap;
 		va_start(ap, format);
+#ifdef USE_FILELOG
+		static int isfirst = 1;
+		FILE *fp = NULL;
+		if(isfirst)
+		{
+			fp = fopen("stdout.txt", "w");
+			isfirst = 0;
+		}
+		else
+		{
+			fp = fopen("stdout.txt", "a");
+		}		
+		if(fp)
+		{
+			va_list ap2;
+			va_copy(ap2, ap);
+			vfprintf(fp, format, ap2);
+			va_end(ap2);
+			fclose(fp);
+		}
+#endif
 #ifdef ANDROID
 		__android_log_vprint(ANDROID_LOG_VERBOSE, "Info", format, ap);
 #elif defined(WINRT)
@@ -56,7 +77,7 @@ namespace utils{
 		MByteToWChar(buf, wstr, 256);
 		OutputDebugString(wstr);
 #else
-		vprintf(format, ap);
+		vfprintf(stdout, format, ap);
 #endif
 		va_end(ap);
 	}
@@ -64,6 +85,27 @@ namespace utils{
 	inline void printError(const char *format, ...){
 		va_list ap;
 		va_start(ap, format);
+#ifdef USE_FILELOG
+		static int isfirst = 1;
+		FILE *fp = NULL;
+		if(isfirst)
+		{
+			fp = fopen("stderr.txt", "w");
+			isfirst = 0;
+		}
+		else
+		{
+			fp = fopen("stderr.txt", "a");
+		}		
+		if(fp)
+		{
+			va_list ap2;
+			va_copy(ap2, ap);
+			vfprintf(fp, format, ap2);
+			va_end(ap2);
+			fclose(fp);
+		}
+#endif
 #ifdef ANDROID
 		__android_log_vprint(ANDROID_LOG_ERROR, "ERR", format, ap);
 #elif defined(WINRT)

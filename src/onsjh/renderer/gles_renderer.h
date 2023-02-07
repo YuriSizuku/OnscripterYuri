@@ -19,8 +19,17 @@
 *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #pragma once
-#include <SDL.h>
-#include <SDL_opengles2.h>
+#include <SDL2/SDL.h>
+
+#if defined(_WIN32) && !defined(_MSC_VER)
+#define _MSC_VER 1200
+#include <SDL2/SDL_opengles2.h>
+#undef _MSC_VER
+#else
+#include <SDL2/SDL_opengles2.h>
+#endif
+
+
 
 class GlesRenderer {
     SDL_Window *window;

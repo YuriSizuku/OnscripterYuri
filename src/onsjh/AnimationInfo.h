@@ -25,7 +25,7 @@
 #ifndef __ANIMATION_INFO_H__
 #define __ANIMATION_INFO_H__
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <string.h>
 
 typedef unsigned char uchar3[3];

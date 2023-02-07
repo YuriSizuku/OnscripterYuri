@@ -6,7 +6,7 @@
     },
     "configurations": [
         {
-            "name": "mingw32",
+            "name": "Mingw32",
             "includePath": [
                 "${workspaceFolder}/src/onsjh/**",
                 "${msys2sdk}/mingw32/include"

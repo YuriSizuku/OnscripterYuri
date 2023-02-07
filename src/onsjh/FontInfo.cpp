@@ -26,7 +26,7 @@
 #include "Utils.h"
 #include <stdio.h>
 #include <string.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #if defined(PSP)
 #include <string.h>

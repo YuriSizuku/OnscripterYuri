@@ -59,6 +59,9 @@ void optionHelp()
     printf( "      --dll file\tset a dll file\n");
     printf( "  -r, --root path\tset the root path to the archives\n");
     printf( "      --fullscreen\tstart in fullscreen mode\n");
+    printf( "      --fullscreen2\tstart in fullscreen mode with stretch\n");
+    printf( "      --width 1280\tforce window width\n");
+    printf( "      --height 720\tforce window height\n");
     printf( "      --window\t\tstart in windowed mode\n");
     printf( "      --force-button-shortcut\tignore useescspc and getenter command\n");
     printf( "      --enable-wheeldown-advance\tadvance the text on mouse wheel down\n");
@@ -69,6 +72,7 @@ void optionHelp()
     printf( "      --enc:sjis\tuse sjis coding script\n");
     printf( "      --debug:1\t\tprint debug info\n");
     printf( "      --fontcache\tcache default font\n");
+    printf( "      --save-dir\tset save dir\n");
     printf( "  -h, --help\t\tshow this help and exit\n");
     printf( "  -v, --version\t\tshow the version information and exit\n");
     exit(0);
@@ -78,7 +82,8 @@ void optionVersion()
 {
     printf("Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n");
     printf("Copyright (c) 2001-2018 Ogapee.\n\
-                              (C) 2014-2018 jh10001<jh10001@live.cn>\n");
+                              (C) 2014-2018 jh10001<jh10001@live.cn>\n\
+                              (C) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n");
     printf("This is free software; see the source for copying conditions.\n");
     exit(0);
 }
@@ -260,7 +265,10 @@ void parseOption(int argc, char *argv[]) {
                 ons.setArchivePath(argv[0]);
             }
             else if ( !strcmp( argv[0]+1, "-fullscreen" ) ){
-                ons.setFullscreenMode();
+                ons.setFullscreenMode(1);
+            }
+            else if ( !strcmp( argv[0]+1, "-fullscreen2" ) ){
+                ons.setFullscreenMode(2);
             }
             else if ( !strcmp( argv[0]+1, "-window" ) ){
                 ons.setWindowMode();
@@ -312,13 +320,11 @@ void parseOption(int argc, char *argv[]) {
 			else if (!strcmp(argv[0]+1, "-no-vsync")){
 			    ons.setVsyncOff();
 			}
-#if defined(ANDROID)
             else if ( !strcmp(argv[0]+1, "-save-dir") ){
                 argc--;
                 argv++;
                 ons.setSaveDir(argv[0]);
             }
-#endif
             else{
                 utils::printInfo(" unknown option %s\n", argv[0]);
             }
@@ -333,7 +339,7 @@ void parseOption(int argc, char *argv[]) {
 
 int main(int argc, char *argv[])
 {
-    utils::printInfo("ONScripter-Jh version %s (%s, %d.%02d)\n", ONS_JH_VERSION, ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
+    utils::printInfo("ONScripter-Jh (Yuri) version %s (%s, %d.%02d)\n", ONS_JH_VERSION, ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
 
 #if defined(PSP)
     ons.disableRescale();

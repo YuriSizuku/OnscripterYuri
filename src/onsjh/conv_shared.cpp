@@ -30,6 +30,10 @@ extern "C"{
 #include <bzlib.h>
 #include "resize_image.h"
 
+#if defined(WIN32) || defined(_WIN32)
+#include <windows.h>
+#endif
+
 int scale_ratio_upper;
 int scale_ratio_lower;
 

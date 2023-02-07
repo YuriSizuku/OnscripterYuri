@@ -399,7 +399,7 @@ void ONScripter::stopBGM( bool continue_flag )
 {
     removeBGMFadeEvent();
     if (timer_bgmfade_id) SDL_RemoveTimer( timer_bgmfade_id );
-    timer_bgmfade_id = NULL;
+    timer_bgmfade_id = 0;
     mp3fadeout_duration_internal = 0;
 
 #ifdef USE_CDROM

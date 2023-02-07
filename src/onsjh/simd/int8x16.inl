@@ -117,12 +117,13 @@ namespace simd {
   }
 
   //Shuffle
-  inline uint8x16 shuffle(uint8x16 a, uint8x16 mask) {
 #ifdef USE_SIMD_X86_SSSE3
-    return _mm_shuffle_epi8(a, mask);
-#endif
-  }
+  inline uint8x16 shuffle(uint8x16 a, uint8x16 mask) {
 
+    return _mm_shuffle_epi8(a, mask);
+
+  }
+#endif
   //Swizzle
   inline uint16x8 widen_hi(uint8x16 a, uint8x16 b) {
 #ifdef USE_SIMD_X86_SSE2

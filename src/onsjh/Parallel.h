@@ -25,10 +25,10 @@
 #endif
 
 #ifdef USE_PARALLEL
-#include "SDL_cpuinfo.h"
-#include "SDL_thread.h"
-#include "SDL_timer.h"
-#include "SDL_atomic.h"
+#include "SDL2/SDL_cpuinfo.h"
+#include "SDL2/SDL_thread.h"
+#include "SDL2/SDL_timer.h"
+#include "SDL2/SDL_atomic.h"
 #endif
 
 #ifdef USE_OMP_PARALLEL

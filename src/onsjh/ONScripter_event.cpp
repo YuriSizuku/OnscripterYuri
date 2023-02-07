@@ -44,9 +44,9 @@
 #define EDIT_MODE_PREFIX "[EDIT MODE]  "
 #define EDIT_SELECT_STRING "MP3 vol (m)  SE vol (s)  Voice vol (v)  Numeric variable (n)"
 
-static SDL_TimerID timer_id = NULL;
-SDL_TimerID timer_cdaudio_id = NULL;
-SDL_TimerID timer_bgmfade_id = NULL;
+static SDL_TimerID timer_id = 0;
+SDL_TimerID timer_cdaudio_id = 0;
+SDL_TimerID timer_bgmfade_id = 0;
 
 typedef SDL_Keycode ONS_Key;
 
@@ -65,7 +65,7 @@ extern "C" void musicFinishCallback()
 extern "C" Uint32 SDLCALL timerCallback( Uint32 interval, void *param )
 {
     SDL_RemoveTimer( timer_id );
-    timer_id = NULL;
+    timer_id = 0;
 
     SDL_Event event;
     event.type = ONS_TIMER_EVENT;
@@ -77,7 +77,7 @@ extern "C" Uint32 SDLCALL timerCallback( Uint32 interval, void *param )
 extern "C" Uint32 cdaudioCallback( Uint32 interval, void *param )
 {
     SDL_RemoveTimer( timer_cdaudio_id );
-    timer_cdaudio_id = NULL;
+    timer_cdaudio_id = 0;
 
     SDL_Event event;
     event.type = ONS_CDAUDIO_EVENT;
@@ -297,7 +297,7 @@ void ONScripter::flushEventSub( SDL_Event &event )
             Mix_VolumeMusic( tmp * MIX_MAX_VOLUME / 100 );
         } else {
             if (timer_bgmfade_id) SDL_RemoveTimer( timer_bgmfade_id );
-            timer_bgmfade_id = NULL;
+            timer_bgmfade_id = 0;
             mp3fadeout_duration_internal = 0;
 
             char *ext = NULL;
@@ -763,12 +763,12 @@ bool ONScripter::keyDownEvent( SDL_KeyboardEvent *event )
     }
     else if (event->keysym.sym == SDLK_LEFT){
         current_button_state.event_type = SDL_MOUSEBUTTONDOWN;
-        current_button_state.event_button = SDL_MOUSEWHEEL;
+        current_button_state.event_button = (unsigned char)SDL_MOUSEWHEEL;
         current_button_state.y = 1;
     }
     else if (event->keysym.sym == SDLK_RIGHT){
         current_button_state.event_type = SDL_MOUSEBUTTONDOWN;
-        current_button_state.event_button = SDL_MOUSEWHEEL;
+        current_button_state.event_button = (unsigned char)SDL_MOUSEWHEEL;
         current_button_state.y = -1;
     }
 
@@ -813,12 +813,12 @@ void ONScripter::keyUpEvent( SDL_KeyboardEvent *event )
     }
     else if (event->keysym.sym == SDLK_LEFT){
         current_button_state.event_type = SDL_MOUSEBUTTONUP;
-        current_button_state.event_button = SDL_MOUSEWHEEL;
+        current_button_state.event_button = (unsigned char)SDL_MOUSEWHEEL;
         current_button_state.y = 1;
     }
     else if (event->keysym.sym == SDLK_RIGHT){
         current_button_state.event_type = SDL_MOUSEBUTTONUP;
-        current_button_state.event_button = SDL_MOUSEWHEEL;
+        current_button_state.event_button =  (unsigned char)SDL_MOUSEWHEEL;
         current_button_state.y = -1;
     }
 
@@ -852,6 +852,11 @@ bool ONScripter::keyPressEvent( SDL_KeyboardEvent *event )
     if ( event->type == SDL_KEYUP ){
 #if !defined(WINRT) && (defined(WIN32) || defined(_WIN32))
       if ((event->keysym.mod & KMOD_ALT) && event->keysym.sym == SDLK_RETURN) {
+        setFullScreen(!fullscreen_mode);
+        return true;
+      }
+      if (event->keysym.sym == SDLK_F11) { // ## to fix dynamic change
+        stretch_mode = !fullscreen_mode; 
         setFullScreen(!fullscreen_mode);
         return true;
       }
@@ -1173,7 +1178,7 @@ void ONScripter::timerEvent(bool init_flag)
 }
 
 #if (defined(IOS) || defined(ANDROID) || defined(WINRT))
-//TODO: ÉÏÏÂ×óÓÒ¼üÄ£Äâ
+//TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½Ä£ï¿½ï¿½
 SDL_MouseWheelEvent transTouchKey(SDL_TouchFingerEvent &finger) {
     static struct FingerPoint {
         float x, y;
@@ -1292,6 +1297,13 @@ void ONScripter::runEventLoop()
 #endif
 #if !defined(ANDROID) && !defined(IOS) && !defined(WINRT)
           case SDL_MOUSEMOTION:
+            if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
+            {
+                // printf("## SDL_MOUSEMOTION (%d, %d) ", event.button.x, event.button.y);
+                event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
+                event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
+                // printf("-> (%d, %d)\n", event.button.x, event.button.y);
+            }
             if (mouseMoveEvent( &event.motion )) return;
             if (btndown_flag){
                 if (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT))
@@ -1300,7 +1312,6 @@ void ONScripter::runEventLoop()
                     tmp_event.button.button = SDL_BUTTON_RIGHT;
                 else
                     break;
-
                 tmp_event.button.type = SDL_MOUSEBUTTONDOWN;
                 ret = mousePressEvent( &tmp_event.button );
                 if (ret) return;
@@ -1314,6 +1325,13 @@ void ONScripter::runEventLoop()
           case SDL_MOUSEBUTTONUP:
             current_button_state.event_type = event.type;
             current_button_state.event_button = event.button.button;
+            if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
+            {
+                // printf("## SDL_MOUSEBUTTONUP (%d, %d) ", event.button.x, event.button.y);
+                event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
+                event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
+                // printf("-> (%d, %d)\n", event.button.x, event.button.y);
+            }
             ret = mousePressEvent( &event.button );
             if (ret) return;
             break;

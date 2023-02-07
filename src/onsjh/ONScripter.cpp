@@ -53,26 +53,38 @@ static void SDL_Quit_Wrapper()
 
 void ONScripter::calcRenderRect() {
     SDL_GetRendererOutputSize(renderer, &device_width, &device_height);
-    int swdh = screen_width * device_height;
-    int dwsh = device_width * screen_height;
-    if (swdh == dwsh) {
+
+    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
+    {
         screen_device_width = device_width;
         screen_device_height = device_height;
     }
-    else if (swdh > dwsh) {
-        screen_device_width = device_width;
-        screen_device_height = (int)ceil(screen_height * ((float)device_width / screen_width));
+    else
+    {
+        int swdh = screen_width * device_height;
+        int dwsh = device_width * screen_height;
+        if (swdh == dwsh) {
+            screen_device_width = device_width;
+            screen_device_height = device_height;
+        }
+        else if (swdh > dwsh) {
+            screen_device_width = device_width;
+            screen_device_height = (int)ceil(screen_height * ((float)device_width / screen_width));
+        }
+        else {
+            screen_device_width = (int)ceil(screen_width * ((float)device_height / screen_height));
+            screen_device_height = device_height;
+        }
     }
-    else {
-        screen_device_width = (int)ceil(screen_width * ((float)device_height / screen_height));
-        screen_device_height = device_height;
-    }
+
     screen_scale_ratio1 = (float)screen_width / screen_device_width;
     screen_scale_ratio2 = (float)screen_height / screen_device_height;
+
     render_view_rect.x = (device_width - screen_device_width) / 2;
     render_view_rect.y = (device_height - screen_device_height) / 2;
     render_view_rect.w = screen_device_width;
     render_view_rect.h = screen_device_height;
+
     if (gles_renderer) {
         float input_size[2] = {(float)screen_width, (float)screen_height};
         float output_size[2] = {(float)render_view_rect.w, (float)render_view_rect.h};
@@ -128,8 +140,6 @@ void ONScripter::initSDL()
     screen_bpp = 32;
     
 #if (defined(IOS) || defined(ANDROID) || defined(WINRT))
-    SDL_DisplayMode mode;
-    SDL_GetDisplayMode(0, 0, &mode);
     int width;
     if (mode.w * screen_height > mode.h * screen_width)
         width = (mode.h*screen_width / screen_height) & (~0x01); // to be 2 bytes aligned
@@ -137,20 +147,27 @@ void ONScripter::initSDL()
         width = mode.w;
     screen_width = width;
 #endif
-
     const double aspect_ratio = (double)script_h.screen_width/script_h.screen_height;
 
     if (force_window_width) {
         screen_device_width  = force_window_width;
-        screen_device_height = force_window_width/aspect_ratio;
-    } else if (force_window_height) {
-        screen_device_width = force_window_height*aspect_ratio;
         screen_device_height = force_window_height;
+        if(!screen_device_height) 
+        {
+            screen_device_height = force_window_width/aspect_ratio;
+        }  
+    } else if (force_window_height) {
+        screen_device_width = force_window_width;
+        screen_device_height = force_window_height;
+        if(!screen_device_width) 
+        {
+            screen_device_width = force_window_height*aspect_ratio;
+        }
     } else {
         screen_device_width = screen_width;
-        screen_device_height = screen_width/aspect_ratio;
+        screen_device_height = screen_height;
     }
-    
+
     // use hardware scaling
     screen_ratio1 = 1;
     screen_ratio2 = 1;
@@ -187,8 +204,12 @@ void ONScripter::initSDL()
     Uint32 render_flag = SDL_RENDERER_ACCELERATED;
     if (vsync) render_flag |= SDL_RENDERER_PRESENTVSYNC;
     renderer = SDL_CreateRenderer(window, -1, render_flag);
-
-    SDL_RenderSetLogicalSize(renderer, screen_width, screen_height);
+    if(!stretch_mode && !(force_window_height && force_window_width))
+    {
+        // this prevents to stretch
+        SDL_RenderSetLogicalSize(renderer, screen_width, screen_height);
+    }
+    
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
     calcRenderRect();
@@ -222,6 +243,11 @@ void ONScripter::initSDL()
     wm_icon_string = new char[ strlen(DEFAULT_WM_ICON) + 1 ];
     memcpy( wm_icon_string, DEFAULT_WM_TITLE, strlen(DEFAULT_WM_ICON) + 1 );
     setCaption(wm_title_string, wm_icon_string);
+
+    if(fullscreen_mode)
+    {
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    }
 }
 
 void ONScripter::openAudio(int freq)
@@ -270,6 +296,7 @@ ONScripter::ONScripter()
     edit_flag = false;
     key_exe_file = NULL;
     fullscreen_mode = false;
+    stretch_mode = false;
     window_mode = false;
     sprite_info  = new AnimationInfo[MAX_SPRITE_NUM];
     sprite2_info = new AnimationInfo[MAX_SPRITE2_NUM];
@@ -339,9 +366,10 @@ void ONScripter::setSaveDir(const char *path)
     script_h.setSaveDir(save_dir);
 }
 
-void ONScripter::setFullscreenMode()
+void ONScripter::setFullscreenMode(int mode)
 {
-    fullscreen_mode = true;
+    fullscreen_mode = mode>=1 ? true: false;
+    stretch_mode = mode==2 ? true: false;
 }
 
 void ONScripter::setWindowMode()
@@ -741,9 +769,10 @@ void ONScripter::flush( int refresh_mode, SDL_Rect *rect, bool clear_dirty_flag,
 
 void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
 {
-    //utils::printInfo("flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
+    // utils::printInfo("flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
     
     SDL_Rect dst_rect = rect;
+
     --dst_rect.x; --dst_rect.y; dst_rect.w += 2; dst_rect.h += 2;
     if (AnimationInfo::doClipping(&dst_rect, &screen_rect) || (dst_rect.w == 2 && dst_rect.h == 2)) return;
     refreshSurface(accumulation_surface, &rect, refresh_mode);
@@ -759,7 +788,14 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
     SDL_Rect *rect_ptr = &dst_rect;
 #endif
     if (isnan(sharpness)) {
-        SDL_RenderCopy(renderer, texture, rect_ptr, rect_ptr);
+        if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
+        {
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+        }
+        else
+        {
+            SDL_RenderCopy(renderer, texture, rect_ptr, rect_ptr);
+        }
     } else {
         gles_renderer->copy(render_view_rect.x, render_view_rect.y);
     }

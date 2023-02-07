@@ -25,7 +25,7 @@
 #ifndef __FONT_INFO_H__
 #define __FONT_INFO_H__
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "BaseReader.h"
 
 typedef unsigned char uchar3[3];

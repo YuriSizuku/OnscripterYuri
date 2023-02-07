@@ -92,7 +92,7 @@ void ONScripter::searchSaveFile( SaveFileInfo &save_file_info, int no )
 
     WCHAR file_nameW[256];
     MultiByteToWideChar(CP_ACP, 0, file_name, -1, file_nameW, 256);
-    handle = CreateFile( file_nameW, GENERIC_READ, 0, NULL,
+    handle = CreateFileW( (LPWSTR)file_nameW, GENERIC_READ, 0, NULL,
                          OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
     if ( handle == INVALID_HANDLE_VALUE ){

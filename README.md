@@ -13,10 +13,10 @@ Features:
   - [ ] android
   - [ ] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
 - [ ] ci in github action to automaticly build  
-- [x] support fullscreen `--fullscreen`, scretch to fullscreen `--fullscreen2`, as well as arbitary resolution `--width`, `--height`  
 - [x] support `nt2`, `nt3` encryption format by Mine  
+- [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
+- [x] support arbitary resolution `--width`, `--height`  
 - [x] fix some bugs in origin version (can not read `00.txt` problem)  
-
 
 ## 1. usage
 
@@ -26,8 +26,10 @@ Features:
 ./ons_yuri --help
 ./ons_yuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf
 ./ons_yuri --width 1280 --height 720 --enc:sjis
-./ons_yuri --fullscreen2 # strech to fullscreen by art+f4
+./ons_yuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
 ```
+
+❗ If you force exit the game, the save might be damaged, try to remvoe envdata to play again.
 
 ## (2) web
 

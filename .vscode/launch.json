@@ -9,9 +9,9 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/build_mingw32/ons_yuri.exe",
-            "args": ["--debug:0",
-                "--width", "960", "--height", "544", 
-                "--root", "test", "--font", "test/default.ttf"],
+            "args": ["--debug:0", // "--fullscreen2",
+                // "--width", "960", "--height", "544", 
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "save"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/build_mingw32",
             "environment": [

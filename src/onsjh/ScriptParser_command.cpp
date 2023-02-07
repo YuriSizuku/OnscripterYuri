@@ -1326,7 +1326,7 @@ int ScriptParser::decCommand()
 int ScriptParser::dateCommand()
 {
     time_t t = time(NULL);
-    struct tm *tm = localtime( &t );
+    struct tm *tm = localtime( (const time_t*)&t );
 
     script_h.readInt();
     script_h.setInt( &script_h.current_variable, tm->tm_year % 100 );

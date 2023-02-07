@@ -89,14 +89,7 @@ GlesRenderer::GlesRenderer(SDL_Window *window, SDL_Texture *texture, const float
 #if defined(IOS) || defined(ANDROID)
 //#define SDL_PROC(ret,func,params) func=func;
 #else
-#define SDL_PROC(ret,func,params) \
-    do { \
-        func = utils::auto_cast(SDL_GL_GetProcAddress(#func)); \
-        if ( ! func ) { \
-            SDL_SetError("Couldn't load GLES2 function %s: %s", #func, SDL_GetError()); \
-            utils::printError("Couldn't load GLES2 function %s: %s", #func, SDL_GetError()); \
-        } \
-    } while ( 0 );
+#define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
 #include "gles2funcs.h"
 #undef SDL_PROC
 #endif

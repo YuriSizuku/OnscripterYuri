@@ -22,7 +22,7 @@
  */
 
 #include "AVIWrapper.h"
-#include <SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include <audiodecoder.h>
 #include <avm_cpuinfo.h>
 #include <avm_output.h>
