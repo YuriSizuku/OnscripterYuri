@@ -1,0 +1,55 @@
+{
+    "env": { // edit your env here
+        "msys2sdk": "D:/Software/env/msys2",
+        "vitasdk": "D:/Software/env/sdk/psvsdk",
+        "emsdk": "D:/software/env/sdk/emsdk"
+    },
+    "configurations": [
+        {
+            "name": "mingw32",
+            "includePath": [
+                "${workspaceFolder}/src/onsjh/**",
+                "${msys2sdk}/mingw32/include"
+            ],
+            "defines": [
+                "_WIN32",
+                "_MSC_VER",
+                "USE_LUA"
+            ],
+            "compilerPath": "${msys2sdk}/mingw32/bin/gcc.exe",
+            "intelliSenseMode": "windows-gcc-x86",
+            "compilerArgs": [ "-m32" ]
+        },
+        {
+            "name": "Linux64",
+            "includePath": [
+                "/usr/include",
+                "${workspaceFolder}/src/"
+            ],
+            "defines": [
+                "_LINUX"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": []
+        },
+        {
+            "name": "Web",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${emsdk}/upstream/emscripten/system/lib/libcxx/include",
+                "${emsdk}/upstream/emscripten/cache/sysroot/include"
+            ],
+            "defines": [
+                "_WEB"
+            ],
+            "compilerPath": "${emsdk}/upstream/bin/clang",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

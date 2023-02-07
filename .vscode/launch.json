@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+        "configurations": [
+        {
+            "name": "win32 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_mingw32/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/build_mingw32",
+            "environment": [
+                {"name": "msys2sdk", "value": "D:/Software/env/msys2"}
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Software/env/msys2/mingw32/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+        {
+            "name": "linux32 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_linux32/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build_linux32/",
+            "environment": [
+                {"name":"DISPLAY", "value": "${env:DWIN}"},
+                {"name":"DISPLAY_NOTWORK", "value": "$(grep nameserver /etc/resolv.conf | sed 's/nameserver //'):11.0"},
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+            ]
+        },
+    ]
+}
