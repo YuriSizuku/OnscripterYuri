@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16.3)
 project(OnsJH)
 
 function(config_linux TARGET_NAME)
+    add_executable(${TARGET_NAME} ${ONSJH_CODE})
     message("Linux enviroment for "  ${TARGET_NAME})
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         USE_OPENGL
@@ -12,11 +13,17 @@ function(config_linux TARGET_NAME)
 endfunction()
 
 function(config_windows TARGET_NAME)
+    add_executable(${TARGET_NAME} WIN32 
+        ${ONSJH_CODE}
+        ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
     if(MINGW)
         message("MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
         target_compile_definitions(${TARGET_NAME} PRIVATE 
             _WIN32
-            USE_LUA)
+            USE_LUA
+            # USE_PARALLEL
+            USE_SIMD
+            USE_SIMD_X86_SSE2)
         target_link_options(${TARGET_NAME} PRIVATE 
             -static-libgcc   # static link mingw env
             -static-libstdc++) 
@@ -105,7 +112,7 @@ function(config_web TARGET_NAME)
         copy ${CMAKE_SOURCE_DIR}/src/example/*.html ${CMAKE_BINARY_DIR})
 endfunction()
 
-function(config_platform TARGET_NAME)    
+function(config_platform TARGET_NAME)
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
         config_linux(${TARGET_NAME})
     elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -117,9 +124,7 @@ function(config_platform TARGET_NAME)
     endif()
 endfunction()
 
-message("OnsJh multi platform")
 set(CMAKE_CXX_STANDARD 11)
-
 set(ONSJH_CODE
     src/onsjh/AnimationInfo.cpp
     src/onsjh/coding2utf16.cpp
@@ -153,8 +158,4 @@ set(ONSJH_CODE
     src/onsjh/sjis2utf16.cpp
     src/onsjh/renderer/gles_renderer.cpp
 )
-
-add_executable(${PROJECT_NAME} ${ONSJH_CODE})
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${PROJECT_SOURCE_DIR}/src)
 config_platform(${PROJECT_NAME})

@@ -14,7 +14,7 @@ if [ -n "$(uname -a | grep Msys)" ]; then
     CXX+=".exe"
 fi
 PATH=$MSYS2SDK/mingw32/bin/:$PATH
-if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=Debug; fi
+if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 
 # config and build project
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \

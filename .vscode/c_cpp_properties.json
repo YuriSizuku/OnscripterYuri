@@ -13,8 +13,10 @@
             ],
             "defines": [
                 "_WIN32",
-                "_MSC_VER",
-                "USE_LUA"
+                "USE_LUA",
+                "USE_PARALLEL",
+                "USE_SIMD",
+                "USE_SIMD_X86_SSE2"
             ],
             "compilerPath": "${msys2sdk}/mingw32/bin/gcc.exe",
             "intelliSenseMode": "windows-gcc-x86",
@@ -23,11 +25,15 @@
         {
             "name": "Linux64",
             "includePath": [
-                "/usr/include",
-                "${workspaceFolder}/src/"
+                "${workspaceFolder}/src/onsjh/**",
+                "/usr/include"
             ],
             "defines": [
-                "_LINUX"
+                "LINUX",
+                "USE_LUA",
+                "USE_PARALLEL",
+                "USE_SIMD",
+                "USE_SIMD_X86_SSE2"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c99",
