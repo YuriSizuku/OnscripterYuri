@@ -1,12 +1,41 @@
-# OnscripterJH
-A experiment onsjh porting to many platform especially web.
+# Onscripter (Yuri)  
+
+An ehancement Onscripter project porting to many platforms including web.
+This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
+
+Features:  
+
+- [x] clear camke project for multi platforms  
+  - [x] mingw32 in windows
+  - [ ] linux x64
+  - [ ] linux aarch64 (raspberrypi)
+  - [ ] web
+  - [ ] android
+  - [ ] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
+- [ ] ci in github action to automaticly build  
+- [x] support fullscreen `--fullscreen`, scretch to fullscreen `--fullscreen2`, as well as arbitary resolution `--width`, `--height`  
+- [x] support `nt2`, `nt3` encryption format by Mine  
+- [x] fix some bugs in origin version (can not read `00.txt` problem)  
+
 
 ## 1. usage
 
+## (1) command
+
+``` bash
+./ons_yuri --help
+./ons_yuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf
+./ons_yuri --width 1280 --height 720 --enc:sjis
+./ons_yuri --fullscreen2 # strech to fullscreen by art+f4
+```
+
+## (2) web
+
 ## 2. build
 
-### (1) local mingw
-install the enviroment in msys
+### (1) local mingw  
+
+Install the enviroment in msys
 
 ``` sh
 pacman -Syu --noconfirm
@@ -24,6 +53,13 @@ pacman -S --noconfirm mingw-w64-i686-mesa mingw-w64-x86_64-mesa
 pacman -S --noconfirm mingw-w64-i686-lua mingw-w64-x86_64-lua
 ```
 
-### (2) local linux
+and then use these `local_mingw32.sh` to build.
 
-### (3) cross web
+``` sh
+cd script
+sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_mingw32.sh"
+```
+
+### (2) local linux x64
+
+### (3) cross web  

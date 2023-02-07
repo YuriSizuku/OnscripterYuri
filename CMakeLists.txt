@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(OnsJH)
+project(ons_yuri)
 
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSJH_CODE})
@@ -23,7 +23,8 @@ function(config_windows TARGET_NAME)
             USE_LUA
             # USE_PARALLEL
             USE_SIMD
-            USE_SIMD_X86_SSE2)
+            USE_SIMD_X86_SSE2
+            USE_FILELOG)
         target_link_options(${TARGET_NAME} PRIVATE 
             -static-libgcc   # static link mingw env
             -static-libstdc++) 
@@ -77,8 +78,8 @@ function(config_windows TARGET_NAME)
             mpg123
             shlwapi)
 
-        target_link_libraries(${TARGET_NAME}   # dynamic links
-            -Wl,-Bdynamic
+        target_link_libraries(${TARGET_NAME} 
+            -Wl,-Bdynamic # dynamic links
             dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
             imm32 winmm gdi32 user32)
 
