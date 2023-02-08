@@ -1,6 +1,6 @@
 # Onscripter (Yuri)  
 
-An ehancement Onscripter project porting to many platforms including web.
+☘️ An ehancement Onscripter project porting to many platforms including web.
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
 Features:  

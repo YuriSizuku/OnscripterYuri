@@ -165,7 +165,7 @@ void ONScripter::initSDL()
         }
     } else {
         screen_device_width = screen_width;
-        screen_device_height = screen_height;
+        screen_device_height = screen_width/aspect_ratio;
     }
 
     // use hardware scaling
@@ -206,8 +206,8 @@ void ONScripter::initSDL()
     renderer = SDL_CreateRenderer(window, -1, render_flag);
     if(!stretch_mode && !(force_window_height && force_window_width))
     {
-        // this prevents to stretch
-        SDL_RenderSetLogicalSize(renderer, screen_width, screen_height);
+        // this prevents to stretch 
+        // SDL_RenderSetLogicalSize(renderer, screen_width, screen_height);
     }
     
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -794,7 +794,8 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
         }
         else
         {
-            SDL_RenderCopy(renderer, texture, rect_ptr, rect_ptr);
+            SDL_RenderClear(renderer);
+            SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
         }
     } else {
         gles_renderer->copy(render_view_rect.x, render_view_rect.y);

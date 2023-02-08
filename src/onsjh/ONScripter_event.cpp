@@ -1297,13 +1297,11 @@ void ONScripter::runEventLoop()
 #endif
 #if !defined(ANDROID) && !defined(IOS) && !defined(WINRT)
           case SDL_MOUSEMOTION:
-            if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
-            {
-                // printf("## SDL_MOUSEMOTION (%d, %d) ", event.button.x, event.button.y);
-                event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
-                event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
-                // printf("-> (%d, %d)\n", event.button.x, event.button.y);
-            }
+            // printf("## SDL_MOUSEMOTION (%d, %d) ", event.button.x, event.button.y);
+            event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
+            event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
+            // printf("-> (%d, %d)\n", event.button.x, event.button.y);
+
             if (mouseMoveEvent( &event.motion )) return;
             if (btndown_flag){
                 if (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT))
@@ -1325,13 +1323,12 @@ void ONScripter::runEventLoop()
           case SDL_MOUSEBUTTONUP:
             current_button_state.event_type = event.type;
             current_button_state.event_button = event.button.button;
-            if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
-            {
-                // printf("## SDL_MOUSEBUTTONUP (%d, %d) ", event.button.x, event.button.y);
-                event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
-                event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
-                // printf("-> (%d, %d)\n", event.button.x, event.button.y);
-            }
+
+            // printf("## SDL_MOUSEBUTTONUP (%d, %d) ", event.button.x, event.button.y);
+            event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
+            event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
+            // printf("-> (%d, %d)\n", event.button.x, event.button.y);
+
             ret = mousePressEvent( &event.button );
             if (ret) return;
             break;
