@@ -85,11 +85,13 @@ void ONScripter::calcRenderRect() {
     render_view_rect.w = screen_device_width;
     render_view_rect.h = screen_device_height;
 
+#if defined(USE_GLES)
     if (gles_renderer) {
         float input_size[2] = {(float)screen_width, (float)screen_height};
         float output_size[2] = {(float)render_view_rect.w, (float)render_view_rect.h};
         gles_renderer->setConstBuffer(input_size, output_size, sharpness);
     }
+#endif
 }
 
 void ONScripter::setCaption(const char *title, const char *iconstr) {
@@ -233,9 +235,11 @@ void ONScripter::initSDL()
 
     coding2utf16->init();
     if (!isnan(sharpness)) {
+#if defined(USE_GLES)
         float input_size[2] = {(float)screen_width, (float)screen_height};
         float output_size[2] = {(float)render_view_rect.w, (float)render_view_rect.h};
         gles_renderer = new GlesRenderer(window, texture, input_size, output_size, sharpness);
+#endif
     }
     
     wm_title_string = new char[ strlen(DEFAULT_WM_TITLE) + 1 ];
@@ -798,7 +802,9 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
             SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
         }
     } else {
+#if defined(USE_GLES)
         gles_renderer->copy(render_view_rect.x, render_view_rect.y);
+#endif
     }
     SDL_RenderPresent(renderer);
 }

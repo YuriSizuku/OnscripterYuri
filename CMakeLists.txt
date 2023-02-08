@@ -21,9 +21,11 @@ function(config_windows TARGET_NAME)
         target_compile_definitions(${TARGET_NAME} PRIVATE 
             _WIN32
             USE_LUA
-            # USE_PARALLEL
+            USE_PARALLEL
             USE_SIMD
             USE_SIMD_X86_SSE2
+            USE_BUILTIN_LAYER_EFFECTS
+            USE_GLES
             USE_FILELOG)
         target_link_options(${TARGET_NAME} PRIVATE 
             -static-libgcc   # static link mingw env
@@ -158,5 +160,9 @@ set(ONSJH_CODE
     src/onsjh/ScriptParser_command.cpp
     src/onsjh/sjis2utf16.cpp
     src/onsjh/renderer/gles_renderer.cpp
+    src/onsjh/builtin_dll/layer_oldmovie.cpp
+    src/onsjh/builtin_dll/layer_snow.cpp
+    src/onsjh/builtin_dll/ONScripter_effect_cascade.cpp
+    src/onsjh/builtin_dll/ONScripter_effect_trig.cpp
 )
 config_platform(${PROJECT_NAME})

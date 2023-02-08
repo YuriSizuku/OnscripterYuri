@@ -19,6 +19,7 @@
 *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #pragma once
+#if defined(USE_GLES)
 #include <SDL2/SDL.h>
 
 #if defined(_WIN32) && !defined(_MSC_VER)
@@ -60,3 +61,4 @@ public:
 	void pause();
 	void resume();
 };
+#endif

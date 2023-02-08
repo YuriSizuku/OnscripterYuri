@@ -28,7 +28,7 @@
 #include "../ONScripter.h"
 #include <math.h>
 #include <stdlib.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 extern ONScripter ons;
 

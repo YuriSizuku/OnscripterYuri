@@ -32,7 +32,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#if defined(USE_GLES)
 #include "renderer/gles_renderer.h"
+#endif
 
 #if defined(USE_SMPEG)
 #include <smpeg.h>
@@ -616,7 +618,9 @@ private:
     int max_texture_width, max_texture_height;
     SDL_Texture *blt_texture;
     SDL_Rect blt_texture_src_rect;
+#if defined(USE_GLES)
     GlesRenderer *gles_renderer;
+#endif
 
     unsigned char *tmp_image_buf;
     unsigned long tmp_image_buf_length;

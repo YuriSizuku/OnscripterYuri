@@ -1,6 +1,7 @@
 # sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/d/software/env/msys2 && ./local_mingw32.sh"
 BUILD_PATH=./../build_mingw32
 CMAKELISTS_PATH=./../
+TARGETS=$@
 
 # config env
 if [ -z "$MSYS2SDK" ]; then MSYS2SDK=/d/Software/env/msys2; fi;
@@ -12,6 +13,7 @@ if [ -n "$(uname -a | grep Msys)" ]; then
 fi
 PATH=$MSYS2SDK/mingw32/bin/:$PATH
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
 # config and build project
 echo "BUILD_TYPE=$BUILD_TYPE, MSYS2SDK=$MSYS2SDK"
@@ -19,4 +21,4 @@ cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
     -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32
-make -C $BUILD_PATH all
+make -C $BUILD_PATH $TARGETS -j $("cat /proc/cpuinfo | grep -c ^processor")

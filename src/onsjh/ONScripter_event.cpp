@@ -1450,10 +1450,14 @@ void ONScripter::runEventLoop()
               }
               break;
           case SDL_APP_WILLENTERBACKGROUND:
+#if defined(USE_GLES)
               gles_renderer->pause();
+#endif
               break;
           case SDL_APP_DIDENTERFOREGROUND:
+#if defined(USE_GLES)
               gles_renderer->resume();
+#endif
               repaintCommand();
               break;
           case SDL_QUIT:

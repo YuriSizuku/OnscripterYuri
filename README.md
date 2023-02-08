@@ -3,15 +3,16 @@
 ☘️ An ehancement Onscripter project porting to many platforms including web.
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
-Features:  
+New Features:  
 
-- [x] clear camke project for multi platforms  
-  - [x] mingw32 in windows
+- [x] clear camke project for easier development
+- [x] multi platform support
+  - [x] windows mingw32
   - [ ] linux x64
   - [ ] linux aarch64 (raspberrypi)
   - [ ] web
   - [ ] android
-  - [ ] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
+  - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
 - [ ] ci in github action to automaticly build  
 - [x] support `nt2`, `nt3` encryption format by Mine  
 - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
@@ -64,4 +65,6 @@ sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_ming
 
 ### (2) local linux x64
 
-### (3) cross web  
+### (3) local linux aarch64
+
+### (4) cross web  
