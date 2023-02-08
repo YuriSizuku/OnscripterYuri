@@ -185,9 +185,11 @@ void ONScripter::initSDL()
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+#if defined(USE_GLES2)
     if (!isnan(sharpness)) {
         SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
     }
+#endif
     int window_flag = SDL_WINDOW_SHOWN;
 #if defined(ANDROID) || defined(IOS) || defined(WINRT)
     window_flag |= SDL_WINDOW_BORDERLESS | SDL_WINDOW_FULLSCREEN;
@@ -525,7 +527,7 @@ int ONScripter::init()
     
     // ----------------------------------------
     // variables relevant to sound
-    this->cdaudio_flag = cdaudio_flag;
+    // this->cdaudio_flag = cdaudio_flag;
 #ifdef USE_CDROM
     cdrom_info = NULL;
     if ( cdaudio_flag ){
@@ -785,7 +787,7 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
     SDL_UnlockSurface(accumulation_surface);
 
     screen_dirty_flag = false;
-#ifdef ANDROID // See sdl2 DOCS/README-android.md for more information on this
+#if defined(ANDROID) || defined(WEB) // See sdl2 DOCS/README-android.md for more information on this
     SDL_RenderClear(renderer);
     SDL_Rect *rect_ptr = nullptr;
 #else

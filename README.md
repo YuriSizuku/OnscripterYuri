@@ -5,19 +5,23 @@ This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SD
 
 New Features:  
 
-- [x] clear camke project for easier development
-- [x] multi platform support
+- develop
+  - [x] clear camke project for easier development
+  - [ ] ci in github action to automaticly build  
+- platform
   - [x] windows mingw32
   - [ ] linux x64
   - [ ] linux aarch64 (raspberrypi)
   - [ ] web
   - [ ] android
   - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
-- [ ] ci in github action to automaticly build  
-- [x] support `nt2`, `nt3` encryption format by Mine  
-- [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
-- [x] support arbitary resolution `--width`, `--height`  
-- [x] fix some bugs in origin version (can not read `00.txt` problem)  
+- render
+  - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
+  - [x] support arbitary resolution `--width`, `--height`  
+- other
+  - [x] support `nt2`, `nt3` encryption format by Mine
+  - [x] support long click or touch to invoke menu  
+  - [x] fix some bugs in origin version (can not read `00.txt` problem)  
 
 ## 1. usage
 
@@ -65,6 +69,22 @@ sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_ming
 
 ### (2) local linux x64
 
-### (3) local linux aarch64
+### (3) cross web  
 
-### (4) cross web  
+Install [emsdk](https://github.com/emscripten-core/emsdk) and use `cross_web.sh` to build.  
+
+``` shell
+cd script
+sh -c "export BUILD_TYPE=Debug && export EMCSDK=/d/Software/env/sdk/emsdk && ./cross_web.sh"
+```
+
+### (4) cross linux aarch64
+
+### (5) cross mingw
+
+## 3. compatibility  
+
+|game|version|status|description|
+|----|-------|------|-----------|
+
+## 4. knowed issues (including already solved)  

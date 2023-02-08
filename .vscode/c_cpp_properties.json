@@ -47,12 +47,12 @@
         {
             "name": "Web",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "${emsdk}/upstream/emscripten/system/lib/libcxx/include",
+                "${workspaceFolder}/src/onsjh/**",
                 "${emsdk}/upstream/emscripten/cache/sysroot/include"
             ],
             "defines": [
-                "_WEB"
+                "WEB",
+                "LINUX"
             ],
             "compilerPath": "${emsdk}/upstream/bin/clang",
             "cStandard": "c99",

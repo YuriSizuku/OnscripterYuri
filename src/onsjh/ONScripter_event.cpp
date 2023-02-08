@@ -48,6 +48,9 @@ static SDL_TimerID timer_id = 0;
 SDL_TimerID timer_cdaudio_id = 0;
 SDL_TimerID timer_bgmfade_id = 0;
 
+#define LONG_CLICK_TIME 1200 //ms
+Uint32 g_lastpress_time = 0;
+
 typedef SDL_Keycode ONS_Key;
 
 bool ext_music_play_once_flag = false;
@@ -459,8 +462,17 @@ bool ONScripter::mousePressEvent( SDL_MouseButtonEvent *event )
     current_button_state.down_flag = false;
     skip_mode &= ~SKIP_NORMAL;
 
-    if ( event->button == SDL_BUTTON_RIGHT &&
-         event->type == SDL_MOUSEBUTTONUP &&
+    bool longpress_flag = false;
+    if(event->button == SDL_BUTTON_LEFT && event->type == SDL_MOUSEBUTTONUP)
+    {
+        //printf("%d %d\n", event->timestamp, g_lastpress_time);
+        if(event->timestamp - g_lastpress_time >= LONG_CLICK_TIME)
+        {
+            longpress_flag = true;
+        }
+    }
+
+    if ( ((event->button == SDL_BUTTON_RIGHT && event->type == SDL_MOUSEBUTTONUP) || longpress_flag) &&
          ((rmode_flag && event_mode & WAIT_TEXT_MODE) ||
           (event_mode & (WAIT_BUTTON_MODE | WAIT_RCLICK_MODE))) ){
         current_button_state.button = -1;
@@ -1178,7 +1190,6 @@ void ONScripter::timerEvent(bool init_flag)
 }
 
 #if (defined(IOS) || defined(ANDROID) || defined(WINRT))
-//TODO: �������Ҽ�ģ��
 SDL_MouseWheelEvent transTouchKey(SDL_TouchFingerEvent &finger) {
     static struct FingerPoint {
         float x, y;
@@ -1317,6 +1328,10 @@ void ONScripter::runEventLoop()
             break;
             
           case SDL_MOUSEBUTTONDOWN:
+            if(event.button.button == SDL_BUTTON_LEFT)
+            {
+                g_lastpress_time = event.button.timestamp;
+            }
             current_button_state.event_type = event.type;
             current_button_state.event_button = event.button.button;
             if ( !btndown_flag ) break;

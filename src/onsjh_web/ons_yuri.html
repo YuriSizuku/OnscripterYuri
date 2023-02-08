@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Onscripter (yuri)</title>
+    </head>
+    <body style="margin: 0 auto; background-color:coral;">
+        <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>
+        <script type='text/javascript'>
+            function scalefull(docobj, ratio=0)
+            {
+                var w = window.innerWidth;
+                var h = window.innerHeight;
+                if(ratio>0)
+                {
+                    if(w/h > ratio)
+                    {
+                        docobj.style.width  = h * ratio  + "px";
+                        docobj.style.height = h + "px";
+                    }
+                    else
+                    {
+                        docobj.style.width  = w  + "px";
+                        docobj.style.height = w / ratio + "px";
+                    }
+                }
+                else
+                {
+                    docobj.style.width  = w + "px";
+                    docobj.style.height = h + "px";
+                }
+                return {w: docobj.style.width, h: docobj.style.height}
+            }
+            var Module = {
+                canvas: (()=>{return document.getElementById('canvas');})(),
+                arguments: ["--root", "/ons_yuri", "--font", "/ons_yuri/default.ttf"],
+                onRuntimeInitialized: () => {
+                    console.log(FS.readdir("/ons_yuri"));
+                    scalefull(canvas, 1280/720);
+                }
+            }
+            addEventListener("resize", (event) => {
+                var canvas = document.getElementById('canvas');
+                scalefull(canvas, 1280/720);
+            });
+        </script>
+        <script src="ons_yuri.js"></script>
+    </body>
+</html>

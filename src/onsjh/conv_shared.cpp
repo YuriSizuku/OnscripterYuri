@@ -177,7 +177,7 @@ size_t rescaleJPEGWrite( unsigned int width, unsigned int height, int byte_per_p
 
     jpeg_set_defaults(&cinfo2);
     jpeg_set_quality(&cinfo2, quality, TRUE );
-    cinfo2.optimize_coding = true;
+    cinfo2.optimize_coding = (boolean)true;
     //jpeg_simple_progression (&cinfo2);
     jpeg_start_compress(&cinfo2, TRUE);
 

@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
 
 #if defined(PSP)
 #include <string.h>

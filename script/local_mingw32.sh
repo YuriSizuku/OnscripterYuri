@@ -21,4 +21,4 @@ cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
     -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32
-make -C $BUILD_PATH $TARGETS -j $("cat /proc/cpuinfo | grep -c ^processor")
+make -C $BUILD_PATH $TARGETS -j $(cat /proc/cpuinfo | grep -c ^processor)

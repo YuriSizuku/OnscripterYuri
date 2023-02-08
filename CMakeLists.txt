@@ -91,28 +91,28 @@ function(config_windows TARGET_NAME)
 endfunction()
 
 function(config_web TARGET_NAME)
+    add_executable(${TARGET_NAME} ${ONSJH_CODE})
     message("Web enviroment for "  ${TARGET_NAME})
     
     # pass flags for emcc
-    set(EMCC_FLAGS "-sUSE_SDL=2 -o ${TARGET_NAME}.js") 
-    if (${TARGET_NAME} MATCHES gl)
-        set(EMCC_FLAGS "${EMCC_FLAGS} -sFULL_ES3 -sMIN_WEBGL_VERSION=2")
-        set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM --preload-file=${CMAKE_BINARY_DIR}/assets@assets")
-        target_compile_definitions(${TARGET_NAME} PRIVATE USE_OPENGL)
-    endif()
+    set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL=2 -sUSE_SDL_TTF=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg")
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL_MIXER=2 -sUSE_BZIP2=1 -sSDL2_MIXER_FORMATS=ogg,mp3 -sUSE_OGG=1 -sUSE_VORBIS=1")
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM --use-preload-plugins --preload-file=${PROJECT_SOURCE_DIR}/asset/test@/ons_yuri")
     set_target_properties(${TARGET_NAME} PROPERTIES LINK_FLAGS ${EMCC_FLAGS})
-    
-    target_include_directories(${TARGET_NAME} PRIVATE
-        ${PROJECT_SOURCE_DIR}/externlib/glm)
+    target_compile_options(${TARGET_NAME} PRIVATE 
+        -Wno-invalid-source-encoding
+    )
     target_compile_definitions(${TARGET_NAME} PRIVATE 
-        _WEB
-        _LINUX)
-    target_link_libraries(${TARGET_NAME}
-        SDL2
-        GL)
-    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+        WEB
+        LINUX
+        USE_PARALLEL
+        USE_BUILTIN_LAYER_EFFECTS)
+    add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E 
-        copy ${CMAKE_SOURCE_DIR}/src/example/*.html ${CMAKE_BINARY_DIR})
+        copy ${CMAKE_SOURCE_DIR}/src/onsjh_web/*.html ${CMAKE_BINARY_DIR}
+        COMMAND ${CMAKE_COMMAND} -E 
+        copy ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico)
 endfunction()
 
 function(config_platform TARGET_NAME)

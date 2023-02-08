@@ -341,6 +341,10 @@ int main(int argc, char *argv[])
 {
     utils::printInfo("ONScripter-Jh (Yuri) version %s (%s, %d.%02d)\n", ONS_JH_VERSION, ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
 
+    printf("%s, %d args: ", argv[0], argc-1);
+    for(int i=1; i<argc;i++) printf("%s ", argv[i]);
+    printf("\n");
+
 #if defined(PSP)
     ons.disableRescale();
     ons.enableButtonShortCut();
