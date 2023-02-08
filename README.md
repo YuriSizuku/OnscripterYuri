@@ -6,18 +6,20 @@ This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SD
 New Features:  
 
 - develop
-  - [x] clear camke project for easier development
+  - [x] clear camke project structure
+  - [x] vscode project for multi enviroment
   - [ ] ci in github action to automaticly build  
 - platform
   - [x] windows mingw32
   - [ ] linux x64
   - [ ] linux aarch64 (raspberrypi)
-  - [ ] web
+  - [ ] web (support save in indexdb, lazy load, lua)
   - [ ] android
   - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
 - render
   - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
   - [x] support arbitary resolution `--width`, `--height`  
+  - [] video support
 - other
   - [x] support `nt2`, `nt3` encryption format by Mine
   - [x] support long click or touch to invoke menu  

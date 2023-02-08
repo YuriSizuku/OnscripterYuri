@@ -48,11 +48,15 @@
             "name": "Web",
             "includePath": [
                 "${workspaceFolder}/src/onsjh/**",
+                "${workspaceFolder}/thirdparty/build/arch_wasm/include",
                 "${emsdk}/upstream/emscripten/cache/sysroot/include"
             ],
             "defines": [
                 "WEB",
-                "LINUX"
+                "LINUX",
+                "USE_LUA",
+                "USE_PARALLEL",
+                "USE_BUILTIN_LAYER_EFFECTS"
             ],
             "compilerPath": "${emsdk}/upstream/bin/clang",
             "cStandard": "c99",

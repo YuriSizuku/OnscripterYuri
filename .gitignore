@@ -1,4 +1,4 @@
-asset/test/**
+asset/*test*/**
 build/**
 build_*/**
-thirdparty/build/**
+thirdparty/**

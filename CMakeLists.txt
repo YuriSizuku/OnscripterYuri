@@ -93,6 +93,12 @@ endfunction()
 function(config_web TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSJH_CODE})
     message("Web enviroment for "  ${TARGET_NAME})
+    target_link_directories(${TARGET_NAME} PRIVATE
+        ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/lib
+    )
+    target_include_directories(${TARGET_NAME} PRIVATE
+        ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/include
+    )
     
     # pass flags for emcc
     set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
@@ -106,8 +112,13 @@ function(config_web TARGET_NAME)
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         WEB
         LINUX
+        USE_LUA
         USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS)
+        USE_BUILTIN_LAYER_EFFECTS
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE
+        lua
+    )
     add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E 
         copy ${CMAKE_SOURCE_DIR}/src/onsjh_web/*.html ${CMAKE_BINARY_DIR}
