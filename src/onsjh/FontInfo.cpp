@@ -3,7 +3,7 @@
  *  FontInfo.cpp - Font information storage class of ONScripter
  *
  *  Copyright (c) 2001-2013 Ogapee. All rights reserved.
- *            (C) 2014 jh10001 <jh10001@live.cn>
+ *            (c) 2014 jh10001 <jh10001@live.cn>
  *
  *  ogapee@aqua.dti2.ne.jp
  *

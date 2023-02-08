@@ -3,7 +3,8 @@
  *  onscripter_main.cpp -- main function of ONScripter
  *
  *  Copyright (c) 2001-2018 Ogapee. All rights reserved.
- *            (C) 2014-2019 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2019 jh10001 <jh10001@live.cn>
+ *            (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -82,8 +83,8 @@ void optionVersion()
 {
     printf("Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n");
     printf("Copyright (c) 2001-2018 Ogapee.\n\
-                              (C) 2014-2018 jh10001<jh10001@live.cn>\n\
-                              (C) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n");
+                (c) 2014-2018 jh10001<jh10001@live.cn>\n\
+                (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n");
     printf("This is free software; see the source for copying conditions.\n");
     exit(0);
 }
@@ -339,7 +340,9 @@ void parseOption(int argc, char *argv[]) {
 
 int main(int argc, char *argv[])
 {
-    utils::printInfo("ONScripter-Jh (Yuri) version %s (%s, %d.%02d)\n", ONS_JH_VERSION, ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
+    utils::printInfo("ONScripter (Yuri %s) (Jh %s) (Ons %s, %d.%02d)\n", 
+        ONS_YURI_VERSION, ONS_JH_VERSION, 
+        ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
 
     printf("%s, %d args: ", argv[0], argc-1);
     for(int i=1; i<argc;i++) printf("%s ", argv[i]);

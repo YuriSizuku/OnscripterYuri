@@ -3,7 +3,7 @@
  *  ONScripter_file.cpp - FILE I/O of ONScripter
  *
  *  Copyright (c) 2001-2018 Ogapee. All rights reserved.
- *            (C) 2014-2018 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2018 jh10001 <jh10001@live.cn>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -61,7 +61,7 @@ void ONScripter::searchSaveFile( SaveFileInfo &save_file_info, int no )
         return;
     }
     time_t mtime = buf.st_mtime;
-    tm = localtime( &mtime );
+    tm = localtime((const time_t*)&mtime );
         
     save_file_info.month  = tm->tm_mon + 1;
     save_file_info.day    = tm->tm_mday;

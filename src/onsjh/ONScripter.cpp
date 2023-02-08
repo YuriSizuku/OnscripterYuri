@@ -3,7 +3,8 @@
  *  ONScripter.cpp - Execution block parser of ONScripter
  *
  *  Copyright (c) 2001-2016 Ogapee. All rights reserved.
- *            (C) 2014-2019 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2019 jh10001 <jh10001@live.cn>
+ *            (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -41,7 +42,7 @@ extern "C" void waveCallback(int channel);
 #define FONT_FILE "default.ttf"
 #define REGISTRY_FILE "registry.txt"
 #define DLL_FILE "dll.txt"
-#define DEFAULT_ENV_FONT "����"
+#define DEFAULT_ENV_FONT "simhei"
 #define DEFAULT_AUTOMODE_TIME 1000
 
 #ifdef __OS2__
@@ -52,6 +53,7 @@ static void SDL_Quit_Wrapper()
 #endif
 
 void ONScripter::calcRenderRect() {
+
     SDL_GetRendererOutputSize(renderer, &device_width, &device_height);
 
     if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
@@ -76,9 +78,14 @@ void ONScripter::calcRenderRect() {
             screen_device_height = device_height;
         }
     }
-
+    
     screen_scale_ratio1 = (float)screen_width / screen_device_width;
     screen_scale_ratio2 = (float)screen_height / screen_device_height;
+
+    // printf("## calcRenderRect screen %dx%d, screen_device %dx%d,  %.2f, %.2f\n", 
+    //     screen_width, screen_height, 
+    //     screen_device_width, screen_device_height, 
+    //     screen_scale_ratio1, screen_scale_ratio2);
 
     render_view_rect.x = (device_width - screen_device_width) / 2;
     render_view_rect.y = (device_height - screen_device_height) / 2;

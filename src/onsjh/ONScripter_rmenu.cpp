@@ -3,7 +3,7 @@
  *  ONScripter_rmenu.cpp - Right click menu handler of ONScripter
  *
  *  Copyright (c) 2001-2018 Ogapee. All rights reserved.
- *            (C) 2014-2019 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2019 jh10001 <jh10001@live.cn>
  *
  *  ogapee@aqua.dti2.ne.jp
  *

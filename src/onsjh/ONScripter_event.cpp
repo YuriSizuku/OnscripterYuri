@@ -3,7 +3,8 @@
  *  ONScripter_event.cpp - Event handler of ONScripter
  *
  *  Copyright (c) 2001-2016 Ogapee. All rights reserved.
- *            (C) 2014-2016 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2016 jh10001 <jh10001@live.cn>
+ *            (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -867,7 +868,7 @@ bool ONScripter::keyPressEvent( SDL_KeyboardEvent *event )
         setFullScreen(!fullscreen_mode);
         return true;
       }
-      if (event->keysym.sym == SDLK_F11) { // ## to fix dynamic change
+      if (event->keysym.sym == SDLK_F11) {
         stretch_mode = !fullscreen_mode; 
         setFullScreen(!fullscreen_mode);
         return true;
@@ -1308,11 +1309,14 @@ void ONScripter::runEventLoop()
 #endif
 #if !defined(ANDROID) && !defined(IOS) && !defined(WINRT)
           case SDL_MOUSEMOTION:
+           
+#if !defined(WEB)
             // printf("## SDL_MOUSEMOTION (%d, %d) ", event.button.x, event.button.y);
             event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
             event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
             // printf("-> (%d, %d)\n", event.button.x, event.button.y);
-
+#endif
+           
             if (mouseMoveEvent( &event.motion )) return;
             if (btndown_flag){
                 if (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT))
@@ -1338,11 +1342,12 @@ void ONScripter::runEventLoop()
           case SDL_MOUSEBUTTONUP:
             current_button_state.event_type = event.type;
             current_button_state.event_button = event.button.button;
-
+#if !defined(WEB)
             // printf("## SDL_MOUSEBUTTONUP (%d, %d) ", event.button.x, event.button.y);
             event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
             event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
             // printf("-> (%d, %d)\n", event.button.x, event.button.y);
+#endif
 
             ret = mousePressEvent( &event.button );
             if (ret) return;

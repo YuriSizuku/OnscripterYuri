@@ -3,7 +3,7 @@
  *  ScriptParser_command.cpp - Define command executer of ONScripter
  *
  *  Copyright (c) 2001-2018 Ogapee. All rights reserved.
- *            (C) 2014-2018 jh10001 <jh10001@live.cn>
+ *            (c) 2014-2018 jh10001 <jh10001@live.cn>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
@@ -1326,7 +1326,7 @@ int ScriptParser::decCommand()
 int ScriptParser::dateCommand()
 {
     time_t t = time(NULL);
-    struct tm *tm = localtime( (const time_t*)&t );
+    struct tm *tm = localtime( &t );
 
     script_h.readInt();
     script_h.setInt( &script_h.current_variable, tm->tm_year % 100 );

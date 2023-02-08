@@ -3,7 +3,8 @@
  *  ScriptHandler.h - Script manipulation class
  *
  *  Copyright (c) 2001-2018 Ogapee. All rights reserved.
- *            (C) 2016-2018 jh10001 <jh10001@live.cn>
+ *            (c) 2016-2018 jh10001 <jh10001@live.cn>
+ *            (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>
  *
  *  ogapee@aqua.dti2.ne.jp
  *
