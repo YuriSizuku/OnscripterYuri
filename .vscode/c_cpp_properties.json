@@ -26,6 +26,26 @@
             "compilerArgs": [ "-m32" ]
         },
         {
+            "name": "Mingw64",
+            "includePath": [
+                "${workspaceFolder}/src/onsjh/**",
+                "${msys2sdk}/mingw64/include"
+            ],
+            "defines": [
+                "_WIN32",
+                "USE_LUA",
+                "USE_PARALLEL",
+                "USE_SIMD",
+                "USE_SIMD_X86_SSE2",
+                "USE_BUILTIN_LAYER_EFFECTS",
+                "USE_GLES",
+                "USE_FILELOG"
+            ],
+            "compilerPath": "${msys2sdk}/mingw64/bin/gcc.exe",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerArgs": [ "-m64" ]
+        },
+        {
             "name": "Linux64",
             "includePath": [
                 "${workspaceFolder}/src/onsjh/**",

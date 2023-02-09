@@ -32,6 +32,11 @@
                 }
                 return {w: docobj.style.width, h: docobj.style.height}
             }
+            addEventListener("resize", (event) => {
+                var canvas = document.getElementById('canvas');
+                scalefull(canvas, 1280/720);
+            });
+            
             var Module = {
                 canvas: (()=>{return document.getElementById('canvas');})(),
                 arguments: ["--root", "/ons_yuri", "--font", "/ons_yuri/default.ttf"],
@@ -40,10 +45,6 @@
                     scalefull(canvas, 1280/720);
                 }
             }
-            addEventListener("resize", (event) => {
-                var canvas = document.getElementById('canvas');
-                scalefull(canvas, 1280/720);
-            });
         </script>
         <script src="ons_yuri.js"></script>
     </body>

@@ -7,10 +7,11 @@ New Features:
 
 - develop
   - [x] clear camke project structure
+  - [x] clear scripts to build without pain
   - [x] vscode project for multi enviroment
   - [ ] ci in github action to automaticly build  
 - platform
-  - [x] windows mingw32
+  - [x] windows by mingw32, mingw64
   - [ ] linux x64
   - [ ] linux aarch64 (raspberrypi)
   - [ ] web (support save in indexdb, lazy load, lua)
