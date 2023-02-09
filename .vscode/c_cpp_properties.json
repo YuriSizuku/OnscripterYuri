@@ -28,7 +28,7 @@
         {
             "name": "Mingw64",
             "includePath": [
-                "${workspaceFolder}/src/onsjh/**",
+                "${workspaceFolder}/src/onsyuri/**",
                 "${msys2sdk}/mingw64/include"
             ],
             "defines": [
@@ -48,7 +48,7 @@
         {
             "name": "Linux64",
             "includePath": [
-                "${workspaceFolder}/src/onsjh/**",
+                "${workspaceFolder}/src/onsyuri/**",
                 "/usr/include"
             ],
             "defines": [
@@ -67,7 +67,7 @@
         {
             "name": "Web",
             "includePath": [
-                "${workspaceFolder}/src/onsjh/**",
+                "${workspaceFolder}/src/onsyuri/**",
                 "${workspaceFolder}/thirdparty/build/arch_wasm/include",
                 "${emsdk}/upstream/emscripten/cache/sysroot/include"
             ],

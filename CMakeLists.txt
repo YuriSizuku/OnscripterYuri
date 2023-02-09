@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(ons_yuri)
+project(onsyuri)
 
 function(config_linux TARGET_NAME)
-    add_executable(${TARGET_NAME} ${ONSJH_CODE})
+    add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     message("Linux enviroment for "  ${TARGET_NAME})
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         USE_OPENGL
@@ -14,7 +14,7 @@ endfunction()
 
 function(config_windows TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
-        ${ONSJH_CODE}
+        ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
     if(MINGW)
         message("MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
@@ -91,7 +91,7 @@ function(config_windows TARGET_NAME)
 endfunction()
 
 function(config_web TARGET_NAME)
-    add_executable(${TARGET_NAME} ${ONSJH_CODE})
+    add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     message("Web enviroment for "  ${TARGET_NAME})
     target_link_directories(${TARGET_NAME} PRIVATE
         ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/lib
@@ -121,7 +121,7 @@ function(config_web TARGET_NAME)
     )
     add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E 
-        copy ${CMAKE_SOURCE_DIR}/src/onsjh_web/*.html ${CMAKE_BINARY_DIR}
+        copy ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
         COMMAND ${CMAKE_COMMAND} -E 
         copy ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico)
 endfunction()
@@ -139,41 +139,41 @@ function(config_platform TARGET_NAME)
 endfunction()
 
 set(CMAKE_CXX_STANDARD 11)
-set(ONSJH_CODE
-    src/onsjh/AnimationInfo.cpp
-    src/onsjh/coding2utf16.cpp
-    src/onsjh/conv_shared.cpp
-    src/onsjh/DirectReader.cpp
-    src/onsjh/DirtyRect.cpp
-    src/onsjh/FontInfo.cpp
-    src/onsjh/gbk2utf16.cpp
-    src/onsjh/LUAHandler.cpp
-    src/onsjh/NsaReader.cpp
-    src/onsjh/ONScripter.cpp
-    src/onsjh/ONScripter_animation.cpp
-    src/onsjh/ONScripter_command.cpp
-    src/onsjh/ONScripter_effect.cpp
-    src/onsjh/ONScripter_effect_breakup.cpp
-    src/onsjh/ONScripter_event.cpp
-    src/onsjh/ONScripter_file.cpp
-    src/onsjh/ONScripter_file2.cpp
-    src/onsjh/ONScripter_image.cpp
-    src/onsjh/ONScripter_lut.cpp
-    src/onsjh/onscripter_main.cpp
-    src/onsjh/ONScripter_rmenu.cpp
-    src/onsjh/ONScripter_sound.cpp
-    src/onsjh/ONScripter_text.cpp
-    src/onsjh/Parallel.cpp
-    src/onsjh/resize_image.cpp
-    src/onsjh/SarReader.cpp
-    src/onsjh/ScriptHandler.cpp
-    src/onsjh/ScriptParser.cpp
-    src/onsjh/ScriptParser_command.cpp
-    src/onsjh/sjis2utf16.cpp
-    src/onsjh/renderer/gles_renderer.cpp
-    src/onsjh/builtin_dll/layer_oldmovie.cpp
-    src/onsjh/builtin_dll/layer_snow.cpp
-    src/onsjh/builtin_dll/ONScripter_effect_cascade.cpp
-    src/onsjh/builtin_dll/ONScripter_effect_trig.cpp
+set(ONSYURI_CODE
+    src/onsyuri/AnimationInfo.cpp
+    src/onsyuri/coding2utf16.cpp
+    src/onsyuri/conv_shared.cpp
+    src/onsyuri/DirectReader.cpp
+    src/onsyuri/DirtyRect.cpp
+    src/onsyuri/FontInfo.cpp
+    src/onsyuri/gbk2utf16.cpp
+    src/onsyuri/LUAHandler.cpp
+    src/onsyuri/NsaReader.cpp
+    src/onsyuri/ONScripter.cpp
+    src/onsyuri/ONScripter_animation.cpp
+    src/onsyuri/ONScripter_command.cpp
+    src/onsyuri/ONScripter_effect.cpp
+    src/onsyuri/ONScripter_effect_breakup.cpp
+    src/onsyuri/ONScripter_event.cpp
+    src/onsyuri/ONScripter_file.cpp
+    src/onsyuri/ONScripter_file2.cpp
+    src/onsyuri/ONScripter_image.cpp
+    src/onsyuri/ONScripter_lut.cpp
+    src/onsyuri/onscripter_main.cpp
+    src/onsyuri/ONScripter_rmenu.cpp
+    src/onsyuri/ONScripter_sound.cpp
+    src/onsyuri/ONScripter_text.cpp
+    src/onsyuri/Parallel.cpp
+    src/onsyuri/resize_image.cpp
+    src/onsyuri/SarReader.cpp
+    src/onsyuri/ScriptHandler.cpp
+    src/onsyuri/ScriptParser.cpp
+    src/onsyuri/ScriptParser_command.cpp
+    src/onsyuri/sjis2utf16.cpp
+    src/onsyuri/renderer/gles_renderer.cpp
+    src/onsyuri/builtin_dll/layer_oldmovie.cpp
+    src/onsyuri/builtin_dll/layer_snow.cpp
+    src/onsyuri/builtin_dll/ONScripter_effect_cascade.cpp
+    src/onsyuri/builtin_dll/ONScripter_effect_trig.cpp
 )
 config_platform(${PROJECT_NAME})
