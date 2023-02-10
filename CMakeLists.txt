@@ -132,11 +132,6 @@ function(config_webfs TARGET_NAME)
     set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain") # make as module
     set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lworkerfs.js --use-preload-plugins")
     set_target_properties(${TARGET_NAME} PROPERTIES LINK_FLAGS ${EMCC_FLAGS})
-    add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E 
-        copy ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
-        COMMAND ${CMAKE_COMMAND} -E 
-        copy ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico)
 endfunction()
 
 function(config_platform TARGET_NAME)
@@ -147,6 +142,11 @@ function(config_platform TARGET_NAME)
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
         config_web(${TARGET_NAME})
         # config_webfs(${TARGET_NAME}_fs)
+        add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E 
+            copy ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E 
+            copy ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico)
     else()
         message("${CMAKE_SYSTEM_NAME} enviroment for ${TARGET_NAME} not supported!")
     endif()

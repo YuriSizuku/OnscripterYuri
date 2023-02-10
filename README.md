@@ -2,8 +2,12 @@
 
 ![web-onscripter](https://img.shields.io/badge/web-onscripter-green)  
 
-☘️ An ehancement Onscripter porting to many platforms, especially **web** ！
+☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
+
+Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html)  
+
+![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
 New features or plans:  
 
@@ -27,8 +31,6 @@ New features or plans:
   - [x] support `nt2`, `nt3` encryption format by Mine
   - [x] support long click or touch to invoke menu  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
-
-![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
 ## 1. usage
 

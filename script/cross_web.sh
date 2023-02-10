@@ -29,7 +29,7 @@ emcc $CMAKELISTS_PATH/src/onsyuri_web/dummy.c \
 
 # config and build project
 # rm -rf $BUILD_PATH/*
-if [ -n $GAME_PATH ]; then cp -rf $GAME_PATH/* $BUILD_PATH; fi
+if [ -n "$GAME_PATH" ]; then cp -rf $GAME_PATH/* $BUILD_PATH; fi
 emcmake cmake -G "Unix Makefiles" \
     -S $CMAKELISTS_PATH -B $BUILD_PATH \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE
