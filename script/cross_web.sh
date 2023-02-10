@@ -23,12 +23,13 @@ make -C $LUA_SRC all PLAT=linux CC=emcc AR="emar rcu" -j$CORE_NUM
 make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH -j$CORE_NUM
 
 embuilder build sdl2 sdl2_ttf sdl2_image sdl2_mixer bzip2 ogg vorbis mpg123
-emcc $CMAKELISTS_PATH/src/onsjh_web/dummy.c \
+emcc $CMAKELISTS_PATH/src/onsyuri_web/dummy.c \
     -o $BUILD_PATH/dummy.js \
     -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg 
 
 # config and build project
-# rm -rf $BUILD_PATH/*
+rm -rf $BUILD_PATH/*
+cp ./../asset/test_lua/*.json $BUILD_PATH
 emcmake cmake -G "Unix Makefiles" \
     -S $CMAKELISTS_PATH -B $BUILD_PATH \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE

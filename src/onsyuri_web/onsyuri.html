@@ -3,49 +3,167 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta onsyuri_index="onsyuri_index.json">
         <title>Onscripter (yuri)</title>
     </head>
     <body style="margin: 0 auto; background-color:black;">
         <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>
-        <script type='text/javascript'>
-            function scalefull(docobj, ratio=0)
-            {
+        <script src="onsyuri.js" type="text/javascript"></script>
+        <script src="onsyuri_fs.js" type="text/javascript"></script>
+        <script type="text/javascript"> // universe function
+            function scale_full(docobj, ratio=0){
                 var w = window.innerWidth;
                 var h = window.innerHeight;
-                if(ratio>0)
-                {
-                    if(w/h > ratio)
-                    {
+                if(ratio>0) {
+                    if(w/h > ratio) {
                         docobj.style.width  = h * ratio  + "px";
                         docobj.style.height = h + "px";
                     }
-                    else
-                    {
+                    else {
                         docobj.style.width  = w  + "px";
                         docobj.style.height = w / ratio + "px";
                     }
                 }
-                else
-                {
+                else {
                     docobj.style.width  = w + "px";
                     docobj.style.height = h + "px";
                 }
                 return {w: docobj.style.width, h: docobj.style.height}
             }
-            addEventListener("resize", (event) => {
-                var canvas = document.getElementById('canvas');
-                scalefull(canvas, 1280/720);
-            });
             
-            var Module = {
-                canvas: (()=>{return document.getElementById('canvas');})(),
-                arguments: ["--root", "/ons_yuri", "--font", "/ons_yuri/default.ttf"],
-                onRuntimeInitialized: () => {
-                    console.log(FS.readdir("/ons_yuri"));
-                    scalefull(canvas, 1280/720);
-                }
+            async function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            async function send_worker(worker, data){
+                worker.postMessage(data);
+                return new Promise((res)=>{
+                    worker.onmessage = (event)=>{
+                        res(event.data);
+                    };
+                })
+            };
+
+            async function load_json(url){
+                return new Promise((res)=>{
+                    fetch(url).then((res)=>res.json())
+                    .then((json)=>(res(json)));
+                })
+            }
+
+            async function load_js(url)
+            {
+                var script = document.createElement('script');
+                script.type = "text/javascript";
+                script.src = url;
+                document.getElementsByTagName("body")[0].appendChild(script);
+                return new Promise((res)=>{
+                    script.onload = () =>{
+                        res(1);
+                    }
+                })
             }
         </script>
-        <script src="ons_yuri.js"></script>
+        <script> // onsyuri em function 
+            function em_mkdirs(_FS, path)
+            {
+                var tmpdir="";
+                var arr = path.split('/');
+                for(i in arr)
+                {
+                    tmpdir += arr[i] +"/";
+                    if(arr[i]=="") continue;
+                    try{
+                        _FS.mkdir(tmpdir);
+                    }
+                    catch{};
+                }
+            }
+
+            function mount_onsgame(_FS, gamedir, files)
+            {
+                console.log("## onsyuri_fs: mount_onsgame", gamedir);
+                for(i in files)
+                {
+                    var path = files[i].path;
+                    var url = files[i].url
+                    var j = path.lastIndexOf("/");
+                    var filename =path.substring(j+1);
+                    var filedir = path.substring(0, j);
+                    var basedir = gamedir + "/" + filedir;
+                    em_mkdirs(_FS, basedir);
+                    console.log(i, filename, url);
+                    _FS.createPreloadedFile(basedir, filename, url, true, false);
+                }
+            }
+
+            function mount_onssave(_FS, _IDBFS, savedir)
+            {
+                console.log("## onsyuri_fs: mount_onssave", savedir);
+                em_mkdirs(_FS, savedir);
+                _FS.mount(_IDBFS, {}, savedir);
+                _FS.syncfs(true, (err)=>{
+                    if(err) console.log(err);
+                });
+                // return new Promise((res)=>{
+                //     _FS.syncfs(true, (err)=>{
+                //         if(err) {res(0);console.log(err);}
+                //         else res(1);
+                //     })
+                // });
+            }
+        </script>
+        <script type="text/javascript"> // onsyuri init    
+            // init onsyuri_index and fs dir        
+            const ONSYURI_FS_DIR = "/yurifs"
+            var onsyuri_index = {};
+            var onsyuri_index_url = document.querySelector(
+                'meta[onsyuri_index]').attributes.onsyuri_index.textContent;
+           
+            // init onsyuri_fs module
+            var onsyuri_fs_module = {};
+            onsyuri_fs_module.preRun = ()=>{
+                console.log("## onsyuri_fs: preRun");
+                mount_onsgame(onsyuri_fs_module.FS, onsyuri_index.gamedir, onsyuri_index.files);
+                mount_onssave(onsyuri_fs_module.FS, onsyuri_fs_module.IDBFS, onsyuri_index.savedir);
+            };
+            
+            // init onsyuri module
+            var onsyuri_module  = {};
+            onsyuri_module.canvas = (()=>{return document.getElementById('canvas');})();
+            onsyuri_module.onRuntimeInitialized = () => {
+                console.log("## onsyuri: onRuntimeInitialized");
+                scale_full(canvas, 1280/720);
+            };
+            onsyuri_module.preInit = ()=>{
+                console.log("## onsyuri: preInit");
+                onsyuri_module.FS.mkdir(ONSYURI_FS_DIR);
+                onsyuri_module.FS.mount(onsyuri_module.PROXYFS,  
+                    {root: "/", fs: onsyuri_fs_module.FS}, ONSYURI_FS_DIR);
+            };
+            
+            addEventListener("resize", (event) => {
+                var canvas = document.getElementById('canvas');
+                scale_full(canvas, 1280/720);
+            });
+            (async() => {
+                onsyuri_index = await load_json(onsyuri_index_url);
+                
+                // invoke onsyuri_fs
+                await onsyuri_fs(onsyuri_fs_module);
+                onsyuri_fs_module.callMain();
+
+                // invoke onsyuri
+                await onsyuri(onsyuri_module);
+                console.log(onsyuri_module.FS.readdir(ONSYURI_FS_DIR + onsyuri_index.gamedir));
+                var args = [
+                    "--root", ONSYURI_FS_DIR + onsyuri_index.gamedir, 
+                    "--font",  ONSYURI_FS_DIR + onsyuri_index.gamedir + "/default.ttf", 
+                    "--save-dir", ONSYURI_FS_DIR + onsyuri_index.savedir];
+                args = args.concat(onsyuri_index.args);
+                console.log("## onsyuri: args", args);
+                onsyuri_module.callMain(args);
+            })();
+        </script>
     </body>
 </html>

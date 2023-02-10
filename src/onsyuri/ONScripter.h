@@ -71,7 +71,7 @@ public:
     
     struct ButtonState{
         unsigned int event_type;
-        unsigned char event_button;
+        unsigned int event_button;
         int x, y, button;
         char str[16];
         bool down_flag;

@@ -2,3 +2,4 @@ asset/*test*/**
 build/**
 build_*/**
 thirdparty/**
+script/*.json
