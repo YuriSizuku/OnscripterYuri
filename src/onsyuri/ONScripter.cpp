@@ -52,6 +52,10 @@ static void SDL_Quit_Wrapper()
 }
 #endif
 
+#ifdef WEB
+#include <emscripten.h>
+#endif
+
 void ONScripter::calcRenderRect() {
 
     SDL_GetRendererOutputSize(renderer, &device_width, &device_height);
@@ -236,6 +240,14 @@ void ONScripter::initSDL()
     underline_value = script_h.screen_height;
 
     utils::printInfo("Display: %d x %d (%d bpp)\n", screen_width, screen_height, screen_bpp);
+#ifdef WEB
+    EM_ASM(
+        self.screen_width = $0;
+        self.screen_height = $1;
+        let canvas = document.getElementById('canvas');
+        if(scale_full && canvas) scale_full(canvas, self.screen_width/self.screen_height);
+    , screen_width, screen_height);
+#endif
     dirty_rect.setDimension(screen_width, screen_height);
     
     screen_rect.x = screen_rect.y = 0;

@@ -43,6 +43,10 @@ extern "C" void c2pstrcpy(Str255 dst, const char *src);	//#include <TextUtils.h>
 #include <pspiofilemgr.h>
 #endif
 
+#if defined(WEB)
+#include <emscripten.h>
+#endif
+
 #define SAVEFILE_MAGIC_NUMBER "ONS"
 #define SAVEFILE_VERSION_MAJOR 2
 #define SAVEFILE_VERSION_MINOR 8
@@ -58,12 +62,13 @@ void ONScripter::searchSaveFile( SaveFileInfo &save_file_info, int no )
     sprintf( file_name, "%ssave%d.dat", save_dir?save_dir:archive_path, no );
     struct stat buf;
     struct tm *tm;
+    // printf("## searchSaveFile %s\n", file_name);
     if ( stat( file_name, &buf ) != 0 ){
         save_file_info.valid = false;
         return;
     }
     time_t mtime = buf.st_mtime;
-    tm = localtime((const time_t*)&mtime );
+    tm = localtime( &mtime );
         
     save_file_info.month  = tm->tm_mon + 1;
     save_file_info.day    = tm->tm_mday;
@@ -266,11 +271,17 @@ int ONScripter::writeSaveFile( int no, const char *savestr )
         utils::printError("can't open save file %s for writing\n", filename );
         return -1;
     }
-
+#if defined(WEB)
+    EM_ASM(
+        if(window.flush_save) window.flush_save();
+        else FS.syncfs(false, (err)=>{console.log(err);});
+    );
+#else
     size_t magic_len = strlen(SAVEFILE_MAGIC_NUMBER)+2;
     sprintf( filename, RELATIVEPATH "sav%csave%d.dat", DELIMITER, no );
     if (saveFileIOBuf( filename, magic_len, savestr ))
         utils::printError("can't open save file %s for writing (not an error)\n", filename );
+#endif
 
     return 0;
 }

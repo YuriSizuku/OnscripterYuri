@@ -370,10 +370,11 @@ int ScriptParser::saveFileIOBuf( const char *filename, int offset, const char *s
 {
     bool use_save_dir = false;
     if (strcmp(filename, "envdata") != 0) use_save_dir = true;
-    
+     
     FILE *fp;
+    // printf("## saveFileIOBuf %s %s\n", filename, savestr);
     if ( (fp = fopen( filename, "wb", use_save_dir )) == NULL ) return -1;
-    
+    // printf("## after saveFileIOBuf\n");
     size_t ret = fwrite(file_io_buf+offset, 1, file_io_buf_ptr-offset, fp);
 
     if (savestr){

@@ -28,8 +28,8 @@ emcc $CMAKELISTS_PATH/src/onsyuri_web/dummy.c \
     -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg 
 
 # config and build project
-rm -rf $BUILD_PATH/*
-cp ./../asset/test_lua/*.json $BUILD_PATH
+# rm -rf $BUILD_PATH/*
+if [ -n $GAME_PATH ]; then cp -rf $GAME_PATH/* $BUILD_PATH; fi
 emcmake cmake -G "Unix Makefiles" \
     -S $CMAKELISTS_PATH -B $BUILD_PATH \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE

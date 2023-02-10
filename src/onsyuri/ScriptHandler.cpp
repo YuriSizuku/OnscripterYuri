@@ -27,6 +27,10 @@
 #include "Utils.h"
 #include "coding2utf16.h"
 
+#if defined(WEB)
+#include <emscripten.h>
+#endif
+
 extern Coding2UTF16 *coding2utf16;
 
 #define TMP_SCRIPT_BUF_LEN 4096

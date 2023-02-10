@@ -7,10 +7,10 @@ def make_filelist(inpath, urlbase):
     for _root, _dirs, _files in os.walk(inpath):
         for file in _files:
             path = os.path.join(_root, file)
+            url = urlbase + relpath if urlbase!="" else ""
             relpath = os.path.relpath(path, inpath).replace('\\', '/')
-            files.append({
-                "path": relpath, "url": urlbase + '/'+ relpath
-            })
+            if url=="": files.append({"path": relpath})
+            else :files.append({"path": relpath, "url": url})
     return files
 
 
@@ -42,7 +42,6 @@ def main(cmdstr=None):
 
     inpath = os.path.abspath(inpath)
     if not title: title = os.path.basename(inpath)
-    if len(urlbase)>0 and urlbase[-1]=='/': urlbase = urlbase[:-1]
     if not gamedir: gamedir = "/onsyuri/" + title
     if not savedir: savedir = "/onsyuri_save/"+title
     files = make_filelist(inpath, urlbase)
@@ -58,5 +57,5 @@ def main(cmdstr=None):
         json.dump(onsyuri_index, fp, indent=2) 
 
 if __name__ == '__main__':
-    debug()
-    # main()
+    # debug()
+    main()

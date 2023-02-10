@@ -1,9 +1,11 @@
 # Onscripter (Yuri)  
 
-☘️ An ehancement Onscripter porting to many platforms, especially web.
+![web-onscripter](https://img.shields.io/badge/web-onscripter-green)  
+
+☘️ An ehancement Onscripter porting to many platforms, especially **web** ！
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
-New Features:  
+New features or plans:  
 
 - develop
   - [x] clear camke project structure
@@ -14,7 +16,7 @@ New Features:
   - [x] windows by mingw32, mingw64
   - [ ] linux x64
   - [ ] linux aarch64 (raspberrypi)
-  - [ ] web (support save in indexdb, lazy load, lua)
+  - [x] web (support save in indexdb, lazy load (not finished yet), lua)
   - [ ] android
   - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
 - render
@@ -25,6 +27,8 @@ New Features:
   - [x] support `nt2`, `nt3` encryption format by Mine
   - [x] support long click or touch to invoke menu  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
+
+![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
 ## 1. usage
 
@@ -41,16 +45,19 @@ New Features:
 
 ### (2) web
 
-This project can run in a browser through hosted web server:  
+This project can run in a browser through hosted web server.  
+Press `F11` to strech full in a webpage, long click (touch also) to invoke game menu.
+It might need some time to load at first without lazyload now.  
+
+The structure is as bellow:  
 
 ``` bash
 onsyuri.html
 onsyuri.js
 onsyuri.wasm
-onsyuri_fs.js
-onsyuri_fs.wasm
 onsyuri_index.json
 [your game files]
+
 ```
 
 It will load the game according to `onsyuri_index.json`, whitch is deifned by `<meta onsyuri_index="onsyuri_index.json">` in `onsyuri.html`.  
@@ -122,3 +129,9 @@ sh -c "export BUILD_TYPE=Debug && export EMCSDK=/d/Software/env/sdk/emsdk && ./c
 |----|-------|------|-----------|
 
 ## 4. knowed issues (including already solved)  
+
+- general  
+- windows  
+- linux  
+- web  
+  - [ ] lazy load in workerfs not work, see this [issue](https://github.com/emscripten-core/emscripten/issues/18698)  
