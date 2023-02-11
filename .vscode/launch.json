@@ -29,13 +29,14 @@
             ]
         },
         {
-            "name": "linux32 cppdbg",
+            "name": "linux64 cppdbg",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build_linux32/onsyuri",
-            "args": [],
+            "program": "${workspaceFolder}/build_linux64/onsyuri",
+            "args": ["--debug:0", "--width", "960", "--height", "544", 
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "save"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build_linux32/test",
+            "cwd": "${workspaceFolder}/build_linux64",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

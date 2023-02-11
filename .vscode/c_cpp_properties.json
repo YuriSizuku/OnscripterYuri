@@ -15,8 +15,6 @@
                 "_WIN32",
                 "USE_LUA",
                 "USE_PARALLEL",
-                "USE_SIMD",
-                "USE_SIMD_X86_SSE2",
                 "USE_BUILTIN_LAYER_EFFECTS",
                 "USE_GLES",
                 "USE_FILELOG"
@@ -49,14 +47,16 @@
             "name": "Linux64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
-                "/usr/include"
+                "/usr/include",
+                "/usr/include/SDL2",
+                "/usr/include/lua5.3"
             ],
             "defines": [
                 "LINUX",
                 "USE_LUA",
                 "USE_PARALLEL",
                 "USE_SIMD",
-                "USE_SIMD_X86_SSE2"
+                "USE_SIMD_X86_SSE"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c99",

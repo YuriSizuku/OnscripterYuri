@@ -5,11 +5,39 @@ function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     message("Linux enviroment for "  ${TARGET_NAME})
     target_compile_definitions(${TARGET_NAME} PRIVATE 
-        USE_OPENGL
-        _LINUX)
+        LINUX
+        USE_LUA
+        USE_PARALLEL
+        USE_BUILTIN_LAYER_EFFECTS
+        USE_GLES
+        USE_FILELOG)
+    target_compile_options(${TARGET_NAME} PRIVATE
+        -static
+    )
+    target_include_directories(${TARGET_NAME} PRIVATE
+        /usr/include/lua5.3
+    )
+
+    include(FindPkgConfig)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
+    pkg_check_modules(LUA53 REQUIRED lua5.3)
+    pkg_check_modules(JPEG REQUIRED libjpeg)
+
     target_link_libraries(${TARGET_NAME}  # dynamic
-        SDL2 
-        GL)
+        ${SDL2_STATIC_LIBRARIES}
+        ${SDL2_TTF_STATIC_LIBRARIES}
+        ${SDL2_IMAGE_STATIC_LIBRARIES}
+        ${SDL2_MIXER_STATIC_LIBRARIES}
+        ${LUA53_STATIC_LIBRARIES}
+        ${JPEG_STATIC_LIBRARIES}
+        bz2
+        -Wl,-Bdynamic
+        asound
+        
+    )
 endfunction()
 
 function(config_windows TARGET_NAME)
