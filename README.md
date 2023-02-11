@@ -5,7 +5,7 @@
 ☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
-Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html)  
+Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [galgame_demo](https://onsgame.netlify.app/game/mo2_demo/)  
 
 ![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
@@ -134,6 +134,8 @@ sh -c "export BUILD_TYPE=Debug && export EMCSDK=/d/Software/env/sdk/emsdk && ./c
 
 - general  
 - windows  
+  - [ ] window exe too big, because of mingw static link  
 - linux  
+- android  
 - web  
   - [ ] lazy load in workerfs not work, see this [issue](https://github.com/emscripten-core/emscripten/issues/18698)  
