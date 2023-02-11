@@ -26,17 +26,19 @@ function(config_linux TARGET_NAME)
     pkg_check_modules(LUA53 REQUIRED lua5.3)
     pkg_check_modules(JPEG REQUIRED libjpeg)
 
-    target_link_libraries(${TARGET_NAME}  # dynamic
-        ${SDL2_STATIC_LIBRARIES}
-        ${SDL2_TTF_STATIC_LIBRARIES}
-        ${SDL2_IMAGE_STATIC_LIBRARIES}
-        ${SDL2_MIXER_STATIC_LIBRARIES}
-        ${LUA53_STATIC_LIBRARIES}
-        ${JPEG_STATIC_LIBRARIES}
+    target_link_libraries(${TARGET_NAME} PRIVATE # static
+        -Wl,-Bstatic
+        ${JPEG_STATIC_LIBRARIES} # avoid libjpeg.so.8 
         bz2
+        lua5.3
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE # dynamic
         -Wl,-Bdynamic
-        asound
-        
+        dl
+        ${SDL2_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_MIXER_LIBRARIES}
     )
 endfunction()
 

@@ -18,7 +18,7 @@ New features or plans:
   - [ ] ci in github action to automaticly build  
 - platform
   - [x] windows by mingw32, mingw64
-  - [x] linux x64
+  - [x] linux x86, x64 (dynamic link)
   - [ ] linux aarch64 (raspberrypi)
   - [x] web (support save in indexdb, lazy load (not finished yet), lua)
   - [ ] android
@@ -34,7 +34,7 @@ New features or plans:
 
 ## 1. usage
 
-### (1) command
+### (1) general command
 
 ``` bash
 ./ons_yuri --help
@@ -45,9 +45,13 @@ New features or plans:
 
 ❗ If you force exit the game, the save might be damaged, try to remvoe envdata to play again.
 
+### (2) linux
+
+If you want to run on linux, we recommend to compile from source code (see next part). Because it strongly depends on glibc and other library version.  
+
 ![onsyuri_mo2_linuxtest](screenshot/onsyuri_mo2_linuxtest.jpg)  
 
-### (2) web
+### (3) web
 
 This project can run in a browser through hosted web server.  
 Press `F11` to strech full in a webpage, long click (touch also) to invoke game menu.
@@ -110,26 +114,35 @@ and then use these `local_mingw32.sh` to build.
 ``` sh
 cd script
 sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_mingw32.sh"
-```
+```  
 
 ### (2) local linux  
 
 Install the dependency  
 
 ``` bash
+# linux64
 sudo apt-get update
 sudo apt-get -y install gcc gdb make cmake git curl
 sudo apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev
 sudo apt-get -y install libbz2-dev libjpeg-dev libpng-dev
 sudo apt-get -y install liblua5.3-dev libgl1-mesa-dev
 
-# not worked in WSL
+# linux32
 sudo dpkg --add-architecture i386 
 sudo apt-get update
-sudo apt-get -y install gcc-multilib
+sudo apt-get -y install gcc-multilib g++-multilib
 sudo apt-get -y install libsdl2-dev:i386 libsdl2-ttf-dev:i386 libsdl2-image-dev:i386 libsdl2-mixer-dev:i386
+sudo apt-get -y install libbz2-dev:i386 libjpeg-dev:i386 libpng-dev:i386
 sudo apt-get -y install liblua5.3-dev:i386 libgl1-mesa-dev:i386
 ```  
+
+``` sh
+cd script
+sh -c "export BUILD_TYPE=Debug && ./local_linux32.sh"
+```  
+
+and then use `local_linux32.sh`, `local_linux64.sh` to build.  
 
 ### (3) cross web  
 

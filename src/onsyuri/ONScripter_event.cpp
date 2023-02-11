@@ -863,7 +863,7 @@ bool ONScripter::keyPressEvent( SDL_KeyboardEvent *event )
     }
     
     if ( event->type == SDL_KEYUP ){
-#if !defined(WINRT) && (defined(WIN32) || defined(_WIN32))
+#if !defined(WINRT) && !defined(WEB) && (defined(WIN32) || defined(_WIN32) || defined(LINUX))
       if ((event->keysym.mod & KMOD_ALT) && event->keysym.sym == SDLK_RETURN) {
         setFullScreen(!fullscreen_mode);
         return true;
