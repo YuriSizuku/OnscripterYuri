@@ -27,6 +27,7 @@
 extern "C"{
 #include <jpeglib.h>
 };
+
 #include <bzlib.h>
 #include "resize_image.h"
 

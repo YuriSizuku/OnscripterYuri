@@ -12,7 +12,7 @@ function(config_linux TARGET_NAME)
         USE_FILELOG
     )
 
-    if(CMAKE_SYSROOT)
+    if(CMAKE_SYSROOT) # cross compile
         message("CMAKE_SYSROOT ${CMAKE_SYSROOT}")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --sysroot=${CMAKE_SYSROOT}")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT}")
@@ -40,8 +40,8 @@ function(config_linux TARGET_NAME)
             SDL2_image
             SDL2_mixer
             -Wl,-Bdynamic
-            pthread
             dl
+            pthread
         )
 
     else()
@@ -85,10 +85,12 @@ function(config_windows TARGET_NAME)
             USE_SIMD_X86_SSE2
             USE_BUILTIN_LAYER_EFFECTS
             USE_GLES
-            USE_FILELOG)
+            USE_FILELOG
+        )
         target_link_options(${TARGET_NAME} PRIVATE 
             -static-libgcc   # static link mingw env
-            -static-libstdc++) 
+            -static-libstdc++
+        ) 
         if(CMAKE_BUILD_TYPE MATCHES "Debug")
             message("generating debug configuration")
             target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
@@ -137,16 +139,64 @@ function(config_windows TARGET_NAME)
             opus
             ogg
             mpg123
-            shlwapi)
+            shlwapi
+        )
 
         target_link_libraries(${TARGET_NAME} 
             -Wl,-Bdynamic # dynamic links
             dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
-            imm32 winmm gdi32 user32)
+            imm32 winmm gdi32 user32
+        )
 
     else()
         message("Windows enviroment for ${TARGET_NAME} not supported!")
     endif()
+endfunction()
+
+function(config_windows2 TARGET_NAME)
+    add_executable(${TARGET_NAME} WIN32 
+        ${ONSYURI_CODE}
+        ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
+    message("Cross MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
+    target_compile_definitions(${TARGET_NAME} PRIVATE 
+        _WIN32
+        XMD_H # fix jpeg IN32 problem in jmorecfg.h
+        USE_LUA
+        USE_PARALLEL
+        USE_BUILTIN_LAYER_EFFECTS
+        USE_FILELOG
+    )
+    set(CMAKE_RC_COMPILER "x86_64-w64-mingw32-windres")
+    target_include_directories(${TARGET_NAME} PRIVATE
+        ${CMAKE_SYSROOT}/include
+        /usr/x86_64-w64-mingw32/include
+    )
+    target_link_directories(${TARGET_NAME} PRIVATE
+        ${CMAKE_SYSROOT}/lib
+    )
+
+    target_link_options(${TARGET_NAME} PRIVATE 
+        -static-libgcc
+        -static-libstdc++
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE # static
+        -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive 
+        -Wl,-Bstatic
+        lua
+        bz2
+        jpeg
+        
+        mingw32
+        SDL2
+        SDL2main
+        SDL2_ttf
+        SDL2_image
+        SDL2_mixer
+        
+        -Wl,-Bdynamic
+        dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
+        imm32 winmm gdi32 user32 rpcrt4
+    )
 endfunction()
 
 function(config_web TARGET_NAME)
@@ -197,7 +247,11 @@ function(config_platform TARGET_NAME)
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
         config_linux(${TARGET_NAME})
     elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-        config_windows(${TARGET_NAME})
+        if (CMAKE_SYSROOT) 
+            config_windows2(${TARGET_NAME})
+        else() 
+            config_windows(${TARGET_NAME}) 
+        endif()
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
         config_web(${TARGET_NAME})
         # config_webfs(${TARGET_NAME}_fs)

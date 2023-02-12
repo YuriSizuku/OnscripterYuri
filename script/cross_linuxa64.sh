@@ -13,19 +13,20 @@ if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
 # SKIP_PORTS="yes"
+# todo: problems on audio and window not appears
 echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
 if [ -z "$SKIP_PORTS" ]; then
     source _fetch.sh
     source _$PLATFORM.sh
     # https://swarminglogic.com/article/2014_11_crosscompile2
-    fetch_jpeg && build_jpeg
-    fetch_bz2 && build_bz2
-    fetch_lua && build_lua
-    get_pulse
+    # fetch_jpeg && build_jpeg
+    # fetch_bz2 && build_bz2
+    # fetch_lua && build_lua
+    # get_pulse
     fetch_sdl2 && build_sdl2
-    fetch_sdl2_image && build_sdl2_image 
-    fetch_sdl2_ttf && build_sdl2_ttf
-    fetch_sdl2_mixer && build_sdl2_mixer
+    # fetch_sdl2_image && build_sdl2_image 
+    # fetch_sdl2_ttf && build_sdl2_ttf
+    # fetch_sdl2_mixer && build_sdl2_mixer
 fi
 
 # config and build project

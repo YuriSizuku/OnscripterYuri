@@ -66,7 +66,7 @@
             "name": "Linuxa64_cross",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
-                "${workspaceFolder}/thirdparty/build/arch_linuxa64/include"
+                "${workspaceFolder}/thirdparty/build/arch_linuxa64/include/**"
             ],
             "defines": [
                 "LINUX",
