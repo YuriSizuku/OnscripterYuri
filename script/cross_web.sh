@@ -6,7 +6,7 @@ CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
 TARGETS=$@
 
 # config env
-source ./_fetchports.sh
+source ./_fetch.sh
 if [ -z "$EMCSDK" ]; then EMCSDK=/d/Software/env/sdk/emsdk; fi
 if [ -n "$(uname -a | grep Msys)" ]; then # fix python problem in windows
     if [ -z "$MSYS2SDK" ]; then MSYS2SDK=/d/Software/env/msys2; fi
@@ -17,11 +17,17 @@ if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
 # build ports
-echo "LUA_SRC=$LUA_SRC"
-if ! [ -d "$PORTBUILD_PATH/lua" ]; then mkdir -p "$PORTBUILD_PATH/lua"; fi
-make -C $LUA_SRC all PLAT=linux CC=emcc AR="emar rcu" -j$CORE_NUM
-make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH -j$CORE_NUM
+function build_lua()
+{
+    if ! [ -d "${LUA_SRC}_wasm" ]; then cp -rp ${LUA_SRC} ${LUA_SRC}_wasm; fi
+    LUA_SRC=${LUA_SRC}_wasm
+    echo "## LUA_SRC=$LUA_SRC"
+    if ! [ -d "$PORTBUILD_PATH/lua" ]; then mkdir -p "$PORTBUILD_PATH/lua"; fi
+    make -C $LUA_SRC all PLAT=linux CC=emcc AR="emar rcu" -j$CORE_NUM
+    make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH -j$CORE_NUM
+}
 
+fetch_lua && build_lua
 embuilder build sdl2 sdl2_ttf sdl2_image sdl2_mixer bzip2 ogg vorbis mpg123
 emcc $CMAKELISTS_PATH/src/onsyuri_web/dummy.c \
     -o $BUILD_PATH/dummy.js \

@@ -9,37 +9,66 @@ function(config_linux TARGET_NAME)
         USE_LUA
         USE_PARALLEL
         USE_BUILTIN_LAYER_EFFECTS
-        USE_GLES
-        USE_FILELOG)
-    target_compile_options(${TARGET_NAME} PRIVATE
-        -static
-    )
-    target_include_directories(${TARGET_NAME} PRIVATE
-        /usr/include/lua5.3
+        USE_FILELOG
     )
 
-    include(FindPkgConfig)
-    pkg_check_modules(SDL2 REQUIRED sdl2)
-    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
-    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
-    pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
-    pkg_check_modules(LUA53 REQUIRED lua5.3)
-    pkg_check_modules(JPEG REQUIRED libjpeg)
+    if(CMAKE_SYSROOT)
+        message("CMAKE_SYSROOT ${CMAKE_SYSROOT}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --sysroot=${CMAKE_SYSROOT}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT}")
+        target_include_directories(${TARGET_NAME} PRIVATE
+            ${CMAKE_SYSROOT}/include
+        )
+        target_link_directories(${TARGET_NAME} PRIVATE
+            ${CMAKE_SYSROOT}/lib
+        )
+    endif()
 
-    target_link_libraries(${TARGET_NAME} PRIVATE # static
-        -Wl,-Bstatic
-        ${JPEG_STATIC_LIBRARIES} # avoid libjpeg.so.8 
-        bz2
-        lua5.3
-    )
-    target_link_libraries(${TARGET_NAME} PRIVATE # dynamic
-        -Wl,-Bdynamic
-        dl
-        ${SDL2_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_MIXER_LIBRARIES}
-    )
+    if(LINK_STATIC)
+        target_link_options(${TARGET_NAME} PRIVATE 
+            -static-libgcc
+            -static-libstdc++
+        )
+        target_link_libraries(${TARGET_NAME} PRIVATE # static
+            # -Wl,-Bstatic,--whole-archive -lpthread -Wl,--no-whole-archive
+            -Wl,-Bstatic
+            lua
+            jpeg
+            bz2
+            SDL2
+            SDL2_ttf
+            SDL2_image
+            SDL2_mixer
+            -Wl,-Bdynamic
+            pthread
+            dl
+        )
+
+    else()
+        include(FindPkgConfig)
+        pkg_check_modules(SDL2 REQUIRED sdl2)
+        pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+        pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+        pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
+        pkg_check_modules(JPEG REQUIRED libjpeg)
+
+        target_include_directories(${TARGET_NAME} PRIVATE
+            /usr/include/lua5.3
+        )
+        target_link_libraries(${TARGET_NAME} PRIVATE
+            -Wl,-Bstatic # avoid libjpeg.so.8 
+            ${JPEG_STATIC_LIBRARIES} 
+            bz2
+            lua5.3
+            -Wl,-Bdynamic
+            dl
+            ${SDL2_LIBRARIES}
+            ${SDL2_TTF_LIBRARIES}
+            ${SDL2_IMAGE_LIBRARIES}
+            ${SDL2_MIXER_LIBRARIES}
+        )
+    endif()
+
 endfunction()
 
 function(config_windows TARGET_NAME)

@@ -7,6 +7,8 @@ TARGETS=$@
 # config env
 CC=gcc
 CXX=g++
+if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
 # config and build project
 echo "BUILD_TYPE=$BUILD_TYPE"

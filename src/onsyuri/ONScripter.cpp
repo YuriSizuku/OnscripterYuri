@@ -123,9 +123,14 @@ void ONScripter::initSDL()
     /* ---------------------------------------- */
     /* Initialize SDL */
 
-    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO ) < 0 ){
+    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER  ) < 0 ){
         utils::printError("Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(-1);
+    }
+
+    if( SDL_Init(SDL_INIT_AUDIO) < 0)
+    {
+        utils::printError("Couldn't initialize SDL: %s\n", SDL_GetError());
     }
 
 #ifdef USE_CDROM

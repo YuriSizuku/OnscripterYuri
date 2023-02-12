@@ -153,7 +153,23 @@ cd script
 sh -c "export BUILD_TYPE=Debug && export EMCSDK=/d/Software/env/sdk/emsdk && ./cross_web.sh"
 ```
 
-### (4) cross linux aarch64
+### (4) cross linux arm
+
+This is aimed for raspberrypi or the other arm64 devices cross compiling.
+Install the dependency for aarch64 cross compiler,  
+
+```shell
+sudo apt-get -y install tar make cmake meson curl git
+sudo apt-get -y install crossbuild-essential-armhf
+sudo apt-get -y install crossbuild-essential-arm64
+```
+
+then use `cross_linuxa64.sh` to compile.  
+
+```shell  
+# use SKIP_PORTS to skip thirdpart builds
+sh -c "export BUILD_TYPE=Debug && export SKIP_PORTS=yes && ./local_linux64.sh"
+```  
 
 ### (5) cross mingw
 

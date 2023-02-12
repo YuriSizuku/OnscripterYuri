@@ -54,14 +54,29 @@
             "defines": [
                 "LINUX",
                 "USE_LUA",
-                "USE_PARALLEL",
-                "USE_SIMD",
-                "USE_SIMD_X86_SSE"
+                "USE_PARALLEL"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": []
+        },
+        {
+            "name": "Linuxa64_cross",
+            "includePath": [
+                "${workspaceFolder}/src/onsyuri/**",
+                "${workspaceFolder}/thirdparty/build/arch_linuxa64/include"
+            ],
+            "defines": [
+                "LINUX",
+                "USE_LUA",
+                "USE_PARALLEL"
+            ],
+            "compilerPath": "/usr/bin/aarch64-linux-gnu-gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "linux-gcc-arm64",
             "compilerArgs": []
         },
         {
