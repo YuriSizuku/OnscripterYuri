@@ -3,7 +3,7 @@
 ![web-onscripter](https://img.shields.io/badge/web-onscripter-green)  
 
 ☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
-This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
+This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.  
 
 Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [galgame_demo](https://onsgame.netlify.app/game/mo2_demo/)  
 
@@ -19,12 +19,12 @@ New features or plans:
   - [ ] ci in github action to automaticly build  
 - platform
   - [x] windows
-    - [x] local compile by msys2  
-    - [x] corss compile by mingw64, mingw32
+    - [x] x86, x64 (local compile by msys2, static link)  
+    - [x] x86, x64 (corss compile by mingw64, mingw32 from linux, static link)
     - [ ] cl compile
   - [x] linux
-    - [x] local x64 (dynamic link)
-    - [ ] cross compile, aarch64 raspberrypi
+    - [x] x86, x64 (local compile, static or dynamic link)
+    - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
   - [x] web (by emscripten)
     - [x] fs to save in indexdb
     - [x] web lua script support
@@ -47,10 +47,10 @@ New features or plans:
 ### (1) general command
 
 ``` bash
-./ons_yuri --help
-./ons_yuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf
-./ons_yuri --width 1280 --height 720 --enc:sjis
-./ons_yuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
+./onsyuri --help
+./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf
+./onsyuri --width 1280 --height 720 --enc:sjis
+./onsyuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
 ```
 
 ❗ If you force exit the game, the save might be damaged, try to remvoe envdata to play again.
@@ -123,6 +123,7 @@ and then use these `local_mingw32.sh` or `local_mingw64.sh` to build.
 
 ``` sh
 cd script
+chmod +x *.sh
 sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_mingw32.sh"
 ```  
 
@@ -149,6 +150,7 @@ sudo apt-get -y install liblua5.3-dev:i386 libgl1-mesa-dev:i386
 
 ``` sh
 cd script
+chmod +x *.sh
 sh -c "export BUILD_TYPE=Debug && ./local_linux32.sh"
 ```  
 
@@ -160,12 +162,18 @@ Install [emsdk](https://github.com/emscripten-core/emsdk) and use `cross_web.sh`
 
 ``` shell
 cd script
-sh -c "export BUILD_TYPE=Debug && export EMCSDK=/d/Software/env/sdk/emsdk && ./cross_web.sh"
+chmod +x *.sh
+sh -c "export BUILD_TYPE=Debug && export EMCSDK=/path/to/emsdk && ./cross_web.sh"
 ```
 
 ### (4) cross linux arm
 
 This is aimed for raspberrypi or the other arm64 devices cross compiling.
+As there are many system bindings in SDL2,  
+just build libraries in the target machine, and use these build cache to link.  
+
+[onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
+
 Install the dependency for aarch64 cross compiler,  
 
 ``` shell
@@ -174,10 +182,18 @@ sudo apt-get -y install crossbuild-essential-armhf
 sudo apt-get -y install crossbuild-essential-arm64
 ```
 
-then use `cross_linuxa64.sh` to compile.  
+then use `cross_linuxa64.sh` or `cross_linuxa32.sh` to compile.  
 
 ```shell  
+# at first build sdl2 in raspberry pi
+sh -c "export SYSROOT=/ && ./local_linux64.sh"
+
+# copy prebuild of dependency to local
+cp -rf /path/to/rpi/OnscripterYuri/thirdparty/build/arch_aarch64 thirdparty/build/arch_aarch64
+
 # use SKIP_PORTS to skip thirdpart builds
+cd script
+chmod +x *.sh
 sh -c "export BUILD_TYPE=Debug && export SKIP_PORTS=yes && ./local_linux64.sh"
 ```  
 

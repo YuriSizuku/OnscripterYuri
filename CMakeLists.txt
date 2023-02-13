@@ -176,11 +176,6 @@ function(config_windows2 TARGET_NAME)
         set(ARCH x86_64)
     else() 
         set(ARCH i686) 
-        target_link_options(${TARGET_NAME} PRIVATE 
-            --enable-stdcall-fixup
-        )
-        target_compile_options(${TARGET_NAME} PRIVATE
-        )
     endif()
     set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
     target_include_directories(${TARGET_NAME} PRIVATE

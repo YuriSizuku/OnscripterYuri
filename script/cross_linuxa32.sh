@@ -1,5 +1,5 @@
 # bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_linuxa64.sh"
-PLATFORM=linuxa64
+PLATFORM=linuxa32
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
 PORTBUILD_PATH=$CMAKELISTS_PATH/thirdparty/build/arch_$PLATFORM
@@ -7,8 +7,8 @@ CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
 TARGETS=$@
 
 # config env
-CC=aarch64-linux-gnu-gcc
-CXX=aarch64-linux-gnu-g++
+CC=arm-linux-gnueabihf-gcc
+CXX=arm-linux-gnueabihf-g++
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 if [ -z "$SYSROOT" ]; then SYSROOT=$PORTBUILD_PATH; fi
