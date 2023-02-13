@@ -1,4 +1,4 @@
-# sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/d/software/env/msys2 && ./local_mingw32.sh"
+# sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/d/software/env/msys2 && ./local_mingw64.sh"
 BUILD_PATH=./../build_mingw64
 CMAKELISTS_PATH=./../
 CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)

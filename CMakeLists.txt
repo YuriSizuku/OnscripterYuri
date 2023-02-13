@@ -3,7 +3,7 @@ project(onsyuri)
 
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
-    message("Linux enviroment for "  ${TARGET_NAME})
+    message("Linux enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         LINUX
         USE_LUA
@@ -12,19 +12,13 @@ function(config_linux TARGET_NAME)
         USE_FILELOG
     )
 
-    if(CMAKE_SYSROOT) # cross compile
-        message("CMAKE_SYSROOT ${CMAKE_SYSROOT}")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --sysroot=${CMAKE_SYSROOT}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT}")
+    if(STATIC_PORT_ROOT)
         target_include_directories(${TARGET_NAME} PRIVATE
-            ${CMAKE_SYSROOT}/include
+            ${STATIC_PORT_ROOT}/include
         )
         target_link_directories(${TARGET_NAME} PRIVATE
-            ${CMAKE_SYSROOT}/lib
+            ${STATIC_PORT_ROOT}/lib
         )
-    endif()
-
-    if(LINK_STATIC)
         target_link_options(${TARGET_NAME} PRIVATE 
             -static-libgcc
             -static-libstdc++
@@ -66,6 +60,18 @@ function(config_linux TARGET_NAME)
             ${SDL2_TTF_LIBRARIES}
             ${SDL2_IMAGE_LIBRARIES}
             ${SDL2_MIXER_LIBRARIES}
+        )
+    endif()
+
+    if(CMAKE_SYSROOT) # cross compile
+        message("CMAKE_SYSROOT ${CMAKE_SYSROOT}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --sysroot=${CMAKE_SYSROOT}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT}")
+        target_include_directories(${TARGET_NAME} PRIVATE
+            ${CMAKE_SYSROOT}/include
+        )
+        target_link_directories(${TARGET_NAME} PRIVATE
+            ${CMAKE_SYSROOT}/lib
         )
     endif()
 
@@ -157,7 +163,7 @@ function(config_windows2 TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
-    message("Cross MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
+    message("Cross MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         _WIN32
         XMD_H # fix jpeg IN32 problem in jmorecfg.h
@@ -166,14 +172,25 @@ function(config_windows2 TARGET_NAME)
         USE_BUILTIN_LAYER_EFFECTS
         USE_FILELOG
     )
-    set(CMAKE_RC_COMPILER "x86_64-w64-mingw32-windres")
+    if(WIN64) 
+        set(ARCH x86_64)
+    else() 
+        set(ARCH i686) 
+        target_link_options(${TARGET_NAME} PRIVATE 
+            --enable-stdcall-fixup
+        )
+        target_compile_options(${TARGET_NAME} PRIVATE
+        )
+    endif()
+    set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
     target_include_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_SYSROOT}/include
-        /usr/x86_64-w64-mingw32/include
+        /usr/${ARCH}-w64-mingw32/include
     )
     target_link_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_SYSROOT}/lib
     )
+    message(${CMAKE_SYSROOT}/lib)
 
     target_link_options(${TARGET_NAME} PRIVATE 
         -static-libgcc

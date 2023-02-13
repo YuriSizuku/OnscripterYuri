@@ -1,5 +1,5 @@
-# bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_mingw64.sh"
-PLATFORM=mingw64
+# bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_mingw32.sh"
+PLATFORM=mingw32
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
 PORTBUILD_PATH=$CMAKELISTS_PATH/thirdparty/build/arch_$PLATFORM
@@ -7,8 +7,8 @@ CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
 TARGETS=$@
 
 # config env
-CC=x86_64-w64-mingw32-gcc
-CXX=x86_64-w64-mingw32-g++
+CC=i686-w64-mingw32-gcc
+CXX=i686-w64-mingw32-g++
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
@@ -28,9 +28,9 @@ fi
 
 # config and build project
 echo "BUILD_TYPE=$BUILD_TYPE"
-export RC=x86_64-w64-mingw32-windres
+export RC=i686-w64-mingw32-windres
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-    -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DWIN64=1 \
+    -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
     -DCMAKE_SYSTEM_NAME="Windows" -DCMAKE_SYSROOT=$PORTBUILD_PATH
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM

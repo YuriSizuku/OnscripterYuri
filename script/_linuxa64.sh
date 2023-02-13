@@ -1,4 +1,4 @@
-# must use after _fetch from cross_linux64.sh
+# must use after _fetch.sh from cross_linuxa64.sh
 
 function build_lua()
 {
@@ -65,10 +65,11 @@ function build_sdl2() # after pulse
     pushd $SDL2_SRC
     export LDFLAGS="-L$PORTBUILD_PATH/lib"
     ./configure --host=aarch64-linux-gnu \
+        --build=x86_64-linux --target=aarch64-linux-gnu \
         --disable-pulseaudio \
-        --enable-video-x11  --enable-x11-shared --disable-video-wayland  \
+        --enable-video-x11  --enable-x11-shared  --enable-video-x11-xcursor --enable-video-x11-xinput --enable-video-x11-xrandr \
+        --disable-video-wayland \
         --enable-arm-simd --enable-arm-neon \
-        --libdir=$PORTBUILD_PATH/lib\
         --prefix=$PORTBUILD_PATH
     make -j$CORE_NUM && make install 
     popd
@@ -98,7 +99,7 @@ function build_sdl2_ttf() # after build_sdl2
     export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is inportant for find SDL path    
     pushd $SDL2_TTF_SRC
     ./configure --host=aarch64-linux-gnu \
-        --disable-harfbuzz \ 
+        --disable-harfbuzz \
         --prefix=$PORTBUILD_PATH
     make -j$CORE_NUM 
     make install 
