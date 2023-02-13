@@ -1,6 +1,6 @@
 # Onscripter (Yuri)  
 
-![web-onscripter](https://img.shields.io/badge/web-onscripter-green)  
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=OnsYuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square)
 
 ☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.  
