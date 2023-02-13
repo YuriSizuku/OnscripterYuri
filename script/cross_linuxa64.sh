@@ -9,9 +9,6 @@ TARGETS=$@
 # config env
 CC=aarch64-linux-gnu-gcc
 CXX=aarch64-linux-gnu-g++
-if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-if [ -z "$TARGETS" ]; then TARGETS=all; fi
-if [ -z "$SYSROOT" ]; then SYSROOT=$PORTBUILD_PATH; fi
 
 # SKIP_PORTS="yes"
 # sdl2 has too many bindings to system, 
@@ -31,6 +28,10 @@ if [ -z "$SKIP_PORTS" ]; then
 fi
 
 # config and build project
+if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
+if [ -z "$SYSROOT" ]; then SYSROOT=$PORTBUILD_PATH; fi
+
 echo "BUILD_TYPE=$BUILD_TYPE"
 PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \

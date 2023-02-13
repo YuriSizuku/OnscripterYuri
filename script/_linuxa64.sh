@@ -64,12 +64,15 @@ function build_sdl2() # after pulse
     echo "## SDL2_SRC=$SDL2_SRC"
     pushd $SDL2_SRC
     export LDFLAGS="-L$PORTBUILD_PATH/lib"
+    SDL2_SYSROOT=/
+    if [ -n "$SYSROOT" ]; then SDL2_SYSROOT=$SYSROOT; fi
+    echo "## SDL2_SYSROOT $SDL2_SYSROOT"
     ./configure --host=aarch64-linux-gnu \
         --disable-pulseaudio \
         --enable-video-x11  --enable-x11-shared  --enable-video-x11-xcursor --enable-video-x11-xinput --enable-video-x11-xrandr \
         --disable-video-wayland \
         --enable-arm-simd --enable-arm-neon \
-        --prefix=$PORTBUILD_PATH
+        --prefix=$PORTBUILD_PATH --with-sysroot=$SDL2_SYSROOT
     make -j$CORE_NUM && make install 
     popd
 }

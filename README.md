@@ -177,7 +177,11 @@ just build libraries in the target machine, and use these build cache to link.
 Install the dependency for aarch64 cross compiler,  
 
 ``` shell
-sudo apt-get -y install tar make cmake meson curl git
+# install in the target machine
+sudo apt-get -y install libx11-dev libxext-dev libasound2-dev
+
+# install in the local machine
+sudo apt-get -y install tar make cmake curl git
 sudo apt-get -y install crossbuild-essential-armhf
 sudo apt-get -y install crossbuild-essential-arm64
 ```

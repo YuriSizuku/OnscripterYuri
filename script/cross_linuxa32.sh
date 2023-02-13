@@ -9,9 +9,6 @@ TARGETS=$@
 # config env
 CC=arm-linux-gnueabihf-gcc
 CXX=arm-linux-gnueabihf-g++
-if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-if [ -z "$TARGETS" ]; then TARGETS=all; fi
-if [ -z "$SYSROOT" ]; then SYSROOT=$PORTBUILD_PATH; fi
 
 # SKIP_PORTS="yes"
 # sdl2 has too many bindings to system, 
@@ -31,8 +28,12 @@ if [ -z "$SKIP_PORTS" ]; then
 fi
 
 # config and build project
-echo "BUILD_TYPE=$BUILD_TYPE"
+if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
+if [ -z "$SYSROOT" ]; then SYSROOT=$PORTBUILD_PATH; fi
 PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig
+
+echo "BUILD_TYPE=$BUILD_TYPE"
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
