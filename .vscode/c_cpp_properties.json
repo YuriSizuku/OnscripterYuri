@@ -8,7 +8,7 @@
         {
             "name": "Mingw32",
             "includePath": [
-                "${workspaceFolder}/src/onsjh/**",
+                "${workspaceFolder}/src/onsyuri/**",
                 "${msys2sdk}/mingw32/include"
             ],
             "defines": [

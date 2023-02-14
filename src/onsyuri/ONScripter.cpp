@@ -201,8 +201,11 @@ void ONScripter::initSDL()
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-#if defined(USE_GLES2)
+#if defined(USE_GLES)
     if (!isnan(sharpness)) {
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
         SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
     }
 #endif
@@ -212,6 +215,12 @@ void ONScripter::initSDL()
 #endif
 #if SDL_VERSION_ATLEAST(2,0,1)
     window_flag |= SDL_WINDOW_ALLOW_HIGHDPI;
+#endif
+
+#if defined(USE_GLES)
+    if (!isnan(sharpness)) {
+        window_flag |= SDL_WINDOW_OPENGL;
+    }
 #endif
 
     int window_x = SDL_WINDOWPOS_CENTERED, window_y = SDL_WINDOWPOS_CENTERED;

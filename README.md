@@ -36,6 +36,7 @@ New features or plans:
 - render
   - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
   - [x] support arbitary resolution `--width`, `--height`  
+  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
   - [ ] video support (future plan)
 - other
   - [x] support `nt2`, `nt3` encryption format by Mine

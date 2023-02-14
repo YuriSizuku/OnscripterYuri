@@ -23,14 +23,11 @@
 #include <SDL2/SDL.h>
 
 #if defined(_WIN32) && !defined(_MSC_VER)
-#define _MSC_VER 1200
+#define SDL_USE_BUILTIN_OPENGL_DEFINITIONS
 #include <SDL2/SDL_opengles2.h>
-#undef _MSC_VER
 #else
 #include <SDL2/SDL_opengles2.h>
 #endif
-
-
 
 class GlesRenderer {
     SDL_Window *window;
@@ -46,10 +43,18 @@ class GlesRenderer {
 	int output_size[2];
 	bool _pause = false;
 #if !(defined(IOS) || defined(ANDROID))
-#define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
-#include "gles2funcs.h"
-#undef SDL_PROC
+	
+	#if defined(WIN32) || defined(_WIN32)
+		#define SDL_PROC(ret,func,params) \
+			ret (APIENTRY *func) params = (ret (APIENTRY *) params) SDL_GL_GetProcAddress(#func);
+	#else
+		#define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
+	#endif
+
+	#include "gles2funcs.h"
+	#undef SDL_PROC
 #endif
+
 	GLuint createShader(GLenum shader_type, const GLchar* shader_src);
 	void initVertexData();
 public:
