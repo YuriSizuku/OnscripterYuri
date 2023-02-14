@@ -1,4 +1,6 @@
 asset/*test*/**
+asset/stdout.txt
+asset/stderr.txt
 build/**
 build_*/**
 thirdparty/**

@@ -281,7 +281,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(ONSYURI_CODE
     src/onsyuri/AnimationInfo.cpp
     src/onsyuri/coding2utf16.cpp
-    src/onsyuri/conv_shared.cpp
     src/onsyuri/DirectReader.cpp
     src/onsyuri/DirtyRect.cpp
     src/onsyuri/FontInfo.cpp

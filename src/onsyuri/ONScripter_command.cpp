@@ -3676,6 +3676,17 @@ int ONScripter::bltCommand()
         src_rect.x -= blt_texture_src_rect.x;
         src_rect.y -= blt_texture_src_rect.y;
         screen_dirty_flag = true;
+
+        // printf("## flush src(%d, %d, %d, %d), dst(%d, %d, %d, %d)\n", 
+        //     src_rect.x, src_rect.y, src_rect.w, src_rect.h,
+        //     dst_rect.x, dst_rect.y, dst_rect.w, dst_rect.h);
+        
+        // fix blt scale
+        dst_rect.x += render_view_rect.x;
+        dst_rect.y += render_view_rect.y;
+        dst_rect.w /= screen_scale_ratio1;
+        dst_rect.h /= screen_scale_ratio2;
+
         SDL_RenderCopy(renderer, blt_texture, &src_rect, &dst_rect);
         SDL_RenderPresent(renderer);
         dirty_rect.clear();

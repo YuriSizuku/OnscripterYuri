@@ -799,7 +799,7 @@ void ONScripter::flush( int refresh_mode, SDL_Rect *rect, bool clear_dirty_flag,
 
 void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
 {
-    // utils::printInfo("flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
+    // printf("## flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
     
     SDL_Rect dst_rect = rect;
 
