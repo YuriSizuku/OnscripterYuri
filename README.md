@@ -1,6 +1,6 @@
 # Onscripter (Yuri)  
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=OnsYuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=OnsYuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win(x86|x64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm32|arm64)&style=flat-square)
 
 ☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.  
@@ -16,7 +16,7 @@ New features or plans:
   - [x] well documention for develop and usage
   - [x] scripts to compile or cross compile without pain
   - [x] vscode project for multi enviroment
-  - [ ] ci in github action to automaticly build  
+  - [x] ci in github action to automaticly build  
 - platform
   - [x] windows
     - [x] x86, x64 (local compile by msys2, static link)  
@@ -172,7 +172,7 @@ This is aimed for raspberrypi or the other arm64 devices cross compiling.
 As there are many system bindings in SDL2,  
 just build libraries in the target machine, and use these build cache to link.  
 
-[onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
+![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
 
 Install the dependency for aarch64 cross compiler,  
 

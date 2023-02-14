@@ -21,7 +21,7 @@ jobs:
       if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
       run: |
         curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
-        tar xvzf thirdparty_build.tar.gz thirdparty/build/arch_mingw32 thirdparty/build/arch_mingw64
+        tar xvzf thirdparty_build.tar.gz
 
   build_win32:
     runs-on: ubuntu-20.04
