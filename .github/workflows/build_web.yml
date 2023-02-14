@@ -38,14 +38,14 @@ jobs:
         path: ${{ env.EMSDK }}
     - name: build onsyuri_web
       run: cd script && export EMCSDK=${{ env.EMCSDK }} && bash ./cross_web.sh
-    - name: pack build
+    - name: prepare release
       run: |
         cd build_web
         mkdir ${{ env.BUILD_NAME }} 
         cp onsyuri{.html,.js,.wasm} ${{ env.BUILD_NAME }}/ 
         7z a -t7z -mtc=on -ms=off -mx=5 -m0=lzma2 ${{ env.BUILD_NAME }}.7z ${{ env.BUILD_NAME }} 
         ls ./
-    - name: create a release
+    - name: create release
       uses: ncipollo/release-action@v1
       with:
         artifacts: "./build_web/${{ env.BUILD_NAME }}.7z"

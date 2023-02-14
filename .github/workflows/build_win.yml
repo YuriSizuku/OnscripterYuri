@@ -1,0 +1,92 @@
+name: build windows x86, x64
+on:
+  push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+permissions:
+  contents: write
+
+jobs:
+  install_thirdparty_build:
+    runs-on: ubuntu-20.04 # default batch, powershell
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: check or download thirdparty_build cache
+      id: check_thirdparty_build
+      uses: actions/cache@v3
+      with: 
+        path: ./thirdparty
+        key: thirdparty_build
+    
+    - name: download thirdparty_build
+      if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
+      run: |
+        curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
+        tar xvzf thirdparty_build.tar.gz thirdparty/build/arch_mingw32 thirdparty/build/arch_mingw64
+
+  build_win32:
+    runs-on: ubuntu-20.04
+    needs: install_thirdparty_build
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: get thirdparty_build cache
+      uses: actions/cache@v3
+      with: 
+        key: thirdparty_build
+        path: ./thirdparty
+    
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x86
+    
+    - name: build onsyuri_x86_win.exe
+      run: |
+        cd script 
+        export SKIP_PORTS=yes && bash ./cross_mingw32.sh
+    
+    - name: prepare release
+      run: |
+        cd build_mingw32 
+        mv onsyuri.exe onsyuri_x86_win.exe
+      
+    - name: create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./build_mingw32/onsyuri_x86_win.exe"
+        allowUpdates: "true"
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  build_win64:
+    runs-on: ubuntu-20.04
+    needs: install_thirdparty_build
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: get thirdparty_build cache
+      uses: actions/cache@v3
+      with: 
+        key: thirdparty_build
+        path: ./thirdparty
+    
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64
+    
+    - name: build onsyuri_x64_win.exe
+      run: |
+        cd script 
+        export SKIP_PORTS=yes && bash ./cross_mingw64.sh
+    
+    - name: prepare release
+      run: |
+        cd build_mingw64
+        mv onsyuri.exe onsyuri_x64_win.exe
+      
+    - name: create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./build_mingw64/onsyuri_x64_win.exe"
+        allowUpdates: "true"
+        token: ${{ secrets.GITHUB_TOKEN }}
