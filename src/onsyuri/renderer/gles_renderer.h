@@ -23,11 +23,9 @@
 #include <SDL2/SDL.h>
 
 #if defined(_WIN32) && !defined(_MSC_VER)
+#endif
 #define SDL_USE_BUILTIN_OPENGL_DEFINITIONS
 #include <SDL2/SDL_opengles2.h>
-#else
-#include <SDL2/SDL_opengles2.h>
-#endif
 
 class GlesRenderer {
     SDL_Window *window;
@@ -43,16 +41,14 @@ class GlesRenderer {
 	int output_size[2];
 	bool _pause = false;
 #if !(defined(IOS) || defined(ANDROID))
-	
-	#if defined(WIN32) || defined(_WIN32)
-		#define SDL_PROC(ret,func,params) \
-			ret (APIENTRY *func) params = (ret (APIENTRY *) params) SDL_GL_GetProcAddress(#func);
-	#else
-		#define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
-	#endif
 
-	#include "gles2funcs.h"
-	#undef SDL_PROC
+
+// dynamic binding at class initialize
+// #define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
+#define SDL_PROC(ret,func,params) \
+	ret (APIENTRY *func) params = (ret (APIENTRY *) params) SDL_GL_GetProcAddress(#func);
+#include "gles2funcs.h"
+#undef SDL_PROC
 #endif
 
 	GLuint createShader(GLenum shader_type, const GLchar* shader_src);

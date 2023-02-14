@@ -203,10 +203,11 @@ void ONScripter::initSDL()
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 #if defined(USE_GLES)
     if (!isnan(sharpness)) {
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
+        int res = 0; // SDL2 can not be configure --disable-video-opengles
+        res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+        res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+        res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+        res = SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
     }
 #endif
     int window_flag = SDL_WINDOW_SHOWN;
@@ -826,7 +827,10 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
 #else
     SDL_Rect *rect_ptr = &dst_rect;
 #endif
-    if (isnan(sharpness)) {
+
+#if defined(USE_GLES)
+    if (isnan(sharpness)) 
+    {
         if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
         {
             SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -837,10 +841,21 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
             SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
         }
     } else {
-#if defined(USE_GLES)
         gles_renderer->copy(render_view_rect.x, render_view_rect.y);
-#endif
+
     }
+#else
+
+    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
+    {
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+    }
+    else
+    {
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
+    }
+#endif
     SDL_RenderPresent(renderer);
 }
 

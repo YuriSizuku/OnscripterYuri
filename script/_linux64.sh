@@ -39,7 +39,6 @@ function build_sdl2() # after pulse
     export LDFLAGS="-L$PORTBUILD_PATH/lib"
     ./configure --host=x86_64-linux-gnu \
         --disable-3dnow --disable-sse --disable-sse3 \
-        --disable-video-opengles --disable-video-opengles1 \
         --disable-video-wayland --disable-video-offscreen \
         --enable-video-x11  --enable-x11-shared  \
         --prefix=$PORTBUILD_PATH

@@ -41,7 +41,7 @@ function build_bz2()
 }
 
 
-function build_sdl2() # after pulse
+function build_sdl2() 
 {
     if ! [ -d "${SDL2_SRC}_${PLATFORM}" ]; then cp -rp ${SDL2_SRC} "${SDL2_SRC}_${PLATFORM}"; fi
     SDL2_SRC=${SDL2_SRC}_${PLATFORM}
@@ -51,7 +51,6 @@ function build_sdl2() # after pulse
     pushd $SDL2_SRC
     ./configure --host=i686-w64-mingw32 \
         --disable-3dnow --disable-sse --disable-sse3 \
-        --disable-video-opengles --disable-video-opengles1 \
         --disable-video-vulkan --disable-video-offscreen \
         --prefix=$PORTBUILD_PATH
     make -j$CORE_NUM && make install 

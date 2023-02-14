@@ -93,9 +93,16 @@ GlesRenderer::GlesRenderer(SDL_Window *window, SDL_Texture *texture, const float
     this->texture = texture;
     SDL_GL_BindTexture(texture, nullptr, nullptr);
     context = SDL_GL_GetCurrentContext();
+    if(!context)
+    {
+        // if build from linux gles might cause some error
+        utils::printError("## GlesRenderer::GlesRenderer  context error: %s\n", SDL_GetError());
+    }
+
     vert_shader = createShader(GL_VERTEX_SHADER, post_vert_src);
     frag_shader = createShader(GL_FRAGMENT_SHADER, post_cas_glsl);
     const auto id = glCreateProgram();
+    // printf("## vert_shader=%d, frag_shader=%d, program=%d\n", vert_shader, frag_shader, id);
     glAttachShader(id, vert_shader);
     glAttachShader(id, frag_shader);
     glBindAttribLocation(id, 0, "a_position");

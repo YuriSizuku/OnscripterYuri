@@ -40,7 +40,6 @@ function build_sdl2() # after pulse
     ./configure --host=i686-linux-gnu \
         "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32"\
         --disable-3dnow --disable-sse --disable-sse3 \
-        --disable-video-opengles --disable-video-opengles1 \
         --disable-video-wayland --disable-video-offscreen \
         --enable-video-x11  --enable-x11-shared  \
         --prefix=$PORTBUILD_PATH

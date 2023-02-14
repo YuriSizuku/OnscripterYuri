@@ -5,7 +5,7 @@
     "version": "0.2.0",
         "configurations": [
         {
-            "name": "win32 cppdbg",
+            "name": "Win32 cppdbg",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/build_mingw32/onsyuri.exe",
@@ -30,7 +30,33 @@
             ]
         },
         {
-            "name": "linux32 cppdbg",
+            "name": "Win64 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_mingw64/onsyuri.exe",
+            "args": ["--debug:0", // "--fullscreen2",
+                // "--width", "960", "--height", "544", 
+                "--sharpness", "1.1",  
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/save"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "environment": [
+                {"name": "msys2sdk", "value": "D:/Software/env/msys2"},
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Software/env/msys2/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+
+        {
+            "name": "Linux32 cppdbg",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build_linux32/onsyuri",
@@ -50,7 +76,7 @@
             ]
         },
         {
-            "name": "linux64 cppdbg",
+            "name": "Linux64 cppdbg",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build_linux64/onsyuri",

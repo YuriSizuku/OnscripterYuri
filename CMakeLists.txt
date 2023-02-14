@@ -9,6 +9,7 @@ function(config_linux TARGET_NAME)
         USE_LUA
         USE_PARALLEL
         USE_BUILTIN_LAYER_EFFECTS
+        USE_GLES
         USE_FILELOG
     )
 
@@ -83,6 +84,15 @@ function(config_windows TARGET_NAME)
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
     if(MINGW)
         message("MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
+        if(CMAKE_BUILD_TYPE MATCHES "Debug")
+            message("generating debug configuration")
+            target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
+            target_compile_options(${TARGET_NAME} PRIVATE -g)
+            target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
+        else()
+            target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
+        endif()
+
         target_compile_definitions(${TARGET_NAME} PRIVATE 
             _WIN32
             USE_LUA
@@ -97,21 +107,12 @@ function(config_windows TARGET_NAME)
             -static-libgcc   # static link mingw env
             -static-libstdc++
         ) 
-        if(CMAKE_BUILD_TYPE MATCHES "Debug")
-            message("generating debug configuration")
-            target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
-            target_compile_options(${TARGET_NAME} PRIVATE -g)
-            target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
-        else()
-            target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
-        endif()
         target_link_libraries(${TARGET_NAME}  # static links
             -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive 
             -Wl,-Bstatic 
             mingw32 
             SDL2main
             SDL2
-            opengl32
             lua
 
             SDL2_image
@@ -164,20 +165,33 @@ function(config_windows2 TARGET_NAME)
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
     message("Cross MINGW enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
-    target_compile_definitions(${TARGET_NAME} PRIVATE 
-        _WIN32
-        XMD_H # fix jpeg IN32 problem in jmorecfg.h
-        USE_LUA
-        USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS
-        USE_FILELOG
-    )
+   
+    # config build type and arch
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        message("generating debug configuration")
+        target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
+        target_compile_options(${TARGET_NAME} PRIVATE -g)
+        target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
+    else()
+        target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
+    endif()
     if(WIN64) 
         set(ARCH x86_64)
     else() 
         set(ARCH i686) 
     endif()
     set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
+
+    # config compile 
+    target_compile_definitions(${TARGET_NAME} PRIVATE 
+        _WIN32
+        XMD_H # fix jpeg IN32 problem in jmorecfg.h
+        USE_LUA
+        USE_PARALLEL
+        USE_BUILTIN_LAYER_EFFECTS
+        USE_GLES
+        USE_FILELOG
+    )
     target_include_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_SYSROOT}/include
         /usr/${ARCH}-w64-mingw32/include
@@ -185,8 +199,6 @@ function(config_windows2 TARGET_NAME)
     target_link_directories(${TARGET_NAME} PRIVATE
         ${CMAKE_SYSROOT}/lib
     )
-    message(${CMAKE_SYSROOT}/lib)
-
     target_link_options(${TARGET_NAME} PRIVATE 
         -static-libgcc
         -static-libstdc++
@@ -196,7 +208,6 @@ function(config_windows2 TARGET_NAME)
         -Wl,-Bstatic
         lua
         bz2
-        jpeg
         
         mingw32
         SDL2
@@ -204,6 +215,7 @@ function(config_windows2 TARGET_NAME)
         SDL2_ttf
         SDL2_image
         SDL2_mixer
+        ssp
         
         -Wl,-Bdynamic
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
