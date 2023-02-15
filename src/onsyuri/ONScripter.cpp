@@ -809,7 +809,7 @@ void ONScripter::flush( int refresh_mode, SDL_Rect *rect, bool clear_dirty_flag,
 
 void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
 {
-    // printf("## flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
+    // printf("## flushDirect mode%d, %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
     
     SDL_Rect dst_rect = rect;
 
@@ -829,29 +829,23 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
 #endif
 
 #if defined(USE_GLES)
-    if (isnan(sharpness)) 
-    {
-        if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
-        {
+    if (isnan(sharpness)) {
+        if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width)){
             SDL_RenderCopy(renderer, texture, NULL, NULL);
         }
-        else
-        {
+        else {
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
         }
     } else {
         gles_renderer->copy(render_view_rect.x, render_view_rect.y);
-
     }
 #else
 
-    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
-    {
+    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width)) {
         SDL_RenderCopy(renderer, texture, NULL, NULL);
     }
-    else
-    {
+    else {
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
     }

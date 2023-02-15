@@ -49,8 +49,8 @@ New features or plans:
 
 ``` bash
 ./onsyuri --help
-./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf
-./onsyuri --width 1280 --height 720 --enc:sjis
+./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf --enc:sjis
+./onsyuri --width 1280 --height 720 --sharpness=3.1
 ./onsyuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
 ```
 

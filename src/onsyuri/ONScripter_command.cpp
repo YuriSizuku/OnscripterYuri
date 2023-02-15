@@ -3677,19 +3677,27 @@ int ONScripter::bltCommand()
         src_rect.y -= blt_texture_src_rect.y;
         screen_dirty_flag = true;
 
-        // printf("## flush src(%d, %d, %d, %d), dst(%d, %d, %d, %d)\n", 
+        // printf("## bltCommand src(%d, %d, %d, %d), dst(%d, %d, %d, %d)\n", 
         //     src_rect.x, src_rect.y, src_rect.w, src_rect.h,
         //     dst_rect.x, dst_rect.y, dst_rect.w, dst_rect.h);
         
+#if defined(USE_GLES)  
+        if(!isnan(sharpness)){ // fix gles render blt problem
+            SDL_BlitScaled(btndef_info.image_surface, &src_rect, bg_info.image_surface, &dst_rect);
+            flushDirect(dst_rect, REFRESH_NORMAL_MODE);
+            dirty_rect.clear();
+            return RET_CONTINUE;
+        }
+#endif
         // fix blt scale
         dst_rect.x += render_view_rect.x;
         dst_rect.y += render_view_rect.y;
         dst_rect.w /= screen_scale_ratio1;
         dst_rect.h /= screen_scale_ratio2;
-
         SDL_RenderCopy(renderer, blt_texture, &src_rect, &dst_rect);
         SDL_RenderPresent(renderer);
         dirty_rect.clear();
+
     } else {
       utils::printError("blt:Wrong arguments.");
     }
