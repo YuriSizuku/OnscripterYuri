@@ -1452,8 +1452,10 @@ void ONScripter::runEventLoop()
                   repaintCommand();
                   break;
               case SDL_WINDOWEVENT_FOCUS_LOST:
+#if defined(_DEBUG) // fix background music
                   Mix_Pause(-1);
                   Mix_PauseMusic();
+#endif
                   // the mouse cursor leaves the window
                   SDL_MouseMotionEvent mevent;
                   mevent.x = screen_device_width;

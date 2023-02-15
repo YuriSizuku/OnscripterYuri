@@ -4,12 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta onsyuri_index="onsyuri_index.json">
-        <title>Onscripter (yuri)</title>
+        <title>Onscripter Yuri v0.6.2</title>
     </head>
     <body style="margin: 0 auto; background-color:black;">
         <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/BrowserFS/1.4.3/browserfs.min.js" type="text/javascript"></script>
         <script src="onsyuri.js" type="text/javascript"></script>
-        <!-- <script src="onsyuri_fs.js" type="text/javascript"></script> -->
         <script type="text/javascript"> // universe function
             function scale_full(docobj, ratio=0){
                 var w = window.innerWidth;
@@ -99,6 +99,24 @@
                 }
             }
 
+            // mount using BrowserFS with lazyload
+            function mount_onsgame2(_module, gamedir, lazyindex, urlbase)
+            {
+                console.log("## onsyuri_fs: mount_onsgame2", gamedir);
+                var _FS=_module.FS;
+                _module.addRunDependency("onsgamefs");
+                
+                var brewfs =  new BrowserFS.FileSystem.MountableFileSystem();
+                var xmlfs = new BrowserFS.FileSystem.XmlHttpRequest(lazyindex, urlbase);
+                brewfs.mount('/xmlfs', xmlfs);
+                BrowserFS.initialize(brewfs);
+                var BREWFS = new BrowserFS.EmscriptenFS(_module.FS, _module.PATH); 
+                
+                em_mkdirs(_FS, gamedir);
+                _FS.mount(BREWFS, {root: "/xmlfs"}, gamedir);
+                _module.removeRunDependency("onsgamefs")
+            }
+
             function mount_onssave(_FS, _IDBFS, savedir)
             {
                 console.log("## onsyuri_fs: mount_onssave", savedir);
@@ -123,28 +141,22 @@
             var onsyuri_index = {};
             var onsyuri_index_url = document.querySelector(
                 'meta[onsyuri_index]').attributes.onsyuri_index.textContent;
-           
-            // init onsyuri_fs module
-            // var onsyuri_fs_module = {};
-            // onsyuri_fs_module.preRun = ()=>{
-            //     console.log("## onsyuri_fs: preRun");
-            //     var urlbase = window.location.href;
-            //     urlbase = urlbase.substring(0, urlbase.lastIndexOf("/") + 1);
-            //     mount_onsgame(onsyuri_fs_module.FS, onsyuri_index.gamedir, onsyuri_index.files, urlbase);
-            //     mount_onssave(onsyuri_fs_module.FS, onsyuri_fs_module.IDBFS, onsyuri_index.savedir);
-            // };
             
             // init onsyuri module
             var onsyuri_module  = {};
             onsyuri_module.canvas = (()=>{return document.getElementById('canvas');})();
             onsyuri_module.preRun = () => {
                 console.log("## onsyuri: preRun");
-                // onsyuri_module.FS.mkdir(ONSYURI_FS_DIR);
-                // onsyuri_module.FS.mount(onsyuri_module.PROXYFS,  
-                //     {root: "/", fs: onsyuri_fs_module.FS}, ONSYURI_FS_DIR);
                 var urlbase = window.location.href;
                 urlbase = urlbase.substring(0, urlbase.lastIndexOf("/") + 1);
-                mount_onsgame(onsyuri_module.FS, onsyuri_index.gamedir, onsyuri_index.files, urlbase);
+                if(onsyuri_index.lazyindex && onsyuri_index.lazyindex!=""){
+                    mount_onsgame2(onsyuri_module, onsyuri_index.gamedir, 
+                        onsyuri_index.lazyindex, urlbase);
+                }
+                else{
+                    mount_onsgame(onsyuri_module.FS, onsyuri_index.gamedir, 
+                        onsyuri_index.files, urlbase);
+                }
                 mount_onssave(onsyuri_module.FS, onsyuri_module.IDBFS, onsyuri_index.savedir);
             };
             onsyuri_module.onRuntimeInitialized = () => {
@@ -169,13 +181,8 @@
 
             (async() => {
                 onsyuri_index = await load_json(onsyuri_index_url);
-                
-                // invoke onsyuri_fs, for future workerfs, this can not sync idbfs through module
-                // await onsyuri_fs(onsyuri_fs_module);
-                // onsyuri_fs_module.callMain();
-
-                // invoke onsyuri
                 await onsyuri(onsyuri_module);
+
                 // console.log("## onsyuri: gamedir", onsyuri_module.FS.readdir(ONSYURI_FS_DIR + onsyuri_index.gamedir));
                 var args = [
                     "--root", ONSYURI_FS_DIR + onsyuri_index.gamedir, 

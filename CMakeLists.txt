@@ -236,7 +236,7 @@ function(config_web TARGET_NAME)
     # pass flags for emcc
     set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
     set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,FS,PROXYFS,IDBFS") # make as module
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,FS,PATH,PROXYFS,IDBFS") # make as module
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL=2 -sUSE_SDL_TTF=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL_MIXER=2 -sUSE_BZIP2=1 -sSDL2_MIXER_FORMATS=ogg,mp3 -sUSE_OGG=1 -sUSE_VORBIS=1")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lproxyfs.js -lidbfs.js --use-preload-plugins")
