@@ -23,6 +23,7 @@
         "cstdio": "cpp",
         "__config": "cpp",
         "bzlib_private.h": "c",
-        "bzlib.h": "c"
+        "bzlib.h": "c",
+        "__node_handle": "cpp"
     }
 }

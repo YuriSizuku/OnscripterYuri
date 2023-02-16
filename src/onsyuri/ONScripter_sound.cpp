@@ -200,7 +200,13 @@ int ONScripter::playMIDI(bool loop_flag)
     
     char midi_filename[256];
     sprintf(midi_filename, "%s%s", save_dir?save_dir:archive_path, TMP_MUSIC_FILE);
+#if defined(ANDROID) || defined(WEB)
+    FILE *_fp = fopen(midi_filename, "rb");
+    SDL_RWops *_rwops = SDL_RWFromFP(_fp, SDL_TRUE);
+    if ((midi_info = Mix_LoadMUS_RW(_rwops, SDL_TRUE)) == NULL) return -1;
+#else
     if ((midi_info = Mix_LoadMUS(midi_filename)) == NULL) return -1;
+#endif
 
     int midi_looping = loop_flag ? -1 : 0;
 

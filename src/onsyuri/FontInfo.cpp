@@ -105,7 +105,12 @@ void *FontInfo::openFont( char *font_file, int ratio1, int ratio2 )
         SDL_RWops *fp;
         bool useFile = (cache_font_file == NULL || strcmp(cache_font_file, font_file) != 0);
         if (useFile) {
-          fp = SDL_RWFromFile(font_file, "rb");
+#if defined(ANDROID) || defined(WEB)
+            FILE *_fp = fopen(font_file, "rb");
+            fp = SDL_RWFromFP(_fp, SDL_TRUE);
+#else
+            fp = SDL_RWFromFile(font_file, "rb");
+#endif
         } else {
           fp = SDL_RWFromConstMem(font_cache, font_cache_size);
         }

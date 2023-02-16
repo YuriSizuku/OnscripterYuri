@@ -43,6 +43,7 @@ jobs:
         cd build_web
         mkdir ${{ env.BUILD_NAME }} 
         cp onsyuri{.html,.js,.wasm} ${{ env.BUILD_NAME }}/ 
+        cp onsyuri_index.py ${{ env.BUILD_NAME }}/
         7z a -t7z -mtc=on -ms=off -mx=5 -m0=lzma2 ${{ env.BUILD_NAME }}.7z ${{ env.BUILD_NAME }} 
         ls ./
     - name: create release

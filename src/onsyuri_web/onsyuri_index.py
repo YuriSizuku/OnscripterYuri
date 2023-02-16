@@ -18,7 +18,7 @@ def make_filelist(inpath, urlbase):
     return files
 
 def debug():
-    cmdstr="-i ./asset/test_mo2demo/ -o ./build_web/onsyuri_index.json --urlbase http://localhost:5500/build_web/ --lazyindex "
+    cmdstr="-i ./asset/test_mo2demo/ -o ./build_web/onsyuri_index.json --urlbase http://localhost:5500/build_web/ --lazyload"
     main(cmdstr)
 
 def main(cmdstr=None):
@@ -31,7 +31,8 @@ def main(cmdstr=None):
     parser.add_argument('--gamedir', type=str, help="gamedir in web fs, default /onsyuri/{title}")
     parser.add_argument('--savedir', type=str, help="savedir in web fs, default /onsyuri_save/{title}")
     parser.add_argument('--urlbase', type=str, default='', help="load files from this url default ./")
-    parser.add_argument('--lazyindex', type=str, help="the index file name for lazyload")
+    parser.add_argument('--lazyload',  action='store_true', help="lazyload by fetching file with filemap ")
+    parser.add_argument('--lazyindex', type=str, help="the index file name for lazyload by BrowerFS (deprecated)")
     parser.add_argument('--args', type=str, nargs='+', default=[], help="args except --root, --save-path to onscripter")
 
     if cmdstr is None: args = parser.parse_args()
@@ -43,6 +44,7 @@ def main(cmdstr=None):
     savedir = args.savedir
     urlbase = args.urlbase
     lazyindex =  args.lazyindex
+    lazyload = args.lazyload
     onsargs = args.args
 
     inpath = os.path.abspath(inpath)
@@ -61,6 +63,7 @@ def main(cmdstr=None):
         'gamedir': gamedir,
         'savedir': savedir,
         'args': onsargs,
+        'lazyload': lazyload,
         'files':files
     }
     if lazyindex is not None: onsyuri_index["lazyindex"] = lazyindex

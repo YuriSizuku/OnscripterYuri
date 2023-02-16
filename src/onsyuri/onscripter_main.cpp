@@ -42,11 +42,11 @@ Coding2UTF16 *coding2utf16 = NULL;
 #import "MoviePlayer.h"
 #endif
 
-#ifdef ANDROID
+#if defined(ANDROID)
 #include <unistd.h>
 #endif
 
-#ifdef WINRT
+#if defined(WINRT)
 #include "ScriptSelector.h"
 #endif
 
@@ -89,7 +89,7 @@ void optionVersion()
     exit(0);
 }
 
-#ifdef ANDROID
+#if defined(ANDROID)
 extern "C"
 {
 #include <jni.h>
@@ -228,6 +228,84 @@ extern "C" void playVideoIOS(const char *filename, bool click_flag, bool loop_fl
 }
 #endif
 
+#if defined(WEB)
+#include <emscripten.h>
+
+#undef fopen
+
+/*
+* fetch the file from server beforce fopen for lazyload
+* value: g_onsyuri_module, g_onsyuri_index, g_onsyuri_filemap
+* function: fetch_file
+*/
+FILE *fopen_ons(const char *path, const char *mode)
+{
+    // printf("## fopen_ons %s, ", path);
+    static int use_lazyload = -1;
+    if(use_lazyload==-1)
+    {
+        use_lazyload = EM_ASM_INT(
+            // check enviroment
+            if (!g_onsyuri_module) return 0;
+            if (!g_onsyuri_index) return 0;
+            if (!fetch_file) return 0;
+
+            // check lazyload flag with filemap
+            if (!g_onsyuri_filemap) return 0;
+            if (Object.keys(g_onsyuri_filemap).length==0) return 0;
+            return 1;
+        );
+    }
+    
+    if(use_lazyload==1 && (strcmp(mode, "r") || strcmp(mode, "rb")))
+    {   
+        int ret = 0;
+        ret = EM_ASM_INT( // path is combined after --gamedir
+            var path = g_onsyuri_module.UTF8ToString($0);
+            var key = path.toLowerCase(); // pay attention to the case sensitive of web
+            if(!g_onsyuri_filemap[key]) return 0;
+            if(g_onsyuri_filemap[key].loaded) return 2;
+            try {
+                fetch_file(g_onsyuri_module.FS, key, g_onsyuri_filemap);
+                return 1;
+            } 
+            catch(e) { 
+                console.log("## fopen_ons web lazyload ${path} error: ", e);
+                return 0;
+            }, path);
+        switch (ret)
+        {
+            case 0: 
+            {
+                // printf(" not found in g_onsyuri_filemap !\n");
+                return fopen(path, mode); // use fopen to check for other file mount
+                break;
+            }
+            case 1:
+            {
+                // printf(" waiting for fetch...\n");
+                break;
+            }
+            case 2:
+            {
+                // printf(" already loaded!\n");
+                return fopen(path, mode);
+                break;
+            }
+        }
+
+        while(!EM_ASM_INT(
+            var path = g_onsyuri_module.UTF8ToString($0);
+            var key = path.toLowerCase();
+            return g_onsyuri_filemap[key].loaded;, path))
+        {
+            SDL_Delay(5); // wait for async function
+        }
+    }
+    return fopen(path, mode);
+}
+#endif
+
 void parseOption(int argc, char *argv[]) {
     while (argc > 0) {
         if ( argv[0][0] == '-' ){
@@ -340,7 +418,7 @@ void parseOption(int argc, char *argv[]) {
 
 int main(int argc, char *argv[])
 {
-    utils::printInfo("ONScripter (Yuri %s) (Jh %s) (Ons %s, %d.%02d)\n", 
+    utils::printInfo("ONScripter Yuri %s,  (Jh %s, Ons %s, %d.%02d)\n", 
         ONS_YURI_VERSION, ONS_JH_VERSION, 
         ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
 

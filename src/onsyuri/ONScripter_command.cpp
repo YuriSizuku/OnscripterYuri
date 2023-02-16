@@ -972,7 +972,7 @@ int ONScripter::savescreenshotCommand()
     resizeSurface( screenshot_surface, surface );
 
     const char *buf = script_h.readStr();
-#ifdef ANDROID
+#if defined(ANDROID) && defined(WEB)
     FILE *fp = fopen(buf, "wb");
     SDL_RWops *rwops = SDL_RWFromFP(fp, SDL_TRUE);
 #else

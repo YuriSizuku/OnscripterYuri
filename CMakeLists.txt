@@ -236,7 +236,7 @@ function(config_web TARGET_NAME)
     # pass flags for emcc
     set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
     set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,FS,PATH,PROXYFS,IDBFS") # make as module
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,UTF8ToString,FS,PATH,PROXYFS,IDBFS") # make as module
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL=2 -sUSE_SDL_TTF=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL_MIXER=2 -sUSE_BZIP2=1 -sSDL2_MIXER_FORMATS=ogg,mp3 -sUSE_OGG=1 -sUSE_VORBIS=1")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lproxyfs.js -lidbfs.js --use-preload-plugins")
@@ -256,17 +256,6 @@ function(config_web TARGET_NAME)
     )
 endfunction()
 
-function(config_webfs TARGET_NAME)
-    # todo: use workerfs for lazy load
-    add_executable(${TARGET_NAME}
-        src/onsyuri_web/dummy.c)
-    set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") 
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain") # make as module
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lworkerfs.js --use-preload-plugins")
-    set_target_properties(${TARGET_NAME} PROPERTIES LINK_FLAGS ${EMCC_FLAGS})
-endfunction()
-
 function(config_platform TARGET_NAME)
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
         config_linux(${TARGET_NAME})
@@ -278,12 +267,14 @@ function(config_platform TARGET_NAME)
         endif()
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
         config_web(${TARGET_NAME})
-        # config_webfs(${TARGET_NAME}_fs)
         add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
-            COMMAND ${CMAKE_COMMAND} -E 
-            copy ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
-            COMMAND ${CMAKE_COMMAND} -E 
-            copy ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico)
+            COMMAND ${CMAKE_COMMAND} -E copy 
+                ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy 
+                ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.py ${CMAKE_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E copy 
+                ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico
+        )
     else()
         message("${CMAKE_SYSTEM_NAME} enviroment for ${TARGET_NAME} not supported!")
     endif()
