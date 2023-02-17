@@ -868,7 +868,7 @@ bool ONScripter::keyPressEvent( SDL_KeyboardEvent *event )
         setFullScreen(!fullscreen_mode);
         return true;
       }
-      if (event->keysym.sym == SDLK_F11) {
+      if (event->keysym.sym == SDLK_F10) {
         stretch_mode = !fullscreen_mode; 
         setFullScreen(!fullscreen_mode);
         return true;
@@ -1309,14 +1309,12 @@ void ONScripter::runEventLoop()
 #endif
 #if !defined(ANDROID) && !defined(IOS) && !defined(WINRT)
           case SDL_MOUSEMOTION:
-           
-#if !defined(WEB)
             // printf("## SDL_MOUSEMOTION (%d, %d) ", event.button.x, event.button.y);
+#if !defined(WEB)
             event.button.x = (event.button.x - render_view_rect.x) * screen_scale_ratio1;
             event.button.y = (event.button.y - render_view_rect.y) * screen_scale_ratio2;
-            // printf("-> (%d, %d)\n", event.button.x, event.button.y);
 #endif
-           
+            // printf("-> (%d, %d)\n", event.button.x, event.button.y);
             if (mouseMoveEvent( &event.motion )) return;
             if (btndown_flag){
                 if (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT))

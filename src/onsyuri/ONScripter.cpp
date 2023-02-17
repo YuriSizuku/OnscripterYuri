@@ -224,6 +224,10 @@ void ONScripter::initSDL()
     }
 #endif
 
+#if defined(WEB)
+    // window_flag |= SDL_WINDOW_RESIZABLE; // can not use RESIZABLE in web, just do it in canvas.width
+#endif
+
     int window_x = SDL_WINDOWPOS_CENTERED, window_y = SDL_WINDOWPOS_CENTERED;
 
     window = SDL_CreateWindow(NULL, window_x, window_y, screen_device_width, screen_device_height, window_flag);
@@ -257,10 +261,10 @@ void ONScripter::initSDL()
     utils::printInfo("Display: %d x %d (%d bpp)\n", screen_width, screen_height, screen_bpp);
 #ifdef WEB
     EM_ASM(
-        self.screen_width = $0;
-        self.screen_height = $1;
+        self.g_screen_width = $0;
+        self.g_screen_height = $1;
         let canvas = document.getElementById('canvas');
-        if(scale_full && canvas) scale_full(canvas, self.screen_width/self.screen_height);
+        if(scale_full && canvas) scale_full(canvas, self.g_screen_width/self.g_screen_height);
     , screen_width, screen_height);
 #endif
     dirty_rect.setDimension(screen_width, screen_height);

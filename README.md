@@ -32,7 +32,7 @@ New features or plans:
     - [ ] support extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile)  
   - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
 - render
-  - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
+  - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
   - [x] support arbitary resolution `--width`, `--height`  
   - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
 - other
@@ -68,8 +68,8 @@ Usage: onsyuri [option ...]
       --window          start in windowed mode
       --width 1280      force window width
       --height 720      force window height
-      --fullscreen      start in fullscreen mode (alt+f4)
-      --fullscreen2     start in fullscreen mode with stretch (f11)
+      --fullscreen      start in fullscreen mode (alt+f4 or f11)
+      --fullscreen2     start in fullscreen mode with stretch (f10)
       --sharpness 3.1    use gles to make image sharp
       --no-video        do not decode video
       --no-vsync        turn off vsync
@@ -100,7 +100,7 @@ You can either download the prebuild static elf from the [release](https://githu
 ### (3) web
 
 This project can run in a browser through hosted web server.  
-Press `F11` to strech full in a webpage, long click (touch also) to invoke game menu.
+Press `F10` to strech full in a webpage, `F11` in fullscreen, long click (touch also) to invoke menu.
 It might need some time to load at first without lazyload now.  
 
 The structure is as bellow:  

@@ -229,16 +229,29 @@
         </script>
 
         <script type="text/javascript"> // onsyuri ui
-            var g_strech_full = false;
+            var g_fullstrech = false;
+            var g_screen_height; // initial in onsyuri C code
+            var g_screen_width; 
+
             window.onresize = (event) =>{
                 var canvas = document.getElementById('canvas');
-                var ratio = g_strech_full ? window.innerWidth/window.innerHeight: canvas.width/canvas.height;
+                var ratio = g_fullstrech ? window.innerWidth/window.innerHeight: g_screen_width/g_screen_height;
                 scale_full(canvas, ratio);
             };
+
             window.onkeydown = (event) => {
-                if(event.key=="F11"){
-                    g_strech_full = !g_strech_full;
+                if(event.key=="F10"){
+                    g_fullstrech = !g_fullstrech;
                     window.dispatchEvent(new Event('resize'));
+                }
+                else if (event.key=="F11") {
+                    var body = document.getElementsByTagName('body')[0];
+                    if(window.innerHeight != screen.height) {
+                        body.requestFullscreen({ navigationUI: "show" })
+                        .then(()=>{ // can not use canvas.requestFullscreen
+                            console.log("## after requestFullscreen");
+                        });
+                    }
                 }
             }
         </script>
