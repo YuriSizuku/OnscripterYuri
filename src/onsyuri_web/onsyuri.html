@@ -187,8 +187,7 @@
 
         </script>
 
-        <script type="text/javascript"> // onsyuri init    
-            // init onsyuri module
+        <script type="text/javascript"> // onsyuri module
             g_onsyuri_module.canvas = (()=>{return document.getElementById('canvas');})();
             g_onsyuri_module.preRun = () => {
                 console.log("## onsyuri: preRun");
@@ -214,20 +213,6 @@
                 console.log("## onsyuri: onRuntimeInitialized");
             };
             
-            // init window
-            var g_strech_full = false;
-            window.onresize = (event) =>{
-                var canvas = document.getElementById('canvas');
-                var ratio = g_strech_full ? window.innerWidth/window.innerHeight: canvas.width/canvas.height;
-                scale_full(canvas, ratio);
-            };
-            window.onkeydown = (event) => {
-                if(event.key=="F11"){
-                    g_strech_full = !g_strech_full;
-                    window.dispatchEvent(new Event('resize'));
-                }
-            }
-
             (async() => {
                 g_onsyuri_index = await load_json(ONSYURI_INDEX_URL);
                 await onsyuri(g_onsyuri_module);
@@ -241,6 +226,21 @@
                 console.log("## onsyuri: args", args);
                 g_onsyuri_module.callMain(args);
             })();
+        </script>
+
+        <script type="text/javascript"> // onsyuri ui
+            var g_strech_full = false;
+            window.onresize = (event) =>{
+                var canvas = document.getElementById('canvas');
+                var ratio = g_strech_full ? window.innerWidth/window.innerHeight: canvas.width/canvas.height;
+                scale_full(canvas, ratio);
+            };
+            window.onkeydown = (event) => {
+                if(event.key=="F11"){
+                    g_strech_full = !g_strech_full;
+                    window.dispatchEvent(new Event('resize'));
+                }
+            }
         </script>
     </body>
 </html>

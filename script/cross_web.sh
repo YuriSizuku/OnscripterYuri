@@ -31,7 +31,9 @@ fetch_lua && build_lua
 embuilder build sdl2 sdl2_ttf sdl2_image sdl2_mixer bzip2 ogg vorbis mpg123
 emcc $CMAKELISTS_PATH/src/onsyuri_web/dummy.c \
     -o $BUILD_PATH/dummy.js \
-    -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg 
+    -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sUSE_SDL_MIXER=2 \
+    -sSDL2_IMAGE_FORMATS=bmp,png,jpg \
+    -sSDL2_MIXER_FORMATS=ogg,mp3,mid -sUSE_OGG=1 -sUSE_VORBIS=1 -sUSE_MPG123=1
 
 # config and build project
 # rm -rf $BUILD_PATH/*

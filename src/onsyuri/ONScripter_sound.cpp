@@ -103,7 +103,7 @@ int ONScripter::playSound(const char *filename, int format, bool loop_flag, int 
             utils::printError("can't load music \"%s\": %s\n", filename, Mix_GetError());
         }
         Mix_VolumeMusic( music_volume );
-        if ( Mix_PlayMusic( music_info, (music_play_loop_flag&&music_loopback_offset==0.0)?-1:0 ) == 0 ){
+        if ( music_info && Mix_PlayMusic( music_info, (music_play_loop_flag&&music_loopback_offset==0.0)?-1:0 ) == 0 ){
             music_buffer = buffer;
             music_buffer_length = length;
             return SOUND_MUSIC;
@@ -116,7 +116,7 @@ int ONScripter::playSound(const char *filename, int format, bool loop_flag, int 
         if (chunk == NULL) {
             utils::printError("can't load chunk \"%s\": %s\n", filename, Mix_GetError());
         }
-        if (playWave(chunk, format, loop_flag, channel) == 0){
+        if (chunk && playWave(chunk, format, loop_flag, channel) == 0){
             delete[] buffer;
             return SOUND_CHUNK;
         }
@@ -202,7 +202,9 @@ int ONScripter::playMIDI(bool loop_flag)
     sprintf(midi_filename, "%s%s", save_dir?save_dir:archive_path, TMP_MUSIC_FILE);
 #if defined(ANDROID) || defined(WEB)
     FILE *_fp = fopen(midi_filename, "rb");
+    if(!_fp) return -1;
     SDL_RWops *_rwops = SDL_RWFromFP(_fp, SDL_TRUE);
+    if(!_rwops) return -1;
     if ((midi_info = Mix_LoadMUS_RW(_rwops, SDL_TRUE)) == NULL) return -1;
 #else
     if ((midi_info = Mix_LoadMUS(midi_filename)) == NULL) return -1;

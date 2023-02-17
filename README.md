@@ -21,7 +21,6 @@ New features or plans:
   - [x] windows
     - [x] x86, x64 (local compile by msys2, static link)  
     - [x] x86, x64 (corss compile by mingw64, mingw32 from linux, static link)
-    - [ ] cl compile
   - [x] linux
     - [x] x86, x64 (local compile, static or dynamic link)
     - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
@@ -29,7 +28,6 @@ New features or plans:
     - [x] fs to save in indexdb
     - [x] web lua script support
     - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
-    - [ ] preloading (future plan)
   - [ ] android (future plan)
     - [ ] support extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile)  
   - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
@@ -37,11 +35,13 @@ New features or plans:
   - [x] support fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f11`  
   - [x] support arbitary resolution `--width`, `--height`  
   - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
-  - [ ] video support (future plan)
 - other
   - [x] support `nt2`, `nt3` encryption format by Mine
   - [x] support long click or touch to invoke menu  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
+- todo
+  - video support (future plan)
+  - preloading (future plan)
 
 ## 1. Usage
 
@@ -259,10 +259,11 @@ then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 ## 4. Issues (including already solved)  
 
 - general  
-  - [x]  ~~release file too big~~; This is because of static link all libraries for better compatibility. Partly solved by recomiple SDL libraries.  
+  - ~~release file too big~~; This is because of static link all libraries for better compatibility. Partly solved by recomiple SDL libraries.  
 - windows  
 - linux  
 - android  
 - web  
-  - [x] ~~lazy load in workerfs not work, see this [issue](https://github.com/emscripten-core/emscripten/issues/18698)~~ ; solved by using [BrowserFS](https://github.com/jvilk/BrowserFS)
-  - [x] ~~Audio glitch problem in slow network~~ ; solved by async fetch without blocking audio
+  - ~~lazy load in workerfs not work, see this [issue](https://github.com/emscripten-core/emscripten/issues/18698)~~ ; solved by using [BrowserFS](https://github.com/jvilk/BrowserFS)
+  - ~~Audio glitch problem in slow network~~ ; solved by async fetch without blocking audio
+  - SDL2 Mix_LoadMUS can not decode mp3
