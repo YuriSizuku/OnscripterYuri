@@ -52,30 +52,39 @@ Coding2UTF16 *coding2utf16 = NULL;
 
 void optionHelp()
 {
-    printf( "Usage: onscripter [option ...]\n" );
-    printf( "      --cdaudio\t\tuse CD audio if available\n");
-    printf( "      --cdnumber no\tchoose the CD-ROM drive number\n");
+    printf( "Usage: onsyuri [option ...]\n" );
+    printf( "  -h, --help\t\tshow this help and exit\n");
+    printf( "  -v, --version\t\tshow the version information and exit\n\n");
+    
+    printf( " load options: \n");
     printf( "  -f, --font file\tset a TTF font file\n");
-    printf( "      --registry file\tset a registry file\n");
-    printf( "      --dll file\tset a dll file\n");
     printf( "  -r, --root path\tset the root path to the archives\n");
-    printf( "      --fullscreen\tstart in fullscreen mode\n");
-    printf( "      --fullscreen2\tstart in fullscreen mode with stretch\n");
+    printf( "      --save-dir\tset save dir\n");
+    printf( "      --debug:1\t\tprint debug info\n");
+    printf( "      --enc:sjis\tuse sjis coding script\n\n");
+
+    printf( " render options: \n");
+    printf( "      --window\t\tstart in windowed mode\n");
     printf( "      --width 1280\tforce window width\n");
     printf( "      --height 720\tforce window height\n");
-    printf( "      --window\t\tstart in windowed mode\n");
-    printf( "      --force-button-shortcut\tignore useescspc and getenter command\n");
+    printf( "      --fullscreen\tstart in fullscreen mode (alt+f4)\n");
+    printf( "      --fullscreen2\tstart in fullscreen mode with stretch (f11)\n");
+    printf( "      --sharpness 3.1 \t use gles to make image sharp\n");
+    printf( "      --no-video\tdo not decode video\n");
+    printf( "      --no-vsync\tturn off vsync\n\n");
+    
+    printf( " other options: \n");
+    printf( "      --cdaudio\t\tuse CD audio if available\n");
+    printf( "      --cdnumber no\tchoose the CD-ROM drive number\n");
+    printf( "      --registry file\tset a registry file\n");
+    printf( "      --dll file\tset a dll file\n");
     printf( "      --enable-wheeldown-advance\tadvance the text on mouse wheel down\n");
     printf( "      --disable-rescale\tdo not rescale the images in the archives\n");
+    printf( "      --force-button-shortcut\tignore useescspc and getenter command\n");
     printf( "      --render-font-outline\trender the outline of a text instead of casting a shadow\n");
     printf( "      --edit\t\tenable online modification of the volume and variables when 'z' is pressed\n");
     printf( "      --key-exe file\tset a file (*.EXE) that includes a key table\n");
-    printf( "      --enc:sjis\tuse sjis coding script\n");
-    printf( "      --debug:1\t\tprint debug info\n");
     printf( "      --fontcache\tcache default font\n");
-    printf( "      --save-dir\tset save dir\n");
-    printf( "  -h, --help\t\tshow this help and exit\n");
-    printf( "  -v, --version\t\tshow the version information and exit\n");
     exit(0);
 }
 
@@ -309,46 +318,38 @@ FILE *fopen_ons(const char *path, const char *mode)
 void parseOption(int argc, char *argv[]) {
     while (argc > 0) {
         if ( argv[0][0] == '-' ){
+            // version, help
             if ( !strcmp( argv[0]+1, "h" ) || !strcmp( argv[0]+1, "-help" ) ){
                 optionHelp();
             }
             else if ( !strcmp( argv[0]+1, "v" ) || !strcmp( argv[0]+1, "-version" ) ){
                 optionVersion();
             }
-            else if ( !strcmp( argv[0]+1, "-cdaudio" ) ){
-                ons.enableCDAudio();
-            }
-            else if ( !strcmp( argv[0]+1, "-cdnumber" ) ){
-                argc--;
-                argv++;
-                ons.setCDNumber(atoi(argv[0]));
-            }
+
+            // load options
             else if ( !strcmp( argv[0]+1, "f" ) || !strcmp( argv[0]+1, "-font" ) ){
                 argc--;
                 argv++;
                 ons.setFontFile(argv[0]);
-            }
-            else if ( !strcmp( argv[0]+1, "-registry" ) ){
-                argc--;
-                argv++;
-                ons.setRegistryFile(argv[0]);
-            }
-            else if ( !strcmp( argv[0]+1, "-dll" ) ){
-                argc--;
-                argv++;
-                ons.setDLLFile(argv[0]);
             }
             else if ( !strcmp( argv[0]+1, "r" ) || !strcmp( argv[0]+1, "-root" ) ){
                 argc--;
                 argv++;
                 ons.setArchivePath(argv[0]);
             }
-            else if ( !strcmp( argv[0]+1, "-fullscreen" ) ){
-                ons.setFullscreenMode(1);
+            else if ( !strcmp(argv[0]+1, "-save-dir") ){
+                argc--;
+                argv++;
+                ons.setSaveDir(argv[0]);
             }
-            else if ( !strcmp( argv[0]+1, "-fullscreen2" ) ){
-                ons.setFullscreenMode(2);
+            else if (!strcmp(argv[0]+1, "-debug:1")){
+                ons.setDebugLevel(1);
             }
+            else if (!strcmp(argv[0]+1, "-enc:sjis")){
+                if (coding2utf16 == NULL) coding2utf16 = new SJIS2UTF16();
+            }
+
+            // render options
             else if ( !strcmp( argv[0]+1, "-window" ) ){
                 ons.setWindowMode();
             }
@@ -362,10 +363,42 @@ void parseOption(int argc, char *argv[]) {
                 argv++;
                 ons.setWindowHeight(atoi(argv[0]));
             }
+            else if ( !strcmp( argv[0]+1, "-fullscreen" ) ){
+                ons.setFullscreenMode(1);
+            }
+            else if ( !strcmp( argv[0]+1, "-fullscreen2" ) ){
+                ons.setFullscreenMode(2);
+            }
             else if ( !strcmp( argv[0]+1, "-sharpness" ) ){
                 argc--;
                 argv++;
                 ons.setSharpness(atof(argv[0]));
+            }
+            else if (!strcmp(argv[0]+1, "-no-video")){
+			    ons.setVideoOff();
+			}
+            else if (!strcmp(argv[0]+1, "-no-vsync")){
+			    ons.setVsyncOff();
+			}
+
+            // other options
+            else if ( !strcmp( argv[0]+1, "-cdaudio" ) ){
+                ons.enableCDAudio();
+            }
+            else if ( !strcmp( argv[0]+1, "-cdnumber" ) ){
+                argc--;
+                argv++;
+                ons.setCDNumber(atoi(argv[0]));
+            }
+            else if ( !strcmp( argv[0]+1, "-registry" ) ){
+                argc--;
+                argv++;
+                ons.setRegistryFile(argv[0]);
+            }
+            else if ( !strcmp( argv[0]+1, "-dll" ) ){
+                argc--;
+                argv++;
+                ons.setDLLFile(argv[0]);
             }
             else if ( !strcmp( argv[0]+1, "-force-button-shortcut" ) ){
                 ons.enableButtonShortCut();
@@ -387,22 +420,8 @@ void parseOption(int argc, char *argv[]) {
                 argv++;
                 ons.setKeyEXE(argv[0]);
             }
-            else if (!strcmp(argv[0]+1, "-enc:sjis")){
-                if (coding2utf16 == NULL) coding2utf16 = new SJIS2UTF16();
-            }
-            else if (!strcmp(argv[0]+1, "-debug:1")){
-                ons.setDebugLevel(1);
-            }
             else if (!strcmp(argv[0]+1, "-fontcache")){
                 ons.setFontCache();
-            }
-			else if (!strcmp(argv[0]+1, "-no-vsync")){
-			    ons.setVsyncOff();
-			}
-            else if ( !strcmp(argv[0]+1, "-save-dir") ){
-                argc--;
-                argv++;
-                ons.setSaveDir(argv[0]);
             }
             else{
                 utils::printInfo(" unknown option %s\n", argv[0]);

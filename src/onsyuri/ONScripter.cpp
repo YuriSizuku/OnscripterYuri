@@ -344,6 +344,7 @@ ONScripter::ONScripter()
     smpeg_info = NULL;
     current_button_state.down_flag = false;
     vsync = true;
+    video = true;
 
     int i;
     for (i=0 ; i<MAX_SPRITE2_NUM ; i++)
@@ -434,6 +435,10 @@ void ONScripter::setSharpness(float sharpness)
 
 void ONScripter::setVsyncOff() {
     vsync = false;
+}
+
+void ONScripter::setVideoOff() {
+    video = false;
 }
 
 void ONScripter::setFontCache()

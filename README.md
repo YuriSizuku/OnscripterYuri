@@ -52,6 +52,41 @@ New features or plans:
 ./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf --enc:sjis
 ./onsyuri --width 1280 --height 720 --sharpness=3.1
 ./onsyuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
+
+Usage: onsyuri [option ...]
+  -h, --help            show this help and exit
+  -v, --version         show the version information and exit
+
+ load options:
+  -f, --font file       set a TTF font file
+  -r, --root path       set the root path to the archives
+      --save-dir        set save dir
+      --debug:1         print debug info
+      --enc:sjis        use sjis coding script
+
+ render options:
+      --window          start in windowed mode
+      --width 1280      force window width
+      --height 720      force window height
+      --fullscreen      start in fullscreen mode (alt+f4)
+      --fullscreen2     start in fullscreen mode with stretch (f11)
+      --sharpness 3.1    use gles to make image sharp
+      --no-video        do not decode video
+      --no-vsync        turn off vsync
+
+ other options:
+      --cdaudio         use CD audio if available
+      --cdnumber no     choose the CD-ROM drive number
+      --registry file   set a registry file
+      --dll file        set a dll file
+      --enable-wheeldown-advance        advance the text on mouse wheel down
+      --disable-rescale do not rescale the images in the archives
+      --force-button-shortcut   ignore useescspc and getenter command
+      --render-font-outline     render the outline of a text instead of casting a shadow
+      --edit            enable online modification of the volume and variables when 'z' is pressed
+      --key-exe file    set a file (*.EXE) that includes a key table
+      --fontcache       cache default font
+
 ```
 
 ❗ If you force exit the game, the save might be damaged, try to remvoe envdata to play again.

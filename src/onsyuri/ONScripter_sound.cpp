@@ -249,6 +249,11 @@ static void smpeg_filter_destroy( struct SMPEG_Filter * filter )
 
 int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag)
 {
+    if(!video) {
+        utils::printInfo( "playMPEG: skip %s with --no-video option \n", filename);
+        return 0;
+    }
+    
     unsigned long length = script_h.cBR->getFileLength( filename );
     if (length == 0){
         utils::printError(" *** can't find file [%s] ***\n", filename );
@@ -381,6 +386,11 @@ int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag)
 
 int ONScripter::playAVI( const char *filename, bool click_flag )
 {
+    if(!video) {
+        utils::printInfo( "playAVI: skip %s with --no-video option \n", filename);
+        return 0;
+    }
+
     unsigned long length = script_h.cBR->getFileLength( filename );
     if (length == 0){
         utils::printError( " *** can't find file [%s] ***\n", filename );

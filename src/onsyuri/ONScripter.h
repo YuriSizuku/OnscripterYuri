@@ -90,6 +90,7 @@ public:
     void setArchivePath(const char *path);
     void setSaveDir(const char *path);
     void setFullscreenMode(int mode=0);
+    void setVideoOff();
     void setWindowMode();
     void setVsyncOff();
     void setFontCache();
@@ -356,6 +357,7 @@ private:
     bool edit_flag;
     char *key_exe_file;
     bool vsync;
+    bool video;
     bool cacheFont;
     bool screen_dirty_flag;
 
