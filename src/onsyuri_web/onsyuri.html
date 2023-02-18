@@ -3,14 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta onsyuri_js="onsyuri.js">
         <meta onsyuri_index="onsyuri_index.json">
-        <title>Onscripter Yuri v0.6.3</title>
+        <title>Onscripter Yuri v0.6.4</title>
     </head>
     <body style="margin: 0 auto; background-color:black;">
-        <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>
-        <script src="onsyuri.js" type="text/javascript"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/BrowserFS/1.4.3/browserfs.min.js" type="text/javascript"></script> -->
-        
+        <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>        
         <script type="text/javascript"> // universe function
             function scale_full(docobj, ratio=0) {
                 var w = window.innerWidth;
@@ -181,6 +179,8 @@
             const ONSYURI_PREFIX = ""; // prefix for mount, not used 
             const ONSYURI_INDEX_URL = document.querySelector( // the url to load onsyuri_index.json
                 'meta[onsyuri_index]').attributes.onsyuri_index.textContent;
+            const ONSYURI_JS_URL = document.querySelector(
+                'meta[onsyuri_js]').attributes.onsyuri_js.textContent;
             var g_onsyuri_index = {}; // onsyuri_index.json, game file index
             var g_onsyuri_filemap = {}; // filemap to record status of loaded files, used for lazyload
             var g_onsyuri_module  = {}; // onsyuri c module, FS and configure are here
@@ -214,7 +214,9 @@
             };
             
             (async() => {
+                //return
                 g_onsyuri_index = await load_json(ONSYURI_INDEX_URL);
+                await load_js(ONSYURI_JS_URL); // dynamic load onsyuri.js
                 await onsyuri(g_onsyuri_module);
 
                 var args = [
@@ -230,30 +232,206 @@
 
         <script type="text/javascript"> // onsyuri ui
             var g_fullstrech = false;
-            var g_screen_height; // initial in onsyuri C code
-            var g_screen_width; 
+            var g_screen_height, g_screen_width; // initial in onsyuri C code
+            var g_lastpressdown; // for longpress 
+            const LONG_CLICK_TIME = 1200;
 
-            window.onresize = (event) =>{
+            function toggle_stretchfull() {
+                g_fullstrech = !g_fullstrech;
+                window.dispatchEvent(new Event('resize'));
+            }
+
+            function toggle_screenfull() {
+                var body = document.getElementsByTagName('body')[0];
+                if(window.innerHeight != screen.height) {
+                    body.requestFullscreen({ navigationUI: "show" })
+                    .then(()=>{ // can not use canvas.requestFullscreen
+                        console.log("## after requestFullscreen");
+                    });
+                }
+                else {
+                    document.exitFullscreen();
+                }
+            }
+
+            function toggle_onsmenu(){
+                var canvas = document.getElementById('canvas');    
+                var event = new KeyboardEvent("keydown", 
+                    {bubbles: true, cancelable: true, keyCode: 0x1B}); // ESC key
+                canvas.dispatchEvent(event);
+                setTimeout(() => {
+                    var event = new KeyboardEvent("keyup", 
+                    {bubbles: true, cancelable: true, keyCode: 0x1B}); // ESC key
+                    canvas.dispatchEvent(event);
+                }, 50);
+            }
+
+            var g_skip = false;
+            function toggle_skip() {
+                g_skip = !g_skip;
+                var canvas = document.getElementById('canvas');    
+                var event = new KeyboardEvent(g_skip ? "keydown": "keyup", 
+                    {bubbles: true, cancelable: true, keyCode: 0x11}); // ctrl key
+                canvas.dispatchEvent(event);
+            }
+
+            function toggle_webinfo() {
+                var onsyuri_webinfo = document.getElementById("onsyuri_webinfo");
+                if(onsyuri_webinfo.style.display=="none") {
+                    var first_line = onsyuri_webinfo.getElementsByTagName("p")[0];
+                    first_line.innerText = `In Game <${g_onsyuri_index.title}>`
+                    onsyuri_webinfo.style.display="block";
+                }
+                else{
+                    onsyuri_webinfo.style.display="none";
+                }
+            }
+
+            function toggle_webmenu() {
+                var onsyuri_webrmenu = document.getElementById("onsyuri_webrmenu");
+                if(onsyuri_webrmenu.style.display=="none") {
+                    onsyuri_webrmenu.style.display = "block";
+                }
+                else {
+                    var onsyuri_webinfo = document.getElementById("onsyuri_webinfo");
+                    onsyuri_webinfo.style.display = "none";
+                    onsyuri_webrmenu.style.display = "none";
+                }
+            }
+
+            window.onresize = (event) => {
                 var canvas = document.getElementById('canvas');
                 var ratio = g_fullstrech ? window.innerWidth/window.innerHeight: g_screen_width/g_screen_height;
                 scale_full(canvas, ratio);
             };
 
             window.onkeydown = (event) => {
-                if(event.key=="F10"){
-                    g_fullstrech = !g_fullstrech;
-                    window.dispatchEvent(new Event('resize'));
+                switch(event.key) {
+                    case "F2":
+                        toggle_webinfo();
+                        break;
+                    case "F9":
+                        toggle_webmenu();
+                        break;
+                    case "F10":
+                        toggle_stretchfull();
+                        break;
+                    case "F11":
+                        toggle_screenfull();
+                        break;
                 }
-                else if (event.key=="F11") {
-                    var body = document.getElementsByTagName('body')[0];
-                    if(window.innerHeight != screen.height) {
-                        body.requestFullscreen({ navigationUI: "show" })
-                        .then(()=>{ // can not use canvas.requestFullscreen
-                            console.log("## after requestFullscreen");
-                        });
+            }
+
+            window.onmousedown = (event) => {
+                if(event.button==0){
+                    g_lastpressdown = event.timeStamp;
+                }
+            }
+
+            window.onmouseup = (event) => {
+                if(event.button==0){
+                    if(event.timeStamp - g_lastpressdown > LONG_CLICK_TIME) {
+                        var onsyuri_webrmenu = document.getElementById("onsyuri_webrmenu");
+                        if(onsyuri_webrmenu.style.display=="none") toggle_webmenu();
+                        g_lastpressdown = event.timeStamp;
                     }
                 }
             }
+
+            window.ontouchstart = (event) => {
+                g_lastpressdown = event.timeStamp;
+            }
+
+            window.ontouchend = (event) => {
+                if(event.timeStamp - g_lastpressdown > LONG_CLICK_TIME) {
+                    var onsyuri_webrmenu = document.getElementById("onsyuri_webrmenu");
+                    if(onsyuri_webrmenu.style.display=="none") toggle_webmenu();
+                    g_lastpressdown = event.timeStamp;
+                }
+            }
+
+            window.onmessage = (evnet)=> {
+                console.log("## onsyuri: onmessage ", event.data);
+                if(!event.data) return;
+                switch(event.data) {
+                    case "onsinit":
+                        var body = document.getElementsByTagName("body")[0];
+                        var onsyuri_webinfo = document.getElementById("onsyuri_webinfo");
+                        if(body) body.style.background = "black";
+                        if(onsyuri_webinfo) onsyuri_webinfo.style.display = "none";
+                        break;
+                }
+            }
         </script>
+        
+        <style>
+            #onsyuri_webinfo {
+                position: fixed; 
+                display: block;
+                border-radius: 10px;
+                top: 17%;
+                left: 0;
+                right: 0; 
+                margin-left:auto;
+                margin-right: auto; 
+                min-width: 300px;
+                max-width: 400px;
+                text-align: left;
+                color: snow;    
+                background: cornflowerblue;
+            }
+
+            #onsyuri_webinfo p {
+                margin-left: 10%; 
+                margin-right: 10%;
+            }
+
+            #onsyuri_webrmenu {
+                position: fixed; 
+                display: block;
+                border-radius: 10px;
+                top: 10%;
+                left: 0;
+                right: 0; 
+                margin-left:auto;
+                margin-right: auto; 
+                min-width: 400px;
+                max-width: 800px;
+                text-align: center;
+                color: snow;
+            }
+
+            #onsyuri_webrmenu button {
+                border: 1px solid;
+                border-radius: 0.3em;
+                background: #00bcd4;
+                border-color: #00bcd4;
+                color: white;
+                font-size: larger;
+                outline: none;
+            }
+
+            #onsyuri_webrmenu button:hover {
+                background: #16e5ff;
+                border-color: #16e5ff;
+            }
+        </style>
+        
+        <div id="onsyuri_webinfo">
+            <p> Loading game resources ... </p>
+            <p> Powered by <a href="https://github.com/YuriSizuku/OnscripterYuri" target="_blank"> Onscripter Yuri</a> v0.6.4</p>
+            <hr>
+            <p> [Right|Long Click|F9]: show menu </p>
+            <p> [F10]: stretch full; [F11]: screen full</p>
+        </div>
+
+        <div id="onsyuri_webrmenu" style="display: none;">
+            <button onclick="toggle_stretchfull()">stretch [F10]</button>
+            <button onclick="toggle_screenfull()">full [F11]</button>
+            <button onclick="toggle_onsmenu()">rmenu [Esc]</button>
+            <button onclick="toggle_skip()">skip [Ctrl]</button>
+            <button onclick="toggle_webinfo()">about [F2]</button>
+            <button onclick="toggle_webmenu()">close [F9]</button>
+        </div>
     </body>
 </html>
