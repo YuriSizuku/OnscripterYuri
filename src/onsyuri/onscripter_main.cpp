@@ -266,7 +266,8 @@ FILE *fopen_ons(const char *path, const char *mode)
         );
     }
     
-    if(use_lazyload==1 && (strcmp(mode, "r") || strcmp(mode, "rb")))
+    FILE *fp = fopen(path, mode);
+    if(!fp && use_lazyload==1 && (strcmp(mode, "r") || strcmp(mode, "rb")))
     {   
         int ret = 0;
         ret = EM_ASM_INT( // path is combined after --gamedir
@@ -287,7 +288,7 @@ FILE *fopen_ons(const char *path, const char *mode)
             case 0: 
             {
                 // printf(" not found in g_onsyuri_filemap !\n");
-                return fopen(path, mode); // use fopen to check for other file mount
+                return fp; // use fopen to check for other file mount
                 break;
             }
             case 1:
@@ -298,7 +299,7 @@ FILE *fopen_ons(const char *path, const char *mode)
             case 2:
             {
                 // printf(" already loaded!\n");
-                return fopen(path, mode);
+                return fp;
                 break;
             }
         }
@@ -310,8 +311,9 @@ FILE *fopen_ons(const char *path, const char *mode)
         {
             SDL_Delay(5); // wait for async function
         }
+        fp = fopen(path, mode); // reload after fetch
     }
-    return fopen(path, mode);
+    return fp;
 }
 #endif
 
@@ -533,6 +535,11 @@ int main(int argc, char *argv[])
     // Run ONScripter
     if (ons.openScript()) exit(-1);
     if (ons.init()) exit(-1);
+#if defined(WEB)
+    EM_ASM(
+        self.postMessage("onsinit");
+    );
+#endif
     ons.executeLabel();
     exit(0);
 }
