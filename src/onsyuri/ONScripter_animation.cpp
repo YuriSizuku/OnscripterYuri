@@ -85,28 +85,33 @@ void ONScripter::proceedAnimation(int current_time)
 
 #ifdef USE_LUA
     if (lua_handler.is_animatable && !script_h.isExternalScript()){
-        while(lua_handler.next_time <= current_time){
-            int tmp_event_mode = event_mode;
-            int tmp_next_time = next_time;
-            int tmp_string_buffer_offset = string_buffer_offset;
+        int tmp_event_mode = event_mode;
+        int tmp_next_time = next_time;
+        int tmp_string_buffer_offset = string_buffer_offset;
 
-            char *current = script_h.getCurrent();
+        char *current = script_h.getCurrent();
+        while (lua_handler.next_time <= current_time){
             if (lua_handler.isCallbackEnabled(LUAHandler::LUA_ANIMATION))
                 if (lua_handler.callFunction(true, "animation"))
                     errorAndExit( lua_handler.error_str );
-            script_h.setCurrent(current);
-            readToken();
-
-            string_buffer_offset = tmp_string_buffer_offset;
-            next_time = tmp_next_time;
-            event_mode = tmp_event_mode;
-
-            lua_handler.next_time += lua_handler.duration_time;
+                
             if (lua_handler.duration_time <= 0){
                 lua_handler.next_time = current_time;
                 break;
             }
+            
+            // exit the loop not to decrease the performance
+            do{
+                lua_handler.next_time += lua_handler.duration_time;
+            }
+            while (lua_handler.next_time <= current_time);
         }
+        script_h.setCurrent(current);
+        readToken();
+
+        string_buffer_offset = tmp_string_buffer_offset;
+        next_time = tmp_next_time;
+        event_mode = tmp_event_mode;
     }
 #endif
 

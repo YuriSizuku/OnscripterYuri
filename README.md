@@ -5,7 +5,7 @@
 ☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
 This is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.  
 
-Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [noesis1 (lazyload)](https://onsgame.netlify.app/game/noesis1/)  
+Online Onscripter game demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [luasnow](https://blog.schnee.moe/static/luasnow.html), [noesis1 (lazyload)](https://onsgame.netlify.app/game/noesis1/)  
 
 ![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
@@ -40,6 +40,7 @@ New features or plans:
   - [x] support `nt2`, `nt3` encryption format by Mine
   - [x] support long click or touch to invoke menu  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
+  - [x] fix lua animation problem
 - todo
   - video support (future plan)
   - preloading (future plan)

@@ -132,7 +132,7 @@ void ScriptHandler::reset()
         clickstr_list = NULL;
     }
 
-    is_internal_script = false;
+    is_internal_script = true;
     ScriptContext *sc = root_script_context.next;
     while (sc){
         ScriptContext *tmp = sc;
@@ -454,7 +454,7 @@ void ScriptHandler::enterExternalScript(char *pos)
     sc->prev = last_script_context;
     last_script_context = sc;
     
-    is_internal_script = true;
+    is_internal_script = false;
     sc->current_script = current_script;
     current_script = pos;
     sc->next_script = next_script;
@@ -470,7 +470,7 @@ void ScriptHandler::leaveExternalScript()
     last_script_context = sc->prev;
     last_script_context->next = NULL;
     if (last_script_context->prev == NULL)
-        is_internal_script = false;
+        is_internal_script = true;
 
     current_script = sc->current_script;
     next_script = sc->next_script;
@@ -588,7 +588,7 @@ bool ScriptHandler::isKidoku()
 
 void ScriptHandler::markAsKidoku( char *address )
 {
-    if (!kidokuskip_flag || is_internal_script) return;
+    if (!kidokuskip_flag || !is_internal_script) return;
 
     int offset = current_script - script_buffer;
     if ( address ) offset = address - script_buffer;
