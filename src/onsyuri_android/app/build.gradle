@@ -12,27 +12,17 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['java']
-            res.srcDirs = ['res']
-        }
-    }
-    externalNativeBuild {
-        cmake {
-            version '3.22.1'
-            path 'cpp/CMakeLists.txt'
-            buildStagingDirectory './../../../build_android'
-        }
-    }
-
     defaultConfig {
         applicationId "com.yuri.onscripter"
         minSdk 22
         targetSdk 31
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+        externalNativeBuild {
+            cmake {
+                arguments "-Wno-dev",  "-DANDROID_ARM_NEON=TRUE"
+            }
         }
         versionCode 1
         versionName '0.7'
@@ -48,6 +38,20 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['java']
+            res.srcDirs = ['res']
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            version '3.22.1'
+            path 'cpp/CMakeLists.txt'
+            buildStagingDirectory './../../../build_android'
+        }
+    }
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "onsyuri[${namespace}]_v${defaultConfig.versionName}.apk"

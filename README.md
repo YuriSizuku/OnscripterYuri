@@ -254,6 +254,15 @@ sudo apt-get -y install mingw-w64 zstd # do not install mingw-w64-tools, this pk
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 
+### (6) cross android  
+
+Install android sdk and ndk, then
+
+``` sh
+cd src/onsyuri_android/
+chmod +x ./gradlew && ./gradlew assembleDebug
+```
+
 ## 3. Compatibility  
 
 |game|version|status|description|

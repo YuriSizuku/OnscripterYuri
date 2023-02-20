@@ -35,6 +35,7 @@ set(SDL2MIXER_OPUS off)
 set(SDL2MIXER_FLAC off)
 set(SDL2MIXER_VORBIS_STB on)
 set(SDL2MIXER_VENDORED on)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-dev")
 add_subdirectory(${SDL2MIXER_DIR})
 
 # build jpeg
@@ -51,6 +52,7 @@ set(LUA_CODE
     ${LUASRC_DIR}/lmathlib.c ${LUASRC_DIR}/loadlib.c ${LUASRC_DIR}/loslib.c  ${LUASRC_DIR}/lstrlib.c ${LUASRC_DIR}/ltablib.c
     ${LUASRC_DIR}/lutf8lib.c ${LUASRC_DIR}/linit.c
 )
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 add_library(lua SHARED ${LUA_CODE})
 
 # build bz2

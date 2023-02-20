@@ -34,4 +34,9 @@ fi
 
 # config and build project
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-if [ -z "$TARGETS" ]; then TARGETS=all; fi
+if [ -z "$TARGETS" ]; then TARGETS=assembleDebug; fi
+
+pushd ${CMAKELISTS_PATH}/src/onsyuri_android
+# use gradlew.bat in windows, or it might failed
+chmod +x ./gradlew && ./gradlew $TARGETS
+popd
