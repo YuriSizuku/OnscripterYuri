@@ -24,8 +24,11 @@
 
 #ifndef __ANIMATION_INFO_H__
 #define __ANIMATION_INFO_H__
-
+#if defined(ANDROID)
+#include "SDL.h"
+#else
 #include <SDL2/SDL.h>
+#endif
 #include <string.h>
 
 typedef unsigned char uchar3[3];

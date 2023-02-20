@@ -24,7 +24,11 @@
 #ifndef __DIRTY_RECT__
 #define __DIRTY_RECT__
 
+#if defined(ANDROID)
+#include "SDL.h"
+#else
 #include <SDL2/SDL.h>
+#endif
 
 struct DirtyRect
 {

@@ -1,3 +1,4 @@
+# general
 asset/*test*/**
 asset/stdout.txt
 asset/stderr.txt
@@ -5,3 +6,15 @@ build/**
 build_*/**
 thirdparty/**
 script/*.json
+
+# android
+local.properties
+src/onsyuri_android/.gradle
+src/onsyuri_android/local.properties
+src/onsyuri_android/.idea/caches
+src/onsyuri_android/.idea/libraries
+src/onsyuri_android/.idea/modules.xml
+src/onsyuri_android/.idea/workspace.xml
+src/onsyuri_android/.idea/navEditor.xml
+src/onsyuri_android/.idea/assetWizardSettings.xml
+src/onsyuri_android/app/cpp/thirdparty/*

@@ -24,11 +24,18 @@
 #undef USE_PARALLEL
 #endif
 
-#ifdef USE_PARALLEL
+#if defined(USE_PARALLEL)
+#if defined(ANDROID)
+#include "SDL_cpuinfo.h"
+#include "SDL_thread.h"
+#include "SDL_timer.h"
+#include "SDL_atomic.h"
+#else
 #include <SDL2/SDL_cpuinfo.h>
 #include <SDL2/SDL_thread.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_atomic.h>
+#endif
 #endif
 
 #ifdef USE_OMP_PARALLEL

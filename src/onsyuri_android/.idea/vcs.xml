@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/dav1d" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/jpeg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libavif" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/brotli" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/brotli/research/esaxx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/brotli/research/libdivsufsort" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/highway" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/lcms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/lodepng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/sjpeg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libjxl/third_party/skcms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libpng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libtiff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/libwebp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_image-2.6.3/external/zlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/flac" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/libmodplug" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/mpg123" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/ogg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/opus" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/opusfile" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/tremor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/cpp/thirdparty/SDL2_mixer-2.6.3/external/vorbis" vcs="Git" />
+  </component>
+</project>

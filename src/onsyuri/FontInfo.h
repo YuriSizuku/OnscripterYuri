@@ -26,7 +26,11 @@
 #define __FONT_INFO_H__
 
 
+#if defined(ANDROID)
+#include "SDL.h"
+#else
 #include <SDL2/SDL.h>
+#endif
 #include "BaseReader.h"
 
 typedef unsigned char uchar3[3];

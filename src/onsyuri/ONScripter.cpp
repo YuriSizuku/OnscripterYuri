@@ -158,6 +158,8 @@ void ONScripter::initSDL()
     screen_bpp = 32;
     
 #if (defined(IOS) || defined(ANDROID) || defined(WINRT))
+    SDL_DisplayMode mode;
+    SDL_GetDisplayMode(0, 0, &mode);
     int width;
     if (mode.w * screen_height > mode.h * screen_width)
         width = (mode.h*screen_width / screen_height) & (~0x01); // to be 2 bytes aligned

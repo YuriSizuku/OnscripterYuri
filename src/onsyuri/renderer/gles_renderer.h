@@ -20,12 +20,18 @@
 */
 #pragma once
 #if defined(USE_GLES)
-#include <SDL2/SDL.h>
 
-#if defined(_WIN32) && !defined(_MSC_VER)
-#endif
+#if defined(ANDROID)
+#include "SDL.h"
+#include <GLES2/gl2platform.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#else
+#include <SDL2/SDL.h>
 #define SDL_USE_BUILTIN_OPENGL_DEFINITIONS
 #include <SDL2/SDL_opengles2.h>
+#endif
+
 
 class GlesRenderer {
     SDL_Window *window;
@@ -40,9 +46,8 @@ class GlesRenderer {
 	GLint const_buffer_location[3];
 	int output_size[2];
 	bool _pause = false;
+
 #if !(defined(IOS) || defined(ANDROID))
-
-
 // dynamic binding at class initialize
 // #define SDL_PROC(ret,func,params) ret (APIENTRY *func) params;
 #define SDL_PROC(ret,func,params) \

@@ -257,6 +257,35 @@ function(config_web TARGET_NAME)
     )
 endfunction()
 
+function(config_android TARGET_NAME)
+    add_library(${TARGET_NAME} SHARED ${ONSYURI_CODE})
+    message("Android enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
+    target_compile_definitions(${TARGET_NAME} PRIVATE 
+        ANDROID
+        USE_LUA
+        USE_PARALLEL
+        USE_BUILTIN_LAYER_EFFECTS
+        USE_GLES
+        USE_FILELOG
+        SDL_JAVA_PACKAGE_PATH=com_yuri_onscripter
+    )
+    target_compile_options(${TARGET_NAME} PRIVATE 
+        -Wno-invalid-source-encoding
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE
+        lua
+        jpeg
+        bz2
+        SDL2
+        SDL2_ttf
+        SDL2_image
+        SDL2_mixer
+        
+        GLESv2
+        log
+    )
+endfunction()
+
 function(config_platform TARGET_NAME)
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
         config_linux(${TARGET_NAME})
@@ -276,6 +305,8 @@ function(config_platform TARGET_NAME)
             COMMAND ${CMAKE_COMMAND} -E copy 
                 ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico
         )
+    elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
+        config_android(${TARGET_NAME})
     else()
         message("${CMAKE_SYSTEM_NAME} enviroment for ${TARGET_NAME} not supported!")
     endif()

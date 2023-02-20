@@ -28,7 +28,11 @@
 #include "../ONScripter.h"
 #include <math.h>
 #include <stdlib.h>
+#if defined(ANDROID)
+#include "SDL_image.h"
+#else
 #include <SDL2/SDL_image.h>
+#endif
 
 extern ONScripter ons;
 
