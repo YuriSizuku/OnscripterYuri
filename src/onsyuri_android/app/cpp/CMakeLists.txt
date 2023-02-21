@@ -66,6 +66,7 @@ target_compile_options(bz2 PRIVATE -D_FILE_OFFSET_BITS=64)
 
 # build onsyuri_android
 set(CMAKE_SYSTEM_NAME Android)
+#set(CMAKE_BUILD_TYPE Debug)
 include_directories(
     ${BZ2_DIR}
     ${LUASRC_DIR}

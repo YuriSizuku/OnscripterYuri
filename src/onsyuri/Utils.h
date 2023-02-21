@@ -43,6 +43,10 @@ static BOOL MByteToWChar(LPCSTR lpcszStr, LPWSTR lpwszStr, DWORD dwSize)
 #include <stdio.h>
 #include <stdarg.h>
 #include <utility>
+#include <string>
+
+extern std::string g_stdoutpath;
+extern std::string g_stderrpath;
 
 namespace utils{
 	inline void printInfo(const char *format, ...){
@@ -53,12 +57,12 @@ namespace utils{
 		FILE *fp = NULL;
 		if(isfirst)
 		{
-			fp = fopen("stdout.txt", "w");
+			fp = fopen(g_stdoutpath.c_str(), "w");
 			isfirst = 0;
 		}
 		else
 		{
-			fp = fopen("stdout.txt", "a");
+			fp = fopen(g_stdoutpath.c_str(), "a");
 		}		
 		if(fp)
 		{
@@ -70,7 +74,7 @@ namespace utils{
 		}
 #endif
 #ifdef ANDROID
-		__android_log_vprint(ANDROID_LOG_VERBOSE, "Info", format, ap);
+		__android_log_vprint(ANDROID_LOG_INFO, "## onsyuri", format, ap);
 #elif defined(WINRT)
 		char *buf = new char[256];
 		vsprintf(buf, format, ap);
@@ -91,12 +95,12 @@ namespace utils{
 		FILE *fp = NULL;
 		if(isfirst)
 		{
-			fp = fopen("stderr.txt", "w");
+			fp = fopen(g_stderrpath.c_str(), "w");
 			isfirst = 0;
 		}
 		else
 		{
-			fp = fopen("stderr.txt", "a");
+			fp = fopen(g_stderrpath.c_str(), "a");
 		}		
 		if(fp)
 		{
@@ -108,7 +112,7 @@ namespace utils{
 		}
 #endif
 #ifdef ANDROID
-		__android_log_vprint(ANDROID_LOG_ERROR, "ERR", format, ap);
+		__android_log_vprint(ANDROID_LOG_ERROR, "## onsyuri", format, ap);
 #elif defined(WINRT)
 		char *buf = new char[256];
 		vsprintf(buf,format,ap);

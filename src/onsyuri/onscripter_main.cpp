@@ -32,6 +32,8 @@
 
 ONScripter ons;
 Coding2UTF16 *coding2utf16 = NULL;
+std::string g_stdoutpath = "stdout.txt";
+std::string g_stderrpath = "stderr.txt";
 
 #if defined(IOS)
 #import <Foundation/NSArray.h>
@@ -177,6 +179,8 @@ FILE *fopen_ons(const char *path, const char *mode)
     if (mode[0] == 'w') mode2 = 1;
 
     FILE *fp = fopen(path, mode);
+    //__android_log_print(ANDROID_LOG_INFO, "## onsyuri",  "fopen_ons %s, %p", path, fp);
+
     if (fp) return fp;
     
     JNIEnv * jniEnv = NULL;

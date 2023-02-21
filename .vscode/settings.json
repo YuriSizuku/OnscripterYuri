@@ -24,6 +24,8 @@
         "__config": "cpp",
         "bzlib_private.h": "c",
         "bzlib.h": "c",
-        "__node_handle": "cpp"
+        "__node_handle": "cpp",
+        "*.tcc": "cpp",
+        "ostream": "cpp"
     }
 }

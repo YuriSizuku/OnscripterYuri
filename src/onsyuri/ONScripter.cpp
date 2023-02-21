@@ -60,13 +60,11 @@ void ONScripter::calcRenderRect() {
 
     SDL_GetRendererOutputSize(renderer, &device_width, &device_height);
 
-    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width))
-    {
+    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width)) {
         screen_device_width = device_width;
         screen_device_height = device_height;
     }
-    else
-    {
+    else {
         int swdh = screen_width * device_height;
         int dwsh = device_width * screen_height;
         if (swdh == dwsh) {
@@ -172,15 +170,13 @@ void ONScripter::initSDL()
     if (force_window_width) {
         screen_device_width  = force_window_width;
         screen_device_height = force_window_height;
-        if(!screen_device_height) 
-        {
+        if(!screen_device_height) {
             screen_device_height = force_window_width/aspect_ratio;
         }  
     } else if (force_window_height) {
         screen_device_width = force_window_width;
         screen_device_height = force_window_height;
-        if(!screen_device_width) 
-        {
+        if(!screen_device_width) {
             screen_device_width = force_window_height*aspect_ratio;
         }
     } else {
@@ -196,19 +192,19 @@ void ONScripter::initSDL()
     screen_scale_ratio1 = (float)screen_width / screen_device_width;
     screen_scale_ratio2 = (float)screen_height / screen_device_height;
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 #if defined(USE_GLES)
     if (!isnan(sharpness)) {
         int res = 0; // SDL2 can not be configure --disable-video-opengles
+        res = SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+        res = SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+        res = SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        res = SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+        res = SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+        res = SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
         res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
         res = SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+        res = SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
         res = SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
     }
 #endif
@@ -290,10 +286,12 @@ void ONScripter::initSDL()
     memcpy( wm_icon_string, DEFAULT_WM_TITLE, strlen(DEFAULT_WM_ICON) + 1 );
     setCaption(wm_title_string, wm_icon_string);
 
+#if !defined(ANDROID)
     if(fullscreen_mode)
     {
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
+#endif
 }
 
 void ONScripter::openAudio(int freq)
@@ -403,6 +401,8 @@ void ONScripter::setArchivePath(const char *path)
     if (archive_path) delete[] archive_path;
     archive_path = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( archive_path, RELATIVEPATH "%s%c", path, DELIMITER );
+    g_stdoutpath = std::string(archive_path) + "stdout.txt";
+    g_stderrpath = std::string(archive_path) + "stderr.txt";
 }
 
 void ONScripter::setSaveDir(const char *path)
@@ -411,6 +411,8 @@ void ONScripter::setSaveDir(const char *path)
     save_dir = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( save_dir, RELATIVEPATH "%s%c", path, DELIMITER );
     script_h.setSaveDir(save_dir);
+    g_stdoutpath = std::string(save_dir) + "stdout.txt";
+    g_stderrpath = std::string(save_dir) + "stderr.txt";
 }
 
 void ONScripter::setFullscreenMode(int mode)
@@ -999,7 +1001,11 @@ void ONScripter::warpMouse(int x, int y) {
 
 void ONScripter::setFullScreen(bool fullscreen) {
     if (fullscreen != fullscreen_mode) {
-        SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+#if defined(ANDROID)
+    SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+#else
+    SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+#endif
         calcRenderRect();
         flushDirect(screen_rect, refreshMode());
         fullscreen_mode = fullscreen;

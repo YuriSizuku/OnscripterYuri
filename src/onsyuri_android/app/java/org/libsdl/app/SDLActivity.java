@@ -50,6 +50,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Hashtable;
 import java.util.Locale;
 
@@ -57,7 +59,7 @@ import java.util.Locale;
 /**
     SDL Activity
 */
-public class SDLActivity extends Activity implements View.OnSystemUiVisibilityChangeListener {
+public class SDLActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
     private static final String TAG = "SDL";
     private static final int SDL_MAJOR_VERSION = 2;
     private static final int SDL_MINOR_VERSION = 26;
@@ -270,10 +272,10 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     protected String[] getLibraries() {
         return new String[] {
             "SDL2",
-            "SDL2_image",
-            "SDL2_mixer",
+            // "SDL2_image",
+            // "SDL2_mixer",
             // "SDL2_net",
-            "SDL2_ttf",
+            // "SDL2_ttf",
             "main"
         };
     }
@@ -469,6 +471,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     protected void onResume() {
         Log.v(TAG, "onResume()");
         super.onResume();
+
 
         if (mHIDDeviceManager != null) {
             mHIDDeviceManager.setFrozen(false);
@@ -1786,6 +1789,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         boolean result = (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
         nativePermissionResult(requestCode, result);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**

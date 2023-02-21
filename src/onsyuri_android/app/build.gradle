@@ -16,8 +16,12 @@ android {
         applicationId "com.yuri.onscripter"
         minSdk 22
         targetSdk 31
+        packagingOptions {
+            // doNotStrip '**.so' // important for debug so
+        }
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
+            debugSymbolLevel 'FULL'
         }
         externalNativeBuild {
             cmake {
@@ -35,6 +39,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            jniDebuggable true
         }
     }
 

@@ -260,6 +260,12 @@ endfunction()
 function(config_android TARGET_NAME)
     add_library(${TARGET_NAME} SHARED ${ONSYURI_CODE})
     message("Android enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        message("generating debug configuration")
+        target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
+        target_compile_options(${TARGET_NAME} PRIVATE -g)
+    endif()
+    
     target_compile_definitions(${TARGET_NAME} PRIVATE 
         ANDROID
         USE_LUA

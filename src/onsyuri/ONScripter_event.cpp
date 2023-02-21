@@ -446,6 +446,7 @@ bool ONScripter::mouseMoveEvent( SDL_MouseMotionEvent *event )
 
 bool ONScripter::mousePressEvent( SDL_MouseButtonEvent *event )
 {
+    // utils::printInfo("## mousePressEvent\n");
     if ( variable_edit_mode ) return false;
     
     if ( automode_flag ){
@@ -466,7 +467,7 @@ bool ONScripter::mousePressEvent( SDL_MouseButtonEvent *event )
     bool longpress_flag = false;
     if(event->button == SDL_BUTTON_LEFT && event->type == SDL_MOUSEBUTTONUP)
     {
-        //printf("%d %d\n", event->timestamp, g_lastpress_time);
+        // utils::printInfo("## mousePressEvent %d %d\n", event->timestamp, g_lastpress_time);
         if(event->timestamp - g_lastpress_time >= LONG_CLICK_TIME)
         {
             longpress_flag = true;
@@ -1265,10 +1266,11 @@ void ONScripter::runEventLoop()
             break;
         case SDL_FINGERDOWN:
         {
+            g_lastpress_time = event.button.timestamp; // fix long press on touch
             convTouchKey(event.tfinger);
             tmp_event.motion.x = (device_width * event.tfinger.x - render_view_rect.x) * screen_scale_ratio1;
             tmp_event.motion.y = (device_height * event.tfinger.y - render_view_rect.y) * screen_scale_ratio2;
-            if (mouseMoveEvent( &tmp_event.motion )) return;       
+            if (mouseMoveEvent( &tmp_event.motion )) return;
             if ( btndown_flag ){
                 tmp_event.button.type = SDL_MOUSEBUTTONDOWN;
                 tmp_event.button.button = SDL_BUTTON_LEFT;
@@ -1330,8 +1332,7 @@ void ONScripter::runEventLoop()
             break;
             
           case SDL_MOUSEBUTTONDOWN:
-            if(event.button.button == SDL_BUTTON_LEFT)
-            {
+            if(event.button.button == SDL_BUTTON_LEFT) {
                 g_lastpress_time = event.button.timestamp;
             }
             current_button_state.event_type = event.type;
@@ -1466,17 +1467,22 @@ void ONScripter::runEventLoop()
                   break;
               case SDL_WINDOWEVENT_RESIZED:
                   calcRenderRect();
+                  repaintCommand();
                   break;
               }
               break;
           case SDL_APP_WILLENTERBACKGROUND:
 #if defined(USE_GLES)
-              gles_renderer->pause();
+                if(gles_renderer) gles_renderer->pause();
 #endif
               break;
           case SDL_APP_DIDENTERFOREGROUND:
+#if defined(ANDROID)
+                utils::printInfo("## SDL_APP_DIDENTERFOREGROUND");
+                SDL_Delay(200); // prevents not recognize the proper size of window
+#endif
 #if defined(USE_GLES)
-              gles_renderer->resume();
+              if(gles_renderer) gles_renderer->resume();
 #endif
               repaintCommand();
               break;
