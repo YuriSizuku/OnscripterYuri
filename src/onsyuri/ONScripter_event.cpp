@@ -467,9 +467,10 @@ bool ONScripter::mousePressEvent( SDL_MouseButtonEvent *event )
     bool longpress_flag = false;
     if(event->button == SDL_BUTTON_LEFT && event->type == SDL_MOUSEBUTTONUP)
     {
-        // utils::printInfo("## mousePressEvent %d %d\n", event->timestamp, g_lastpress_time);
+        // utils::printInfo("## mousePressEvent %u %u\n", event->timestamp, g_lastpress_time);
         if(event->timestamp - g_lastpress_time >= LONG_CLICK_TIME)
         {
+            // utils::printInfo("## longpress_flag");
             longpress_flag = true;
         }
     }
@@ -1229,6 +1230,7 @@ void ONScripter::runEventLoop()
     SDL_Event event, tmp_event;
 
     while ( SDL_WaitEvent(&event) ) {
+        tmp_event = event; // fix android long click problem
 #if defined(USE_SMPEG)
         // required to repeat the movie
         if (layer_smpeg_sample)
@@ -1255,7 +1257,7 @@ void ONScripter::runEventLoop()
             if (btndown_flag){
                 event.button.type = SDL_MOUSEBUTTONDOWN;
                 event.button.button = SDL_BUTTON_LEFT;
-                if (SDL_GetNumTouchFingers(event.tfinger.touchId) >= 2)
+                if (SDL_GetNumTouchFingers(event.tfinger.touchId) >= 3)
                     event.button.button = SDL_BUTTON_RIGHT;
                 event.button.x = tmp_event.motion.x;
                 event.button.y = tmp_event.motion.y;
@@ -1274,7 +1276,7 @@ void ONScripter::runEventLoop()
             if ( btndown_flag ){
                 tmp_event.button.type = SDL_MOUSEBUTTONDOWN;
                 tmp_event.button.button = SDL_BUTTON_LEFT;
-                if (SDL_GetNumTouchFingers(event.tfinger.touchId) >= 2)
+                if (SDL_GetNumTouchFingers(event.tfinger.touchId) >= 3)
                     tmp_event.button.button = SDL_BUTTON_RIGHT;
                 tmp_event.button.x = (device_width * event.tfinger.x - render_view_rect.x) * screen_scale_ratio1;
                 tmp_event.button.y = (device_height * event.tfinger.y - render_view_rect.y) * screen_scale_ratio2;
@@ -1282,7 +1284,7 @@ void ONScripter::runEventLoop()
             }
             {
                 num_fingers = SDL_GetNumTouchFingers(event.tfinger.touchId);
-                if (num_fingers >= 3){
+                if (num_fingers >= 4){
                     tmp_event.key.keysym.sym = SDLK_LCTRL;
                     ret |= keyDownEvent( &tmp_event.key );
                 }
@@ -1296,7 +1298,7 @@ void ONScripter::runEventLoop()
             {
                 tmp_event.button.type = SDL_MOUSEBUTTONUP;
                 tmp_event.button.button = SDL_BUTTON_LEFT;
-                if (num_fingers == 2)
+                if (num_fingers == 3)
                     tmp_event.button.button = SDL_BUTTON_RIGHT;
                 tmp_event.button.x = (device_width * event.tfinger.x - render_view_rect.x) * screen_scale_ratio1;
                 tmp_event.button.y = (device_height * event.tfinger.y - render_view_rect.y) * screen_scale_ratio2;

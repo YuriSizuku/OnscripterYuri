@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         m_onsargs.add("/storage/emulated/0/Android/data/com.yuri.onscripter/files/game/test");
         m_onsargs.add("--font");
         m_onsargs.add("/storage/emulated/0/Android/data/com.yuri.onscripter/files/game/test/default.ttf");
-        m_onsargs.add("--fullscreen");
+        m_onsargs.add("--fullscreen2");
         m_onsargs.add("--debug:1");
-//        m_onsargs.add("--sharpness");
-//        m_onsargs.add("12.0");
+        m_onsargs.add("--sharpness");
+        m_onsargs.add("12.0");
 
         Intent intent = new Intent();
         intent.setClass(this, ONScripter.class);

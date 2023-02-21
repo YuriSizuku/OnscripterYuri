@@ -1,7 +1,10 @@
 package com.yuri.onscripter;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 
 import org.libsdl.app.SDLActivity;
 
@@ -67,11 +70,30 @@ public class ONScripter extends SDLActivity {
         Intent intent = getIntent();
         m_onsargs = intent.getStringArrayListExtra("args");
         nativeInitJavaCallbacks();
+        this.fullscreen();
+    }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        this.fullscreen();
+    }
+
+
+    public void onWindowFocusChanged (boolean hasFocus){
+        if(hasFocus) this.fullscreen();
+    }
+
+    private void fullscreen(){
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
         // hide title for SDL
         try {
             this.getSupportActionBar().hide();
         }
         catch (NullPointerException e){}
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 }
