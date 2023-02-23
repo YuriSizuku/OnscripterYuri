@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class ONScripter extends SDLActivity {
     private ArrayList<String> m_onsargs;
-    private DocumentFile m_onsbase;
+    private DocumentFile m_onsbase; // use this to judge whether to use saf
 
     // for onsyuri c code
     private native int nativeInitJavaCallbacks();
@@ -39,7 +39,7 @@ public class ONScripter extends SDLActivity {
         if (m_onsbase==null) return -1;
         String path = new String(pathbyte, StandardCharsets.UTF_8);
         DocumentFile doc = SafFile.mkdirsSaf(m_onsbase, path);
-        if(doc==null) return  -1;
+        if (doc==null) return  -1;
         else  return 0;
     }
 
@@ -92,7 +92,7 @@ public class ONScripter extends SDLActivity {
 
         m_onsargs = intent.getStringArrayListExtra(SHAREDPREF_GAMEARGS);
         String uristr = intent.getStringExtra(SHAREDPREF_GAMEURI);
-        if(uristr!=null){
+        if(uristr!=null) {
             Uri uri = Uri.parse(uristr);
             m_onsbase = DocumentFile.fromTreeUri(this, uri);
         }

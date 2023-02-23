@@ -3702,7 +3702,7 @@ int ONScripter::bltCommand()
         //     src_rect.x, src_rect.y, src_rect.w, src_rect.h,
         //     dst_rect.x, dst_rect.y, dst_rect.w, dst_rect.h);
         
-#if defined(USE_GLES)  
+#if defined(USE_GLES)
         if(!isnan(sharpness)){ // fix gles render blt problem
             SDL_BlitScaled(btndef_info.image_surface, &src_rect, bg_info.image_surface, &dst_rect);
             flushDirect(dst_rect, REFRESH_NORMAL_MODE);
@@ -3710,6 +3710,11 @@ int ONScripter::bltCommand()
             return RET_CONTINUE;
         }
 #endif
+        
+#if defined(ANDROID) // dirty fix for android flash problem 
+        SDL_BlitScaled(btndef_info.image_surface, &src_rect, bg_info.image_surface, &dst_rect);
+        flushDirect(dst_rect, REFRESH_NORMAL_MODE);
+#else
         // fix blt scale
         dst_rect.x += render_view_rect.x;
         dst_rect.y += render_view_rect.y;
@@ -3717,7 +3722,9 @@ int ONScripter::bltCommand()
         dst_rect.h /= screen_scale_ratio2;
         SDL_RenderCopy(renderer, blt_texture, &src_rect, &dst_rect);
         SDL_RenderPresent(renderer);
+#endif
         dirty_rect.clear();
+
 
     } else {
       utils::printError("blt:Wrong arguments.");

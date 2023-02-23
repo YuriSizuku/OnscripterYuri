@@ -7,6 +7,7 @@
 package com.yuri.onscripter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,8 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 public class SafFile {
 
@@ -37,7 +40,7 @@ public class SafFile {
     public static String g_sharedprefkey ="uri";
 
     /**
-     * Use for regist jni file hook with SAF, such as fopen
+     * Use for register jni file hook with SAF, such as fopen
      * @param hooksoStr, regexp str passing to xhook register 
      * @param soPath, dlopen this path before xhook register
      */
@@ -52,18 +55,16 @@ public class SafFile {
     /**
      *  This function shound call at first;
      */
-    public static void init(final Context context, final SharedPreferences sharedpref) {
+    public static void init(@NonNull Context context, @NonNull SharedPreferences sharedpref) {
         g_context = context;
         g_sharedpref = sharedpref;
     }
 
-    public static void init(final Context context, String sharedPrefName, String sharedPrefKey) {
-        if (sharedPrefName != null)  g_sharedprefname = sharedPrefName;
-        if (sharedPrefKey != null) g_sharedprefkey = sharedPrefKey;
-        if (context != null) {
-            final SharedPreferences share = context.getSharedPreferences(g_sharedprefname, Context.MODE_PRIVATE);
-            init(context, share);
-        }
+    public static void init(@NonNull Context context, @NonNull String sharedPrefName, @NonNull String sharedPrefKey) {
+        g_sharedprefname = sharedPrefName;
+        g_sharedprefkey = sharedPrefKey;
+        final SharedPreferences share = context.getSharedPreferences(g_sharedprefname, Context.MODE_PRIVATE);
+        init(context, share);
     }
 
     /**
@@ -92,22 +93,14 @@ public class SafFile {
     }
 
     @SuppressLint("ObsoleteSdkInt")
-    public static String[] getStorageDirectories(Context context){
-        if (context == null) {
-            Log.e(LOGTAG, "SafFile.getStorageDirections context is null!");
-            return null;
-        }
-
+    public static String[] getStorageDirectories(@NonNull Context context){
         String[] storageDirectories;
         final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
-        // Log.i(LOGTAG, "secondary_storage "+rawSecondaryStoragesStr);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final List<String> results = new ArrayList<>();
             final File[] externalDirs = context.getExternalFilesDirs(null);
             if (externalDirs != null) {
                 for (final File file : externalDirs) {
-                    // Log.i(LOGTAG, "getExt...dirs " + file.getPath());
                     final String path = file.getPath().split("/Android")[0];
                     if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                             && Environment.isExternalStorageRemovable(file))
@@ -136,12 +129,7 @@ public class SafFile {
     public static String[] getAppDirectories(){
         return getAppDirectories(g_context);
     }
-    public static String[] getAppDirectories(Context context) {
-        if (context == null) {
-            Log.e(LOGTAG, "SafFile.getAppDirectories context is null!");
-            return null;
-        }
-
+    public static String[] getAppDirectories(@NonNull Context context) {
         // internal storage
         final List<String> dirs = new ArrayList<>();
         File file = context.getFilesDir();
@@ -156,34 +144,17 @@ public class SafFile {
     }
 
     // uri functions
-    public static void requestDocUri(final Activity activity, final int requestCode) {
-        if(activity==null){
-            Log.e(LOGTAG, "SafFile.requestDocUri activity is null");
-            return;
-        }
+    public static void requestDocUri(@NonNull Activity activity, int requestCode) {
         final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         activity.startActivityForResult(intent, requestCode);
     }
     public static void saveDocUri(Uri uri){
         saveDocUri(g_sharedpref, uri);
     }
-    public static void saveDocUri(final Intent intent, final int responseCode){
+    public static void saveDocUri(@NonNull Intent intent, final int responseCode){
         saveDocUri(g_context, g_sharedpref, intent, responseCode);
     }
-    public static void saveDocUri(Context context, SharedPreferences sharedpref, final Intent intent, final int responseCode) {
-        if(context==null) {
-            Log.e(LOGTAG, "SafFile.saveDocUriFromResult context is null!");
-            return;
-        }
-        if(sharedpref==null){
-            Log.e(LOGTAG, "SafFile.saveDocUriFromResult sharedpref is null!");
-            return;
-        } 
-        if(intent==null){
-            Log.e(LOGTAG, "SafFile.saveDocUriFromResult intent is null!");
-            return;
-        }
-
+    public static void saveDocUri(@NonNull Context context, @NonNull SharedPreferences sharedpref, @NonNull Intent intent, int responseCode) {
         Uri uri;
         uri = intent.getData();
         if (uri != null) {
@@ -196,11 +167,7 @@ public class SafFile {
         }
     }
     @SuppressLint("ApplySharedPref")
-    public static void saveDocUri(SharedPreferences sharedpref, Uri uri) {
-        if(sharedpref==null){
-            Log.e(LOGTAG, "SafFile.saveDocUri share is null!");
-            return;
-        }
+    public static void saveDocUri(@NonNull SharedPreferences sharedpref, Uri uri) {
         if(uri==null){
             sharedpref.edit().remove(g_sharedprefkey).commit();
         }
@@ -212,12 +179,7 @@ public class SafFile {
     public static Uri loadDocUri(){
         return loadDocUri(g_sharedpref);
     }
-    public static Uri loadDocUri(SharedPreferences sharedpref) {
-        if(sharedpref==null){
-            Log.e(LOGTAG, "SafFile.loadDocUri sharedpref is null!");
-            return null;
-        }
-
+    public static Uri loadDocUri(@NonNull SharedPreferences sharedpref) {
         final String p = sharedpref.getString(g_sharedprefkey, null);
         Uri uri = null;
         if (p != null)  uri = Uri.parse(p);
@@ -226,7 +188,7 @@ public class SafFile {
     public static void removeDocUri(){
         removeDocUri(g_sharedpref);
     }
-    public static void removeDocUri(SharedPreferences sharedpref){
+    public static void removeDocUri(@NonNull SharedPreferences sharedpref){
         saveDocUri(sharedpref, null);
     }
 
@@ -237,11 +199,7 @@ public class SafFile {
     public static DocumentFile getBaseDocumentFile() {
         return getBaseDocumentFile(g_context);
     }
-    public static DocumentFile getBaseDocumentFile(Context context){
-        if (context==null) {
-            Log.e(LOGTAG, "SafFile.getBaseDocumentFile context is null!");
-            return null;
-        }
+    public static DocumentFile getBaseDocumentFile(@NonNull Context context){
         DocumentFile base = null;
         Uri docUri = loadDocUri();
         if (docUri != null) base = DocumentFile.fromTreeUri(context, docUri);
@@ -254,12 +212,8 @@ public class SafFile {
      * @param pathtobase, relative pathtobase to base
      * @return the pathtobase's parent pathtobase DocumentFile
      */
-    public static DocumentFile getDirDocumentFile(final DocumentFile base, String pathtobase) {
+    public static DocumentFile getDirDocumentFile(@NonNull DocumentFile base, String pathtobase) {
         DocumentFile target = base;
-        if (base == null) {
-            Log.e(LOGTAG, "SafFile.getTargetDirDocumentFile base is null!");
-            return null;
-        }
         if(pathtobase==null) pathtobase="";
 
         pathtobase = pathtobase.replace("\\", "/");
@@ -276,11 +230,7 @@ public class SafFile {
      * @param base, extsdcard DocumentFile
      * @param path, absolute path
      */
-    public static DocumentFile mkdirsSaf(final DocumentFile base, String path) {
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.mkdirSaf base is null!");
-            return null;
-        }
+    public static DocumentFile mkdirsSaf(@NonNull DocumentFile base, String path) {
         if(path==null) path="";
         
         DocumentFile df2;
@@ -334,12 +284,9 @@ public class SafFile {
      * @param path, absoluate path
      * @param mode, "r", "rw", "w", "a"
      */
-    public static DocumentFile createFileSaf(Context context, final DocumentFile base, String path, String mode) {
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.createFileSaf base is null!");
-            return null;
-        }
+    public static DocumentFile createFileSaf(@NonNull Context context, @NonNull DocumentFile base, String path, String mode) {
         if(path==null) path="";
+        if(mode==null) mode="r";
 
         boolean iswrite = false;
         boolean isappend = false;
@@ -373,14 +320,11 @@ public class SafFile {
     /**
      *  deprecated, because findfile too slow
      */
-    public static DocumentFile createFileSaf2(final DocumentFile base, String path, String mode) {
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.createFileSaf base is null!");
-            return null;
-        }
+    public static DocumentFile createFileSaf2(@NonNull DocumentFile base, String path, String mode) {
         if(path==null) path="";
+        if(mode==null) mode="r";
         
-        DocumentFile df2 = null;
+        DocumentFile docfile = null;
         path = path.replace("\\", "/");
         final String[] paths = path.split("/");
         final DocumentFile dirdoc = getDirDocumentFile(base, path);
@@ -391,16 +335,16 @@ public class SafFile {
             if (mode.indexOf('a')>=0) isappend = true;
             String filename = paths[paths.length - 1];
 
-            df2 = dirdoc.findFile(filename);
+            docfile = dirdoc.findFile(filename);
             if(iswrite || isappend) {
-                if (df2 != null && df2.exists()) { // find file
-                    if (isappend)  return df2;
-                    else df2.delete();
+                if (docfile != null && docfile.exists()) { // find file
+                    if (isappend)  return docfile;
+                    else docfile.delete();
                 }
-                df2 = dirdoc.createFile("application/octet-stream", filename);
+                docfile = dirdoc.createFile("application/octet-stream", filename);
             }
         }
-        return df2;
+        return docfile;
     }
     
     /**
@@ -408,11 +352,7 @@ public class SafFile {
      * @param base, extsdcard DocumentFile
      * @param path, absolute path
      */
-    public static boolean deleteFileSaf(final DocumentFile base, String path) {
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.deleteFileSaf base is null!");
-            return false;
-        }
+    public static boolean deleteFileSaf(@NonNull DocumentFile base, String path) {
         if(path==null) path="";
 
         boolean ret = false;
@@ -435,16 +375,7 @@ public class SafFile {
      */
 
     @SuppressLint("Recycle")
-    public static int getFdSaf(final Context context, final DocumentFile base, final String path, final String mode) {
-        if(context==null) {
-            Log.e(LOGTAG, "SafFile.getFdSaf context is null!");
-            return 0;
-        }
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.getFdSaf base is null!");
-            return 0;
-        }
-        
+    public static int getFdSaf(@NonNull Context context, @NonNull DocumentFile base, final String path, final String mode) {
         ParcelFileDescriptor pfd;
         DocumentFile docfile = createFileSaf(context, base, path, mode);
         if (docfile == null) return -1;
@@ -462,26 +393,15 @@ public class SafFile {
      * @param base, extsdcard DocumentFile
      * @param path, absolute path
      */
-    public static OutputStream getOutputStreamSaf(final Context context,
-              final DocumentFile base, final String path, final boolean append) {
-        if(context==null) {
-            Log.e(LOGTAG, "SafFile.getOutputStreamSaf context is null!");
-            return null;
-        }
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.getOutputStreamSaf base is null!");
-            return null;
-        }
-        
+    public static OutputStream getOutputStreamSaf(@NonNull Context context,
+             @NonNull DocumentFile base, String path, boolean append) {
         OutputStream out;
         final String mode = append ? "wa" : "w";
-        final DocumentFile df2 = createFileSaf(context, base, path, mode);
-        if (df2 == null) {
-            return null;
-        }
+        final DocumentFile docfile = createFileSaf(context, base, path, mode);
+        if (docfile == null) return null;
         try {
-            out = context.getContentResolver().openOutputStream(df2.getUri(), mode);
-        } catch (final Exception e) {
+            out = context.getContentResolver().openOutputStream(docfile.getUri(), mode);
+        } catch (final FileNotFoundException e) {
             return null;
         }
         return out;
@@ -492,26 +412,11 @@ public class SafFile {
      * @param base, extsdcard DocumentFile
      * @param path, absolute path
      */
-    public static boolean writeFileSaf(final Context context, final DocumentFile base, final String path,
-            final byte[] fileContent, final boolean isappend) {
-        if(context==null) {
-            Log.e(LOGTAG, "SafFile.writeFileSaf context is null!");
-            return false;
-        }
-        if(base==null){
-            Log.e(LOGTAG, "SafFile.writeFileSaf base is null!");
-            return false;
-        }
-
-        final OutputStream out = getOutputStreamSaf(context, base, path, isappend);
-        if (out == null) {
-            if(path!=null) 
-                Log.e(LOGTAG, "SafFile.writeFileSaf" + path + " error!");
-            else 
-                Log.e(LOGTAG, "SafFile.writeFileSaf" + " error!");
-            return false;
-        }
+    public static boolean writeFileSaf(@NonNull Context context, @NonNull DocumentFile base,
+            String path, byte[] fileContent, boolean isappend) {
         try {
+            OutputStream out = getOutputStreamSaf(context, base, path, isappend);
+            assert out != null;
             out.write(fileContent);
             out.flush();
             out.close();

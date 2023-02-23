@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
                 }
                 holder.button_gameicon.setImageBitmap(bitmap);
+                // ((BitmapDrawable)holder.button_gameicon.getDrawable()).getBitmap();
 
                 // game path type
                 String pathtype = gameinfo.getPathType();
@@ -252,20 +253,22 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton m_buttonexplore;
     private ListView m_listgame;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+
+    public void test(){
         File file = new File("/storage/emulated/0/Local/Game/ons_game/Noesis 羽化/0.txt");
         try {
             FileInputStream fin = new FileInputStream(file);
             int c = fin.read();
+            fin.close();
         }
-        catch (FileNotFoundException e){
+        catch (FileNotFoundException ignored){
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initValue();
@@ -338,6 +341,9 @@ public class MainActivity extends AppCompatActivity {
             onsargs.add("--save-dir");
             onsargs.add(savedir);
         }
+        onsargs.add("--fullscreen2");
+//        onsargs.add("--sharpness");
+//        onsargs.add("100.0");
 
         Intent intent = new Intent();
         intent.setClass(this, ONScripter.class);
@@ -345,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = SafFile.loadDocUri();
             if(uri!=null) intent.putExtra(SHAREDPREF_GAMEURI, uri.toString());
         }
+
         intent.putStringArrayListExtra(SHAREDPREF_GAMEARGS, onsargs);
         startActivity(intent);
     }

@@ -851,7 +851,7 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
             SDL_RenderCopy(renderer, texture, NULL, &render_view_rect);
         }
     } else {
-        gles_renderer->copy(render_view_rect.x, render_view_rect.y);
+        if(gles_renderer) gles_renderer->copy(render_view_rect.x, render_view_rect.y);
     }
 #else
 
