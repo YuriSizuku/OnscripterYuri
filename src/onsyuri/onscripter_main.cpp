@@ -134,9 +134,9 @@ JNIEXPORT jint JNICALL JAVA_EXPORT_NAME(ONScripter_nativeInitJavaCallbacks) (JNI
 {
     JavaONScripter = jniEnv->NewGlobalRef(thiz);
     jclass JavaONScripterClass = jniEnv->GetObjectClass(JavaONScripter);
-    JavaPlayVideo = jniEnv->GetMethodID(JavaONScripterClass, "playVideo", "([C)V");
-    JavaGetFD = jniEnv->GetMethodID(JavaONScripterClass, "getFD", "([CI)I");
-    JavaMkdir = jniEnv->GetMethodID(JavaONScripterClass, "mkdir", "([C)I");
+    JavaPlayVideo = jniEnv->GetMethodID(JavaONScripterClass, "playVideo", "([B)V");
+    JavaGetFD = jniEnv->GetMethodID(JavaONScripterClass, "getFD", "([BI)I");
+    JavaMkdir = jniEnv->GetMethodID(JavaONScripterClass, "mkdir", "([B)I");
     return 0;
 }
 
@@ -152,7 +152,7 @@ JAVA_EXPORT_NAME(ONScripter_nativeGetHeight) ( JNIEnv*  env, jobject thiz )
     return ons.getHeight();
 }
 
-void playVideoAndroid(const char *filename)
+void playVideoAndroid(const char *path)
 {
     JNIEnv * jniEnv = NULL;
     jniVM->AttachCurrentThread(&jniEnv, NULL);
@@ -162,14 +162,32 @@ void playVideoAndroid(const char *filename)
         return;
     }
 
-    jchar *jc = new jchar[strlen(filename)];
-    for (int i=0 ; i<strlen(filename) ; i++)
-        jc[i] = filename[i];
-    jcharArray jca = jniEnv->NewCharArray(strlen(filename));
-    jniEnv->SetCharArrayRegion(jca, 0, strlen(filename), jc);
-    jniEnv->CallVoidMethod( JavaONScripter, JavaPlayVideo, jca );
-    jniEnv->DeleteLocalRef(jca);
-    delete[] jc;
+    jbyte *jb = new jbyte[strlen(path)];
+    for (int i=0;i<strlen(path);i++) jb[i] = path[i];
+    jbyteArray jba = jniEnv->NewByteArray(strlen(path));
+    jniEnv->SetByteArrayRegion(jba, 0, strlen(path), jb);
+    jniEnv->CallVoidMethod(JavaONScripter, JavaPlayVideo, jba);
+    jniEnv->DeleteLocalRef(jba);
+    delete[] jb;
+}
+
+#include <sys/stat.h>
+int stat_ons(const char *path, struct stat * statbuf){
+    int res = stat(path, statbuf);
+    if(res!=-1 ) return res;
+
+    JNIEnv * jniEnv = NULL;
+    jniVM->AttachCurrentThread(&jniEnv, NULL);
+    jbyte *jb = new jbyte[strlen(path)];
+    for (int i=0;i<strlen(path);i++) jb[i] = path[i];
+    jbyteArray jba = jniEnv->NewByteArray(strlen(path));
+    jniEnv->SetByteArrayRegion(jba, 0, strlen(path), jb);
+    int fd = jniEnv->CallIntMethod(JavaONScripter, JavaGetFD, jba, 0);
+    jniEnv->DeleteLocalRef(jba);
+    delete[] jb;
+    res = fstat(fd, statbuf);
+    close(fd);
+    return res;
 }
 
 #undef fopen
@@ -179,7 +197,7 @@ FILE *fopen_ons(const char *path, const char *mode)
     if (mode[0] == 'w') mode2 = 1;
 
     FILE *fp = fopen(path, mode);
-    //__android_log_print(ANDROID_LOG_INFO, "## onsyuri",  "fopen_ons %s, %p", path, fp);
+    // __android_log_print(ANDROID_LOG_INFO, "## onsyuri",  "fopen_ons %s, %s, %p", path, mode, fp);
 
     if (fp) return fp;
     
@@ -191,23 +209,22 @@ FILE *fopen_ons(const char *path, const char *mode)
         return NULL;
     }
 
-    jchar *jc = new jchar[strlen(path)];
-    for (int i=0 ; i<strlen(path) ; i++)
-        jc[i] = path[i];
-    jcharArray jca = jniEnv->NewCharArray(strlen(path));
-    jniEnv->SetCharArrayRegion(jca, 0, strlen(path), jc);
-    int fd = jniEnv->CallIntMethod( JavaONScripter, JavaGetFD, jca, mode2 );
-    jniEnv->DeleteLocalRef(jca);
-    delete[] jc;
+    jbyte *jb = new jbyte[strlen(path)];
+    for (int i=0;i<strlen(path);i++) jb[i] = path[i];
+    jbyteArray jba = jniEnv->NewByteArray(strlen(path));
+    jniEnv->SetByteArrayRegion(jba, 0, strlen(path), jb);
+    int fd = jniEnv->CallIntMethod(JavaONScripter, JavaGetFD, jba, mode2 );
+    jniEnv->DeleteLocalRef(jba);
+    delete[] jb;
 
     return fdopen(fd, mode);
 }
 
 #undef mkdir
 extern int mkdir(const char *pathname, mode_t mode);
-int mkdir_ons(const char *pathname, mode_t mode)
+int mkdir_ons(const char *path, mode_t mode)
 {
-    if (mkdir(pathname, mode) == 0 || errno != EACCES) return 0;
+    if (mkdir(path, mode) == 0 || errno != EACCES) return 0;
 
     JNIEnv * jniEnv = NULL;
     jniVM->AttachCurrentThread(&jniEnv, NULL);
@@ -217,14 +234,13 @@ int mkdir_ons(const char *pathname, mode_t mode)
         return -1;
     }
 
-    jchar *jc = new jchar[strlen(pathname)];
-    for (int i=0 ; i<strlen(pathname) ; i++)
-        jc[i] = pathname[i];
-    jcharArray jca = jniEnv->NewCharArray(strlen(pathname));
-    jniEnv->SetCharArrayRegion(jca, 0, strlen(pathname), jc);
-    int ret = jniEnv->CallIntMethod( JavaONScripter, JavaMkdir, jca );
-    jniEnv->DeleteLocalRef(jca);
-    delete[] jc;
+    jbyte *jb = new jbyte[strlen(path)];
+    for (int i=0;i<strlen(path);i++) jb[i] = path[i];
+    jbyteArray jba = jniEnv->NewByteArray(strlen(path));
+    jniEnv->SetByteArrayRegion(jba, 0, strlen(path), jb);
+    int ret = jniEnv->CallIntMethod(JavaONScripter, JavaMkdir, jba);
+    jniEnv->DeleteLocalRef(jba);
+    delete[] jb;
 
     return ret;
 }
@@ -443,14 +459,6 @@ void parseOption(int argc, char *argv[]) {
 
 int main(int argc, char *argv[])
 {
-    utils::printInfo("ONScripter Yuri %s,  (Jh %s, Ons %s, %d.%02d)\n", 
-        ONS_YURI_VERSION, ONS_JH_VERSION, 
-        ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
-
-    printf("%s, %d args: ", argv[0], argc-1);
-    for(int i=1; i<argc;i++) printf("%s ", argv[i]);
-    printf("\n");
-
 #if defined(PSP)
     ons.disableRescale();
     ons.enableButtonShortCut();
@@ -510,6 +518,11 @@ int main(int argc, char *argv[])
     // Parse options
     argv++;
     parseOption(argc - 1, argv);
+
+    utils::printInfo("ONScripter Yuri %s,  (Jh %s, Ons %s, %d.%02d)\n", 
+        ONS_YURI_VERSION, ONS_JH_VERSION, 
+        ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
+
     const char *argfilename = "ons_args";
     FILE *fp = NULL;
     if (ons.getArchivePath()) {

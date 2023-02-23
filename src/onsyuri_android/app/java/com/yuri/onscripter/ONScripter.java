@@ -1,38 +1,50 @@
 package com.yuri.onscripter;
 
-import android.app.ActionBar;
+import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMEARGS;
+import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMEURI;
+
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import androidx.documentfile.provider.DocumentFile;
 
 import org.libsdl.app.SDLActivity;
 
-import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 
 public class ONScripter extends SDLActivity {
-    static {
-        System.loadLibrary("lua");
-        System.loadLibrary("jpeg");
-        System.loadLibrary("bz2");
-        System.loadLibrary("onsyuri");
-    }
-
     private ArrayList<String> m_onsargs;
+    private DocumentFile m_onsbase;
+
+    // for onsyuri c code
     private native int nativeInitJavaCallbacks();
 
-    public int getFD(char[] path, int mode){
-        // Log.i("## onsyuri_android", new String(path));
-        File file = new File(new String(path));
-        return -1;
+    public int getFD(byte[] pathbyte, int mode) {
+        if (m_onsbase==null) return -1;
+        String path = new String(pathbyte, StandardCharsets.UTF_8);
+        String safmode = mode==0 ? "r" : "w";
+        int fd = SafFile.getFdSaf(this, m_onsbase, path, safmode);
+        Log.i("## onsyuri_android", String.format("getFD path=%s, mode=%d, fd=%d", new String(path), mode, fd));
+        return fd;
     }
 
-    public int mkdir(char[] path){
-        return 0;
+    public int mkdir(byte[] pathbyte) {
+        if (m_onsbase==null) return -1;
+        String path = new String(pathbyte, StandardCharsets.UTF_8);
+        DocumentFile doc = SafFile.mkdirsSaf(m_onsbase, path);
+        if(doc==null) return  -1;
+        else  return 0;
     }
 
-    public void playVideo(char[] cArr) {
+    public void playVideo(byte[] pathbyte) {
+        String path = new String(pathbyte, StandardCharsets.UTF_8);
 //        try {
 //            String replace = ("file://" + gCurrentDirectoryPath + "/" + new String(cArr)).replace('\\', '/');
 //            StringBuilder sb = new StringBuilder();
@@ -48,6 +60,14 @@ public class ONScripter extends SDLActivity {
 //        }
     }
 
+    // override sdl functions
+    static {
+        System.loadLibrary("lua");
+        System.loadLibrary("jpeg");
+        System.loadLibrary("bz2");
+        System.loadLibrary("onsyuri");
+    }
+
     @Override
     protected String[] getLibraries() {
         return new String[] {
@@ -61,39 +81,49 @@ public class ONScripter extends SDLActivity {
 
     @Override
     protected String[] getArguments() {
-        return  (String[]) m_onsargs.toArray(new String[0]);
+        return m_onsargs.toArray(new String[0]);
     }
 
+    // override activity functions
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        m_onsargs = intent.getStringArrayListExtra("args");
+
+        m_onsargs = intent.getStringArrayListExtra(SHAREDPREF_GAMEARGS);
+        String uristr = intent.getStringExtra(SHAREDPREF_GAMEURI);
+        if(uristr!=null){
+            Uri uri = Uri.parse(uristr);
+            m_onsbase = DocumentFile.fromTreeUri(this, uri);
+        }
+        else {
+            m_onsbase = null;
+        }
+
         nativeInitJavaCallbacks();
         this.fullscreen();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         this.fullscreen();
     }
 
 
-    public void onWindowFocusChanged (boolean hasFocus){
+    public void onWindowFocusChanged (boolean hasFocus) {
         if(hasFocus) this.fullscreen();
     }
 
-    private void fullscreen(){
+    private void fullscreen() {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
         // hide title for SDL
         try {
-            this.getSupportActionBar().hide();
+            Objects.requireNonNull(this.getSupportActionBar()).hide();
         }
-        catch (NullPointerException e){}
+        catch (NullPointerException ignored){}
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 }

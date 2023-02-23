@@ -108,20 +108,21 @@ void *FontInfo::openFont( char *font_file, int ratio1, int ratio2 )
     if ( !fc->next ){
         fc->next = new FontContainer();
         fc->next->size = font_size;
-        SDL_RWops *fp;
+        SDL_RWops *rwops = NULL;
         bool useFile = (cache_font_file == NULL || strcmp(cache_font_file, font_file) != 0);
         if (useFile) {
 #if defined(ANDROID) || defined(WEB)
-            FILE *_fp = fopen(font_file, "rb");
-            fp = SDL_RWFromFP(_fp, SDL_TRUE);
+            FILE *fp = fopen(font_file, "rb");
+            if(fp) rwops = SDL_RWFromFP(fp, SDL_TRUE);
+            // utils::printInfo("## onsyuri FontInfo::openFont %s, fp=%p, rwops=%p\n", font_file, fp, rwops);
 #else
-            fp = SDL_RWFromFile(font_file, "rb");
+            rwops = SDL_RWFromFile(font_file, "rb");
+            // utils::printInfo("## onsyuri FontInfo::openFont %s, useFile=%d, rwops=%p\n", font_file, useFile, rwops);
 #endif
         } else {
-          fp = SDL_RWFromConstMem(font_cache, font_cache_size);
+          rwops = SDL_RWFromConstMem(font_cache, font_cache_size);
         }
-        if ( fp == NULL ) return NULL;
-        fp->close(fp);
+        if ( rwops == NULL ) return NULL;
 #if defined(PSP)
         fc->next->rw_ops = SDL_RWFromFile(font_file, "r");
         fc->next->font[0] = TTF_OpenFontRW( fc->next->rw_ops, SDL_TRUE, font_size * ratio1 / ratio2 );
@@ -132,14 +133,18 @@ void *FontInfo::openFont( char *font_file, int ratio1, int ratio2 )
         fc->next->power_resume_number = psp_power_resume_number;
         strcpy(fc->next->name, font_file);
 #else
-        if (useFile) fc->next->font[0] = TTF_OpenFont(font_file, font_size * ratio1 / ratio2);
+        // fix android or web with fdopen 
+        if (useFile) fc->next->font[0] = TTF_OpenFontRW(rwops, SDL_TRUE, font_size * ratio1 / ratio2);
         else fc->next->font[0] = TTF_OpenFontRW(SDL_RWFromConstMem(font_cache, font_cache_size), 1, font_size * ratio1 / ratio2);
-        if (useFile) fc->next->font[1] = TTF_OpenFont(font_file, font_size * ratio1 / ratio2);
+        rwops->seek(rwops, 0, SEEK_SET); // this is important to reload again !
+        if (useFile) fc->next->font[1] = TTF_OpenFontRW(rwops, SDL_TRUE, font_size * ratio1 / ratio2);
         else fc->next->font[1] = TTF_OpenFontRW(SDL_RWFromConstMem(font_cache, font_cache_size), 1, font_size * ratio1 / ratio2);
+        
         if (fc->next->font[1] == nullptr) {
             utils::printError("Open font failed: %s\n", TTF_GetError());
         }
         TTF_SetFontOutline(fc->next->font[1], 1);
+
 #endif
     }
 #if defined(PSP)

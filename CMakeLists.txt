@@ -273,6 +273,7 @@ function(config_android TARGET_NAME)
         USE_BUILTIN_LAYER_EFFECTS
         USE_GLES
         USE_FILELOG
+        UTF8_FILESYSTEM
         SDL_JAVA_PACKAGE_PATH=com_yuri_onscripter
     )
     target_compile_options(${TARGET_NAME} PRIVATE 

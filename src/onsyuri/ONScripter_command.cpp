@@ -31,6 +31,7 @@
 #endif
 #include "version.h"
 #include "Utils.h"
+#include <algorithm>
 
 #if defined(MACOSX) && (SDL_COMPILEDVERSION >= 1208)
 #include <CoreFoundation/CoreFoundation.h>
@@ -972,12 +973,32 @@ int ONScripter::savescreenshotCommand()
     resizeSurface( screenshot_surface, surface );
 
     const char *buf = script_h.readStr();
-#if defined(ANDROID) && defined(WEB)
-    FILE *fp = fopen(buf, "wb");
-    SDL_RWops *rwops = SDL_RWFromFP(fp, SDL_TRUE);
+   
+    // fix --root, --save-dir problem
+    std::string savepath;
+    std::string imgpath(buf); // dirty fix for screenshot save/save problem
+    std::replace(imgpath.begin(), imgpath.end(), '\\', '/');
+
+    if(this->save_dir) {
+        int idx = imgpath.find_last_of("/");
+        std::string savename = idx < 0 ? imgpath : imgpath.substr( idx + 1);
+        savepath = std::string(this->save_dir) +  savename;
+    }
+    else if(this->archive_path){
+        savepath = std::string(this->archive_path) +  imgpath;
+    }
+    else{
+        savepath = imgpath;
+    }
+
+#if defined(ANDROID) || defined(WEB)
+    FILE *fp = ::fopen(savepath.c_str(), "wb");
+    SDL_RWops *rwops = NULL;
+    if(fp) rwops = SDL_RWFromFP(fp, SDL_TRUE);
 #else
-    SDL_RWops *rwops = SDL_RWFromFile(buf, "wb");
+    SDL_RWops *rwops = SDL_RWFromFile(savepath.c_str(), "wb");
 #endif
+    // utils::printInfo("## savescreenshotCommand savepath=%s, rwops=%p \n", savepath.c_str(), rwops);
     if (rwops == nullptr || SDL_SaveBMP_RW(surface, rwops, 1) != 0)
         utils::printError("Save screenshot failed: %s\n", SDL_GetError());
     SDL_FreeSurface(surface);

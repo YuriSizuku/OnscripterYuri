@@ -12,7 +12,7 @@
             "args": ["--debug:0", // "--fullscreen2",
                 // "--width", "960", "--height", "544", 
                 "--sharpness", "12.1",  
-                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceRoot}/build_mingw32"],
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceRoot}\\build_mingw32"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/asset",
             "environment": [

@@ -33,7 +33,7 @@
 #endif
 
 #ifdef ANDROID
-extern "C" void playVideoAndroid(const char *filename);
+extern "C" void playVideoAndroid(const char *path);
 #endif
 
 #if defined(IOS)

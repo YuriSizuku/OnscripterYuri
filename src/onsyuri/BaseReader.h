@@ -27,9 +27,10 @@
 
 #include <stdio.h>
 #if defined(ANDROID)
+extern "C" int stat_ons(const char *path, struct stat *statbuf);
 extern "C" FILE *fopen_ons(const char *str, const char *mode);
 #define fopen fopen_ons
-extern "C" int mkdir_ons(const char *pathname, mode_t mode);
+extern "C" int mkdir_ons(const char *path, mode_t mode);
 #define mkdir mkdir_ons
 #endif
 

@@ -342,7 +342,6 @@ size_t DirectReader::getFileLength( const char *file_name )
     int compression_type;
     size_t len;
     FILE *fp = getFileHandle( file_name, compression_type, &len );
-
     if ( fp ) fclose( fp );
     
     return len;

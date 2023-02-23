@@ -25,7 +25,7 @@
 #include "ScriptParser.h"
 #include "Utils.h"
 #include <math.h>
-#if defined(LINUX) || defined(MACOSX) || defined(IOS)
+#if defined(LINUX) || defined(MACOSX) || defined(IOS) || defined(ANDROID)
 #include <sys/stat.h>
 #endif
 
@@ -358,9 +358,13 @@ int ScriptParser::savedirCommand()
         save_dir = new char[ strlen(archive_path) + strlen(path) + 2 ];
         sprintf( save_dir, "%s%s%c", archive_path, path, DELIMITER );
 
-#if defined(LINUX) || defined(MACOSX) || defined(IOS)
+#if defined(LINUX) || defined(MACOSX) || defined(IOS) || defined(ANDROID)
         struct stat buf;
-        if ( stat( save_dir, &buf ) != 0 ){
+#if defined(ANDROID)
+        if ( stat_ons( save_dir, &buf ) != 0 ){
+#else
+        if ( stat( save_dir, &buf ) != 0 ) {
+#endif
             fprintf(stderr, "savedir: %s doesn't exist.\n", save_dir);
             delete[] save_dir;
             save_dir = NULL;
@@ -1340,7 +1344,6 @@ int ScriptParser::dateCommand()
 
     script_h.readInt();
     script_h.setInt( &script_h.current_variable, tm->tm_mday );
-
     return RET_CONTINUE;
 }
 

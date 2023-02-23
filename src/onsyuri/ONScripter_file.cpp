@@ -25,7 +25,7 @@
 #include "ONScripter.h"
 #include "Utils.h"
 
-#if defined(LINUX) || defined(MACOSX) || defined(IOS)
+#if defined(LINUX) || defined(MACOSX) || defined(IOS) || defined(ANDROID)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -58,12 +58,16 @@ void ONScripter::searchSaveFile( SaveFileInfo &save_file_info, int no )
     char file_name[256];
 
     script_h.getStringFromInteger( save_file_info.sjis_no, no, (num_save_file >= 10)?2:1 );
-#if defined(LINUX) || defined(MACOSX) || defined(IOS)
+#if defined(LINUX) || defined(MACOSX) || defined(IOS) || defined(ANDROID)
     sprintf( file_name, "%ssave%d.dat", save_dir?save_dir:archive_path, no );
     struct stat buf;
     struct tm *tm;
     // printf("## searchSaveFile %s\n", file_name);
+#if defined(ANDROID)
+    if ( stat_ons( file_name, &buf ) != 0 ){
+#else
     if ( stat( file_name, &buf ) != 0 ){
+#endif
         save_file_info.valid = false;
         return;
     }

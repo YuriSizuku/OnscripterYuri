@@ -24,6 +24,7 @@
 
 #include "ONScripter.h"
 #include <new>
+#include <algorithm>
 #include "resize_image.h"
 #include "Utils.h"
 #if defined(USE_OMP_PARALLEL) || defined(USE_PARALLEL)
@@ -132,9 +133,30 @@ SDL_Surface *ONScripter::createRectangleSurface(char *filename, bool *has_alpha,
 
 SDL_Surface *ONScripter::createSurfaceFromFile(char *filename, bool *has_alpha, int *location)
 {
+    // printf("## createSurfaceFromFile %s\n", filename);
     unsigned long length = script_h.cBR->getFileLength( filename );
 
     if (length == 0){
+        if(this->save_dir) { // dirty fix for load save image
+            std::string imgpath(filename);
+            std::replace(imgpath.begin(), imgpath.end(), '\\', '/');
+            int idx = imgpath.find_last_of("/");
+            std::string imagname = idx < 0 ? imgpath : imgpath.substr( idx + 1);
+            std::string finalpath = std::string(this->save_dir) +  imagname;
+            FILE* fp = ::fopen(finalpath.c_str(), "rb");
+            if (fp) {
+                SDL_RWops* rwops = SDL_RWFromFP(fp, SDL_TRUE);
+                int is_png = IMG_isPNG(rwops);
+                SDL_Surface *tmp = IMG_Load_RW(rwops, SDL_TRUE);
+                if (tmp && has_alpha){
+                    if (tmp->format->Amask || is_png)
+                        *has_alpha = true;
+                    else
+                        *has_alpha = false;
+                }
+                return tmp;
+            }
+        }
         utils::printError(" *** can't find file [%s] ***\n", filename);
         return NULL;
     }
@@ -150,7 +172,7 @@ SDL_Surface *ONScripter::createSurfaceFromFile(char *filename, bool *has_alpha, 
         if (tmp_image_buf) delete[] tmp_image_buf;
         tmp_image_buf = NULL;
     }
-
+    
     unsigned char *buffer = NULL;
     if (length > tmp_image_buf_length){
         buffer = new(std::nothrow) unsigned char[length];
@@ -165,6 +187,7 @@ SDL_Surface *ONScripter::createSurfaceFromFile(char *filename, bool *has_alpha, 
     }
         
     script_h.cBR->getFile(filename, buffer, location);
+
     char *ext = strrchr(filename, '.');
 
     SDL_RWops *src = SDL_RWFromMem(buffer, length);

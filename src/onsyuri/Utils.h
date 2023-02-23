@@ -55,17 +55,14 @@ namespace utils{
 #ifdef USE_FILELOG
 		static int isfirst = 1;
 		FILE *fp = NULL;
-		if(isfirst)
-		{
+		if(isfirst) {
 			fp = fopen(g_stdoutpath.c_str(), "w");
 			isfirst = 0;
 		}
-		else
-		{
+		else {
 			fp = fopen(g_stdoutpath.c_str(), "a");
 		}		
-		if(fp)
-		{
+		if(fp) {
 			va_list ap2;
 			va_copy(ap2, ap);
 			vfprintf(fp, format, ap2);
@@ -93,17 +90,14 @@ namespace utils{
 #ifdef USE_FILELOG
 		static int isfirst = 1;
 		FILE *fp = NULL;
-		if(isfirst)
-		{
+		if(isfirst) {
 			fp = fopen(g_stderrpath.c_str(), "w");
 			isfirst = 0;
 		}
-		else
-		{
+		else {
 			fp = fopen(g_stderrpath.c_str(), "a");
 		}		
-		if(fp)
-		{
+		if(fp) {
 			va_list ap2;
 			va_copy(ap2, ap);
 			vfprintf(fp, format, ap2);
