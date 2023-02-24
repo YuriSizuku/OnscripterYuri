@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image_gameicon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="#D6EF8F"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/text_gamename"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:background="#84EFFF"
+                    android:gravity="center|center_vertical"
+                    android:text="game title"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/text_gameargs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#AEEA00"
+                android:editable="true"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:textSize="14sp"
+                tools:text="--args" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#FFF2A3"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/button_checkexec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#00C853"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:text="exec"
+                    android:textColor="#00C853" />
+
+                <CheckBox
+                    android:id="@+id/button_checkread"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#00C853"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:text="read"
+                    android:textColor="#00C853" />
+
+                <CheckBox
+                    android:id="@+id/button_checkwrite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#00C853"
+                    android:checked="false"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:text="write"
+                    android:textColor="#00C853" />
+
+                <Button
+                    android:id="@+id/button_run"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#00BFA5"
+                    android:text="RUN"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/button_closedetail"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:background="#FF9100"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+        <TextView
+            android:id="@+id/text_gamepath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFD1D1"
+            android:ems="10"
+            android:inputType="textMultiLine|textPersonName"
+            android:text="game path"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

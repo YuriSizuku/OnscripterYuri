@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:animationCache="true"
     android:background="#F8FFFF"
     android:orientation="vertical">
 
@@ -44,6 +46,11 @@
             app:srcCompat="@android:drawable/ic_menu_manage" />
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/layout_gameconfig"
+        layout="@layout/layout_gameconfig"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/list_game"

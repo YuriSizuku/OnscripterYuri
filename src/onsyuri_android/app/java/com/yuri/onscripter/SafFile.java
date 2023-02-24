@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import android.annotation.SuppressLint;
@@ -137,34 +138,36 @@ public class SafFile {
 
         // external storage, including ext sdcard
         File[] files = context.getExternalFilesDirs(null);
-        for(File _file : files){
-            if (_file!=null) dirs.add(_file.toString());
+        for(File _file : Objects.requireNonNull(files)){
+            dirs.add(_file.toString());
         }
         return dirs.toArray(new String[0]);
+    }
+
+    public static String uri2Path(@NonNull Uri uri){
+        // uri format
+        String path = "";
+        return path;
     }
 
     // uri functions
     public static void requestDocUri(@NonNull Activity activity, int requestCode) {
         final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         activity.startActivityForResult(intent, requestCode);
     }
     public static void saveDocUri(Uri uri){
         saveDocUri(g_sharedpref, uri);
     }
     public static void saveDocUri(@NonNull Intent intent, final int responseCode){
-        saveDocUri(g_context, g_sharedpref, intent, responseCode);
+        saveDocUri(g_sharedpref, intent, responseCode);
     }
-    public static void saveDocUri(@NonNull Context context, @NonNull SharedPreferences sharedpref, @NonNull Intent intent, int responseCode) {
+    public static void saveDocUri(@NonNull SharedPreferences sharedpref, @NonNull Intent intent, int responseCode) {
         Uri uri;
         uri = intent.getData();
-        if (uri != null) {
-            saveDocUri(sharedpref, uri);
-            int takeFlags = intent.getFlags(); // Persist access permissions.
-            takeFlags |= Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-            context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
-        } else {
-            Log.e(LOGTAG, "SafFile.saveDocUriFromResult, Get uri failed!");
-        }
+        if (uri != null) saveDocUri(sharedpref, uri);
+        else Log.e(LOGTAG, "SafFile.saveDocUriFromResult, Get uri failed!");
     }
     @SuppressLint("ApplySharedPref")
     public static void saveDocUri(@NonNull SharedPreferences sharedpref, Uri uri) {
@@ -295,17 +298,17 @@ public class SafFile {
         path = path.replace("\\", "/");
 
         if(iswrite || isappend){
-            DocumentFile df2 = null;
+            DocumentFile docfile = null;
             final String[] paths = path.split("/");
             final DocumentFile dirdoc = getDirDocumentFile(base, path);
             if (dirdoc != null) {
                 String filename = paths[paths.length - 1];
-                df2 = dirdoc.findFile(filename);
-                if(df2 == null || !df2.exists()) {
-                    df2 = dirdoc.createFile("application/octet-stream", filename);
+                docfile = dirdoc.findFile(filename);
+                if(docfile == null || !docfile.exists()) {
+                    docfile = dirdoc.createFile("application/octet-stream", filename);
                 }
             }
-            return df2;
+            return docfile;
         }
         else { // faster read without DocumentFile.findName
             String uristr = Uri.encode(path);
@@ -356,14 +359,14 @@ public class SafFile {
         if(path==null) path="";
 
         boolean ret = false;
-        DocumentFile df2;
+        DocumentFile docfile;
         path = path.replace("\\", "/");
         final String[] paths = path.split("/");
         final int end = paths[paths.length - 1].length() > 0 ? paths.length - 1 : paths.length - 2;
         final DocumentFile target = getDirDocumentFile(base, path);
         if (target != null) {
-            df2 = target.findFile(paths[end]);
-            if (df2 != null && df2.exists()) ret = df2.delete();
+            docfile = target.findFile(paths[end]);
+            if (docfile != null && docfile.exists()) ret = docfile.delete();
         }
         return ret;
     }

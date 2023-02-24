@@ -1,6 +1,6 @@
 package com.yuri.onscripter;
 
-import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMEARGS;
+import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMECONFIG;
 import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMEURI;
 
 import android.content.Intent;
@@ -16,7 +16,6 @@ import org.libsdl.app.SDLActivity;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 
 public class ONScripter extends SDLActivity {
@@ -31,7 +30,7 @@ public class ONScripter extends SDLActivity {
         String path = new String(pathbyte, StandardCharsets.UTF_8);
         String safmode = mode==0 ? "r" : "w";
         int fd = SafFile.getFdSaf(this, m_onsbase, path, safmode);
-        Log.i("## onsyuri_android", String.format("getFD path=%s, mode=%d, fd=%d", new String(path), mode, fd));
+        // Log.i("## onsyuri_android", String.format("getFD path=%s, mode=%d, fd=%d", new String(path), mode, fd));
         return fd;
     }
 
@@ -90,7 +89,7 @@ public class ONScripter extends SDLActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        m_onsargs = intent.getStringArrayListExtra(SHAREDPREF_GAMEARGS);
+        m_onsargs = intent.getStringArrayListExtra(SHAREDPREF_GAMECONFIG);
         String uristr = intent.getStringExtra(SHAREDPREF_GAMEURI);
         if(uristr!=null) {
             Uri uri = Uri.parse(uristr);

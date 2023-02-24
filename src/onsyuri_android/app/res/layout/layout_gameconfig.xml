@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#CBFDA0"
+    android:orientation="vertical">
+
+    <CheckBox
+        android:id="@+id/button_stretchfull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stretch fullscreen (no navigation bar)" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/button_gles2sharpness"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="use gles2 sharpness (use hardware render)" />
+
+        <EditText
+            android:id="@+id/text_gles2sharpness"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:ems="10"
+            android:inputType="number|textPersonName|numberDecimal"
+            android:text="10.0" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/button_disablevideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="disable video (skip video command)" />
+
+    <CheckBox
+        android:id="@+id/button_usesjis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="use sjis encoding (for Japnese game, default is gbk)" />
+
+    <CheckBox
+        android:id="@+id/button_scopedsavedir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="savedir in scoped storage (if gamedir readonly)" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/teal_200" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="https://github.com/YuriSizuku/OnscripterYuri" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_checkupdate"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#00C853"
+                    android:text="Check Update"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/button_about"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#00C853"
+                    android:text="About"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_version"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:text="@string/app_version"
+            android:textColor="#0091EA"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>
