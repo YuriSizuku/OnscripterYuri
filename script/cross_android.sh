@@ -1,4 +1,4 @@
-# bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_linuxa64.sh"
+# bash -c "export SKIP_PORTS=yes && ./cross_android.sh"
 PLATFORM=android
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
@@ -36,7 +36,8 @@ fi
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=assembleDebug; fi
 
+
 pushd ${CMAKELISTS_PATH}/src/onsyuri_android
-# use gradlew.bat in windows, or it might failed
-chmod +x ./gradlew && ./gradlew $TARGETS
+echo "ANDROID_HOME=$ANDROID_HOME" # use ANDROID_HOME or local.properties
+chmod +x ./gradlew && ./gradlew $TARGETS --no-daemon
 popd
