@@ -146,53 +146,58 @@ public class SafFile {
 
     public static String uri2Path(@NonNull Uri uri){
         // uri format
-        String path = "";
-        return path;
+        return "";
     }
 
     // uri functions
     public static void requestDocUri(@NonNull Activity activity, int requestCode) {
         final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         activity.startActivityForResult(intent, requestCode);
     }
     public static void saveDocUri(Uri uri){
-        saveDocUri(g_sharedpref, uri);
+        saveDocUri(g_sharedpref, g_sharedprefkey, uri);
     }
     public static void saveDocUri(@NonNull Intent intent, final int responseCode){
-        saveDocUri(g_sharedpref, intent, responseCode);
+        saveDocUri(g_context, g_sharedpref, g_sharedprefkey, intent, responseCode);
     }
-    public static void saveDocUri(@NonNull SharedPreferences sharedpref, @NonNull Intent intent, int responseCode) {
+    @SuppressLint("WrongConstant")
+    public static void saveDocUri(@NonNull Context context, @NonNull SharedPreferences sharedpref,
+            @NonNull String sharedprefkey, @NonNull Intent intent, int responseCode) {
         Uri uri;
         uri = intent.getData();
-        if (uri != null) saveDocUri(sharedpref, uri);
+        if (uri != null) {
+            final int takeFlags = intent.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            context.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+            saveDocUri(sharedpref, sharedprefkey, uri);
+        }
         else Log.e(LOGTAG, "SafFile.saveDocUriFromResult, Get uri failed!");
     }
     @SuppressLint("ApplySharedPref")
-    public static void saveDocUri(@NonNull SharedPreferences sharedpref, Uri uri) {
+    public static void saveDocUri(@NonNull SharedPreferences sharedpref, @NonNull String sharedprefkey, Uri uri) {
         if(uri==null){
-            sharedpref.edit().remove(g_sharedprefkey).commit();
+            sharedpref.edit().remove(sharedprefkey).commit();
         }
         else{
-            sharedpref.edit().putString(g_sharedprefkey, uri.toString()).commit();
+            sharedpref.edit().putString(sharedprefkey, uri.toString()).commit();
         }
     }
 
     public static Uri loadDocUri(){
-        return loadDocUri(g_sharedpref);
+        return loadDocUri(g_sharedpref, g_sharedprefkey);
     }
-    public static Uri loadDocUri(@NonNull SharedPreferences sharedpref) {
-        final String p = sharedpref.getString(g_sharedprefkey, null);
+    public static Uri loadDocUri(@NonNull SharedPreferences sharedpref, @NonNull String sharedprefkey) {
+        final String p = sharedpref.getString(sharedprefkey, null);
         Uri uri = null;
         if (p != null)  uri = Uri.parse(p);
         return uri;
     }
     public static void removeDocUri(){
-        removeDocUri(g_sharedpref);
+        removeDocUri(g_sharedpref, g_sharedprefkey);
     }
-    public static void removeDocUri(@NonNull SharedPreferences sharedpref){
-        saveDocUri(sharedpref, null);
+    public static void removeDocUri(@NonNull SharedPreferences sharedpref, @NonNull String sharedprefkey){
+        saveDocUri(sharedpref, sharedprefkey, null);
     }
 
     /**

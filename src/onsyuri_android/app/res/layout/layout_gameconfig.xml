@@ -42,13 +42,19 @@
         android:id="@+id/button_usesjis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="use sjis encoding (for Japnese game, default is gbk)" />
+        android:text="use sjis encoding (for Japanese game, default is gbk)" />
 
     <CheckBox
         android:id="@+id/button_scopedsavedir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="savedir in scoped storage (if gamedir readonly)" />
+
+    <CheckBox
+        android:id="@+id/button_alloweditargs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="allow edit start args (for debug)" />
 
     <View
         android:id="@+id/divider"
@@ -59,7 +65,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="3dp">
 
         <LinearLayout
             android:layout_width="wrap_content"

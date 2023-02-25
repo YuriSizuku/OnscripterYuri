@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">ONScripter-Yuri</string>
     <string name="app_version">v0.7.0</string>
+    <string name="app_about">
+        An enhancement of ONScripter, developed by YuriSizuku \n
+        1. Game Dir \n
+        use SAF or put game files in app, ext app dir \n
+            /storage/emulated/0/Android/data/com.yuri.onscripter/files \n
+            /storage/XXXX-XXXX/0/Android/data/com.yuri.onscripter/files \n\n
+        2. Game Setting \n
+           setting game parameter like `strech fullscreen` \n\n
+        3. Game Gesture \n
+           [long click/3 fingers] to invoke menu \n
+           [4 fingers] to skip text
+    </string>
 </resources>

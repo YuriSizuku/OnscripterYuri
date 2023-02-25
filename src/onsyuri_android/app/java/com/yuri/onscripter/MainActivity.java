@@ -2,8 +2,6 @@ package com.yuri.onscripter;
 
 import static android.provider.DocumentsContract.Document.MIME_TYPE_DIR;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -317,6 +315,14 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> gameargs = prepareOnsargs(gameinfo.getGameDir());
                 String gamecmd = argsToCmd(gameargs);
                 text_gameargs.setText(gamecmd);
+                try {
+                    if(m_gameargs!=null) text_gameargs.setEnabled(m_gameargs.getBoolean("alloweditargs"));
+                    else text_gameargs.setEnabled(false);
+                }
+                catch (JSONException e){
+                    text_gameargs.setEnabled(false);
+                }
+
                 CheckBox button_checkexec = view_gamedetail.findViewById(R.id.button_checkexec);
                 CheckBox button_checkread = view_gamedetail.findViewById(R.id.button_checkread);
                 CheckBox button_checkwrite = view_gamedetail.findViewById(R.id.button_checkwrite);
@@ -328,7 +334,9 @@ public class MainActivity extends AppCompatActivity {
                 Button button_run = view_gamedetail.findViewById(R.id.button_run);
                 button_run.setOnClickListener(view -> {
                     String cmd = text_gameargs.getText().toString();
-                    ArrayList<String> args = cmdToArgs(cmd);
+                    ArrayList<String> args;
+                    if(!cmd.equals(gamecmd)) args = cmdToArgs(cmd);
+                    else  args = gameargs;
                     startOnsyuri(gamemod, gameinfo.getShortPath(), args, gameinfo.m_isUri);
                 });
 
@@ -384,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String argsToCmd(ArrayList<String> args){
         StringBuilder cmd = new StringBuilder();
-        for(int i=0;i<args.size();i++){
+        for(int i=0;i<args.size();i++) {
             cmd.append(args.get(i)).append(" ");
         }
         return cmd.toString();
@@ -426,7 +434,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultData){
         super.onActivityResult(requestCode, resultCode, resultData);
-        if (requestCode == ACTIVITY_SAF) {
+        if (requestCode == ACTIVITY_SAF ) {
+            if(resultData==null) return;
             Uri uri = resultData.getData();
             m_textgamedir.setText(uri.toString());
             SafFile.saveDocUri(resultData, requestCode);
@@ -457,13 +466,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private DIR_TYPE checkDir(String dirpath){
+        if(dirpath==null) return DIR_TYPE.NOT_DIR;
         try {
             File file = new File(dirpath);
             if(file.isDirectory()) { // if input valid dirpath
                 return DIR_TYPE.NORMAL_DIR;
             }
             else {
-                Uri uri = Uri.parse(m_gamedir);
+                Uri uri = Uri.parse(dirpath);
                 DocumentFile doc = DocumentFile.fromTreeUri(this, uri);
                 if(doc!=null && doc.isDirectory()) return DIR_TYPE.SAF_DIR;
                 else return DIR_TYPE.NOT_DIR;
@@ -472,7 +482,6 @@ public class MainActivity extends AppCompatActivity {
         catch (IllegalArgumentException e){
             return  DIR_TYPE.NOT_DIR;
         }
-
     }
 
     private ArrayList<String> prepareOnsargs(String gamedir){
@@ -496,11 +505,9 @@ public class MainActivity extends AppCompatActivity {
                 savedir += "save/" + gamename;
 
                 File file = new File(savedir);
-                if(file!=null){
-                    if(file.exists() || file.mkdirs()) {
-                        onsargs.add("--save-dir");
-                        onsargs.add(savedir);
-                    }
+                if(file.exists() || file.mkdirs()) {
+                    onsargs.add("--save-dir");
+                    onsargs.add(savedir);
                 }
             }
 
@@ -519,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(this, ONScripter.class);
         intent.putStringArrayListExtra(SHAREDPREF_GAMECONFIG, onsargs);
-        if(usesaf){
+        if(usesaf) {
             Uri uri = SafFile.loadDocUri();
             if (uri!=null) intent.putExtra(SHAREDPREF_GAMEURI, uri.toString());
         }
@@ -532,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout_config = findViewById(R.id.layout_gameconfig);
 
         // checkbox or editbox
-        for(int i=0; i<layout_config.getChildCount();i++){
+        for(int i=0; i<layout_config.getChildCount(); i++){
             View v = layout_config.getChildAt(i);
             if(v instanceof LinearLayout){
                 for (int j=0; j<((LinearLayout)v).getChildCount();j++){
@@ -555,13 +562,22 @@ public class MainActivity extends AppCompatActivity {
 
         // config, check update, about button
         Button button_checkupdate = findViewById(R.id.button_checkupdate);
-        button_checkupdate.setOnClickListener(view -> Toast.makeText(this,
-                "see https://github.com/YuriSizuku/OnscripterYuri/releases",
-                Toast.LENGTH_LONG).show());
+        button_checkupdate.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            intent.setData(Uri.parse("https://github.com/YuriSizuku/OnscripterYuri/releases"));
+            startActivity(intent);
+        });
         Button button_about = findViewById(R.id.button_about);
-        button_about.setOnClickListener(view -> Toast.makeText(this,
-                "see https://github.com/YuriSizuku/OnscripterYuri",
-                Toast.LENGTH_LONG).show());
+        button_about.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(getResources().getString(R.string.app_name));
+            builder.setMessage(getResources().getString(R.string.app_about));
+            builder.setCancelable(true);
+            builder.setPositiveButton("Ok", (dialog, which) -> dialog.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
         ImageButton button_config = findViewById(R.id.button_config);
         button_config.setOnClickListener(view->{
             int visibility = layout_config.getVisibility();
@@ -618,6 +634,7 @@ public class MainActivity extends AppCompatActivity {
         CheckBox button_disablevideo = findViewById(R.id.button_disablevideo);
         CheckBox button_usesjis = findViewById(R.id.button_usesjis);
         CheckBox button_scopedsavedir = findViewById(R.id.button_scopedsavedir);
+        CheckBox button_alloweditargs = findViewById(R.id.button_alloweditargs);
         try {
             if(init) { // config -> view
                 String jsonstr = m_sharedpref.getString(SHAREDPREF_GAMECONFIG, null);
@@ -628,6 +645,7 @@ public class MainActivity extends AppCompatActivity {
                 button_disablevideo.setChecked(m_gameargs.getBoolean("disablevideo"));
                 button_usesjis.setChecked(m_gameargs.getBoolean("usesjis"));
                 button_scopedsavedir.setChecked(m_gameargs.getBoolean("scopedsavedir"));
+                button_alloweditargs.setChecked(m_gameargs.getBoolean("alloweditargs"));
                 text_gles2sharpness.setText(m_gameargs.getString("sharpness_value"));
             }
             else { // view -> config
@@ -637,6 +655,7 @@ public class MainActivity extends AppCompatActivity {
                 m_gameargs.put("disablevideo", button_disablevideo.isChecked());
                 m_gameargs.put("usesjis", button_usesjis.isChecked());
                 m_gameargs.put("scopedsavedir", button_scopedsavedir.isChecked());
+                m_gameargs.put("alloweditargs", button_alloweditargs.isChecked());
                 String sharpness_value = text_gles2sharpness.getText().toString();
                 try {
                     Double.valueOf(sharpness_value);
@@ -651,10 +670,13 @@ public class MainActivity extends AppCompatActivity {
         catch (JSONException e){
             Log.e("## onsyuri_android", e.toString());
         }
+
+        // immediate change
+        EditText text_gamedir = findViewById(R.id.text_gamedir);
+        text_gamedir.setEnabled(button_alloweditargs.isChecked());
     }
 
     private DIR_TYPE updateGameDir(){
-        String _gamedir = m_textgamedir.getText().toString();
         DIR_TYPE dir_type = checkDir(m_gamedir);
         switch (dir_type) {
             case NOT_DIR:
@@ -670,6 +692,7 @@ public class MainActivity extends AppCompatActivity {
                 m_sharedpref.edit().remove(SHAREDPREF_GAMEDIR).apply();
                 m_textgamedir.setTextColor(Color.parseColor(COLOR_SAFDIR));
         }
+        String _gamedir = m_textgamedir.getText().toString();
         if(!_gamedir.equals(m_gamedir)) m_textgamedir.setText(m_gamedir);
         return dir_type;
     }
