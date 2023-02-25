@@ -2,7 +2,7 @@
     <string name="app_name">ONScripter-Yuri</string>
     <string name="app_version">v0.7.0</string>
     <string name="app_about">
-        An enhancement of ONScripter, developed by YuriSizuku \n
+        An enhancement of ONScripter, developed by YuriSizuku \n\n
         1. Game Dir \n
         use SAF or put game files in app, ext app dir \n
             /storage/emulated/0/Android/data/com.yuri.onscripter/files \n
