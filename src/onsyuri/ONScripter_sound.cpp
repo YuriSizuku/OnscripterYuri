@@ -262,18 +262,6 @@ int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag)
         return 0;
     }
 
-#ifdef ANDROID
-    playVideoAndroid(filename);
-    return 0;
-#endif
-
-#ifdef IOS
-    char *absolute_filename = new char[ strlen(archive_path) + strlen(filename) + 1 ];
-    sprintf( absolute_filename, "%s%s", archive_path, filename );
-    playVideoIOS(absolute_filename, click_flag, loop_flag);
-    delete[] absolute_filename;
-#endif
-
     int ret = 0;
 #if defined(USE_SMPEG)
     stopSMPEG();
@@ -372,17 +360,24 @@ int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag)
     delete[] pixel_buf;
     SDL_DestroyMutex(oi.mutex);
     texture = SDL_CreateTextureFromSurface(renderer, accumulation_surface);
-#elif !defined(WINRT) && (defined(WIN32) || defined(_WIN32))
-    char filename2[256];
-    strcpy(filename2, filename);
-    for (unsigned int i=0; i<strlen(filename2); i++)
-        if (filename2[i] == '/' || filename2[i] == '\\')
-            filename2[i] = DELIMITER;
-    system(filename2);
-#elif !defined(IOS)
+#else
+    char *absolute_filename = new char[ strlen(archive_path) + strlen(filename) + 1 ];
+    sprintf( absolute_filename, "%s%s", archive_path, filename );
+    for (int i=0;i<strlen( absolute_filename );i++) {
+        if ( absolute_filename[i] == '/' || absolute_filename[i] == '\\' )
+            absolute_filename[i] = DELIMITER;
+    }
+#if !defined(WINRT) && (defined(WIN32) || defined(_WIN32))
+    system(absolute_filename);
+#elif defined(IOS)
+    playVideoIOS(absolute_filename, click_flag, loop_flag);
+#elif defined(ANDROID)
+    playVideoAndroid(absolute_filename);
+#else
     utils::printError( "mpegplay command is disabled.\n" );
 #endif
-
+    delete[] absolute_filename;
+#endif
     return ret;
 }
 
@@ -399,18 +394,24 @@ int ONScripter::playAVI( const char *filename, bool click_flag )
         return 0;
     }
 
-#ifdef ANDROID
-    playVideoAndroid(filename);
-    return 0;
-#endif
-
+    int ret = 0;
+    char *absolute_filename = new char[ strlen(archive_path) + strlen(filename) + 1 ];
+    sprintf( absolute_filename, "%s%s", archive_path, filename );
+    for (int i=0;i<strlen( absolute_filename );i++) {
+        if ( absolute_filename[i] == '/' || absolute_filename[i] == '\\' )
+            absolute_filename[i] = DELIMITER;
+    }
 #if !defined(WINRT) && (defined(WIN32) || defined(_WIN32))
-    system(filename);
+    system(absolute_filename);
+#elif defined(IOS)
+    playVideoIOS(absolute_filename, click_flag, loop_flag);
+#elif defined(ANDROID)
+    playVideoAndroid(absolute_filename);
 #else
     utils::printError( "avi command is disabled.\n" );
 #endif
-
-    return 0;
+    delete[] absolute_filename;
+    return ret;
 }
 
 void ONScripter::stopBGM( bool continue_flag )

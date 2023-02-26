@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -72,12 +71,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class GameInfo {
+        private boolean m_isIconCached;
+        private Bitmap m_icon;
         public boolean m_isUri;
         public String m_path;
         public String m_name = null;
         public GameInfo(String path, boolean isUri) {
             m_isUri = isUri;
             m_path = path;
+            m_isIconCached = false;
             if(m_isUri){
                 Uri uri =  Uri.parse(path);
                 String mimeType = getContentResolver().getType(uri);
@@ -108,17 +110,13 @@ public class MainActivity extends AppCompatActivity {
         public String getGameDir() {
             return  m_isUri ? m_name : m_path;
         }
-        public String getShortPath(){
-            String path = m_path;
-            if(m_isUri){
-                path = Uri.decode(path);
-                int idx = path.lastIndexOf(0x3A);
-                path = path.substring(idx+1);
-            }
-            return path;
+        public String getRealPath(){
+            return m_isUri ? SafFile.uri2Path(m_path) : m_path;
         }
 
         public Bitmap getIcon(){
+            if(m_isIconCached) return m_icon;
+            m_isIconCached = true;
             Bitmap bitmap = null;
             if(m_isUri) { // append uri with %2f (`/`)
                 Uri uri = Uri.parse(m_path +"%2Ficon.png");
@@ -142,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 else iconpath = m_path + "/icon.png";
                 bitmap = BitmapFactory.decodeFile(iconpath);
             }
+            m_icon = bitmap;
             return bitmap;
         }
 
@@ -256,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             String shortpath = "";
             Configuration config = MainActivity.this.getResources().getConfiguration();
             if(config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                shortpath = " | " + gameinfo.getShortPath();
+                shortpath = " | " + gameinfo.getRealPath();
             }
             holder.text_gametitle.setText(" " + gameinfo.m_name + shortpath);
 
@@ -289,24 +288,27 @@ public class MainActivity extends AppCompatActivity {
             holder.text_gameno.setText(String.format("%d/%d", position + 1,  this.getCount()));
         }
 
+        @SuppressLint("RtlHardcoded")
         private void getGameDetailView(LinearLayout rootview, ItemViewHolder holder, int position) {
             GameInfo gameinfo = m_gamelist.get(position);
 
             // game run shortcut
-            int gamemod = gameinfo.checkValid();
             holder.button_gameicon.setOnClickListener(view -> {
+                int gamemod = gameinfo.checkValid();
                 ArrayList<String> onsargs = prepareOnsargs(gameinfo.getGameDir());
-                startOnsyuri(gamemod, gameinfo.getShortPath(), onsargs, gameinfo.m_isUri);
+                startOnsyuri(gamemod, gameinfo.getRealPath(), onsargs, gameinfo.m_isUri);
             });
 
             // game details
             holder.text_gametitle.setOnClickListener(event->{
                 // game name, path, icon
-                @SuppressLint("InflateParams") View view_gamedetail = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_gamedetail, null);
+                int gamemod = gameinfo.checkValid();
+                @SuppressLint("InflateParams")
+                View view_gamedetail = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_gamedetail, null);
                 TextView text_gamename = view_gamedetail.findViewById(R.id.text_gamename);
                 text_gamename.setText(gameinfo.m_name);
                 TextView text_gamepath = view_gamedetail.findViewById(R.id.text_gamepath);
-                text_gamepath.setText(gameinfo.m_path);
+                text_gamepath.setText(gameinfo.getRealPath());
                 ImageView image_gameicon = view_gamedetail.findViewById(R.id.image_gameicon);
                 image_gameicon.setImageBitmap(((BitmapDrawable)holder.button_gameicon.getDrawable()).getBitmap());
 
@@ -337,19 +339,26 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> args;
                     if(!cmd.equals(gamecmd)) args = cmdToArgs(cmd);
                     else  args = gameargs;
-                    startOnsyuri(gamemod, gameinfo.getShortPath(), args, gameinfo.m_isUri);
+                    startOnsyuri(gamemod, gameinfo.getRealPath(), args, gameinfo.m_isUri);
                 });
 
                 // game detail popup
                 PopupWindow window_config = new PopupWindow(MainActivity.this);
                 window_config.setContentView(view_gamedetail);
-                window_config.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+
                 window_config.setFocusable(true); // close window when outside click
                 window_config.setAnimationStyle(android.R.style.Animation_Toast);
-                ImageButton button_closedetail = view_gamedetail.findViewById(R.id.button_closedetail);
-                button_closedetail.setOnClickListener(view->window_config.dismiss());
-                window_config.showAtLocation(rootview,  Gravity.BOTTOM, 0, 0);
-
+                Configuration config = MainActivity.this.getResources().getConfiguration();
+                if(config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    window_config.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+                    window_config.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+                    window_config.showAtLocation(rootview,  Gravity.RIGHT | Gravity.BOTTOM, 0, 0);
+                }
+                else {
+                    window_config.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+                    window_config.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+                    window_config.showAtLocation(rootview,  Gravity.BOTTOM, 0, 0);
+                }
             });
         }
 
@@ -526,12 +535,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(this, ONScripter.class);
         intent.putStringArrayListExtra(SHAREDPREF_GAMECONFIG, onsargs);
+
         if(usesaf) {
             Uri uri = SafFile.loadDocUri();
             if (uri!=null) intent.putExtra(SHAREDPREF_GAMEURI, uri.toString());
         }
         startActivity(intent);
     }
+
     // onsyuri android ui function
 
     private void initUiGameConfig(){

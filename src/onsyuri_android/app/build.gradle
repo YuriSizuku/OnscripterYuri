@@ -28,20 +28,36 @@ android {
             }
         }
         versionCode 1
-        versionName '0.7'
+        versionName '0.7.1'
     }
     signingConfigs {
         release {
+            storeFile file('sign.jks')
+            def signPropsFile = file('sign.properties')
+            if (signPropsFile.exists()) {
+                Properties signProps = new Properties()
+                signProps.load(new FileInputStream(signPropsFile))
+                keyAlias signProps['SIGN_KEY_ALIAS']
+                keyPassword signProps['SIGN_KEY_PASS']
+                storePassword signProps['SIGN_STORE_PASS']
+            }
+            else {
+                keyAlias System.getenv("SIGN_KEY_ALIAS")
+                keyPassword System.getenv("SIGN_KEY_PASS")
+                storePassword System.getenv("SIGN_STORE_PASS")
+            }
         }
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
             debuggable true
+            signingConfig signingConfigs.release
         }
     }
 

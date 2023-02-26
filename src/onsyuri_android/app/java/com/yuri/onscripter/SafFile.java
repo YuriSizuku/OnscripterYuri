@@ -138,16 +138,31 @@ public class SafFile {
 
         // external storage, including ext sdcard
         File[] files = context.getExternalFilesDirs(null);
-        for(File _file : Objects.requireNonNull(files)){
+        for(File _file : Objects.requireNonNull(files)) {
             dirs.add(_file.toString());
         }
         return dirs.toArray(new String[0]);
     }
 
+    public static String uri2Path(@NonNull String uristr) {
+        return uri2Path(Uri.parse(uristr));
+    }
+
     public static String uri2Path(@NonNull Uri uri){
         // uri format
+        String scheme = uri.getScheme();
+        if(scheme.equals("content")) {
+            String path = uri.getLastPathSegment();
+            if(!path.contains("primary:")) path = "/" + path.replace("%3A", "/");
+            else path = "/storage/emulated/0/" + path.replace("primary:", "");
+            return  Uri.decode(path);
+        } else if (scheme.equals("file")) {
+            return Uri.decode(uri.getPath());
+        }
         return "";
     }
+
+
 
     // uri functions
     public static void requestDocUri(@NonNull Activity activity, int requestCode) {

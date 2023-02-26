@@ -10,21 +10,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 
 import org.libsdl.app.SDLActivity;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ONScripter extends SDLActivity {
     private ArrayList<String> m_onsargs;
-    private DocumentFile m_onsbase; // use this to judge whether to use saf
+    // use this to judge whether to use saf
+    private DocumentFile m_onsbase;
 
     // for onsyuri c code
     private native int nativeInitJavaCallbacks();
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     public int getFD(byte[] pathbyte, int mode) {
         if (m_onsbase==null) return -1;
         String path = new String(pathbyte, StandardCharsets.UTF_8);
@@ -44,19 +49,44 @@ public class ONScripter extends SDLActivity {
 
     public void playVideo(byte[] pathbyte) {
         String path = new String(pathbyte, StandardCharsets.UTF_8);
-//        try {
-//            String replace = ("file://" + gCurrentDirectoryPath + "/" + new String(cArr)).replace('\\', '/');
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("playVideo: ");
-//            sb.append(replace);
-//            Log.v("ONS", sb.toString());
-//            Uri parse = Uri.parse(replace);
-//            Intent intent = new Intent("android.intent.action.VIEW");
-//            intent.setDataAndType(parse, "video/*");
-//            startActivityForResult(intent, -1);
-//        } catch (Exception e) {
-//            Log.e("ONS", "playVideo error:  " + e.getClass().getName());
-//        }
+        try {
+            Uri uri;
+            path = path.replace('\\', '/');
+            if(m_onsbase==null)  {
+                // scoped storage, content://com.yuri.onscripter.fileProvider/external_file_path/
+                uri = FileProvider.getUriForFile(this,
+                        Objects.requireNonNull(getClass().getPackage()).getName() +".fileProvider",
+                        new File(path));
+            }
+            else uri = Uri.parse(m_onsbase.getUri() + "%2F" + Uri.encode(path));
+            Log.i("## onsyuri_android", "playVideo " + uri.toString());
+            invokeSystemPlayer(uri);
+
+        } catch (Exception e) {
+            Log.e("## onsyuri_android", "playVideo error:  " + e.getClass().getName() + " "+ e.getMessage());
+        }
+    }
+
+    private void invokeSystemPlayer(Uri uri){
+        AlertDialog.Builder builder = new AlertDialog.Builder(ONScripter.this);
+        builder.setTitle("Playing game video");
+        StringBuilder message = new StringBuilder();
+        message.append("playVideo: ").append(uri.toString()).append("\n");
+        message.append("Please select a video app to play ! ");
+        AlertDialog.Builder builder1 = builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            dialog.dismiss();
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.setDataAndType(uri, "video/*");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivityForResult(intent, -1);
+        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        runOnUiThread(() -> {
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
     }
 
     // override sdl functions
