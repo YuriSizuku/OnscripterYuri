@@ -21,10 +21,14 @@ jobs:
         cache: gradle
 
     - name: build onsyuri_android
+      env:
+        SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
+        SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+        SIGN_STORE_PASS: ${{ secrets.SIGN_STORE_PASS }}
       run: cd script && bash ./cross_android.sh
 
     - name: prepare to release
-      run: cp ./build_android/outputs/apk/debug/*.apk ${{ env.BUILD_NAME }}.apk
+      run: cp ./build_android/outputs/apk/release/*.apk ${{ env.BUILD_NAME }}.apk
     
     - name: create release
       uses: ncipollo/release-action@v1

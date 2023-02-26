@@ -519,7 +519,7 @@ int main(int argc, char *argv[])
     argv++;
     parseOption(argc - 1, argv);
 
-    utils::printInfo("ONScripter Yuri %s,  (Jh %s, Ons %s, %d.%02d)\n", 
+    utils::printInfo("ONScripter Yuri %s, (Jh%s,Ons%s,NSC%d.%02d)\n", 
         ONS_YURI_VERSION, ONS_JH_VERSION, 
         ONS_VERSION, NSC_VERSION / 100, NSC_VERSION % 100);
 

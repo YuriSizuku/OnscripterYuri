@@ -34,7 +34,7 @@ fi
 
 # config and build project
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-if [ -z "$TARGETS" ]; then TARGETS=assembleDebug; fi
+if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi
 
 pushd ${CMAKELISTS_PATH}/src/onsyuri_android
 echo "ANDROID_HOME=$ANDROID_HOME" 

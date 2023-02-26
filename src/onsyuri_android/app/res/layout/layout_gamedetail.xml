@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -114,27 +114,15 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_gamepath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/button_closedetail"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:background="#FF9100"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
-        <TextView
-            android:id="@+id/text_gamepath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFD1D1"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:text="game path"
-            android:textSize="12sp" />
-    </LinearLayout>
+        android:background="#FFD1D1"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textMultiLine"
+        android:text="game path"
+        android:textSize="12sp" />
 
 </LinearLayout>

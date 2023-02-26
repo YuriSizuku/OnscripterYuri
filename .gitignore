@@ -9,6 +9,7 @@ script/*.json
 
 # android
 local.properties
+sign.properties
 src/onsyuri_android/.gradle
 src/onsyuri_android/local.properties
 src/onsyuri_android/.idea/caches
