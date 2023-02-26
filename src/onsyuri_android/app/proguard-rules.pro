@@ -12,6 +12,14 @@
 #   public *;
 #}
 
+-keep class com.yuri.onscripter.ONScripter {
+    public *;
+}
+
+-keep class org.libsdl.app.** {
+    public *;
+}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

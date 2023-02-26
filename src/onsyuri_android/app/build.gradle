@@ -50,7 +50,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled true // this may cause jni crash
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }

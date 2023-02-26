@@ -152,10 +152,10 @@ public class SafFile {
         // uri format
         String scheme = uri.getScheme();
         if(scheme.equals("content")) {
-            String path = uri.getLastPathSegment();
-            if(!path.contains("primary:")) path = "/" + path.replace("%3A", "/");
+            String path = uri.getLastPathSegment(); //already decoded
+            if(!path.contains("primary:")) path = "/storage/" + path.replace(":", "/");
             else path = "/storage/emulated/0/" + path.replace("primary:", "");
-            return  Uri.decode(path);
+            return  path;
         } else if (scheme.equals("file")) {
             return Uri.decode(uri.getPath());
         }
