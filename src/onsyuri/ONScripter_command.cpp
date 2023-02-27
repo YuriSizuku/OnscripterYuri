@@ -966,9 +966,10 @@ int ONScripter::savescreenshotCommand()
         delete_flag = false;
     }       
 
-    if (screenshot_surface == NULL)
-        screenshot_surface = AnimationInfo::alloc32bitSurface(screen_device_width, screen_device_height, texture_format);
-
+    if (!screenshot_surface){
+         screenshot_surface = AnimationInfo::alloc32bitSurface(screen_width, screen_height, texture_format);
+    }
+       
     SDL_Surface *surface = AnimationInfo::alloc32bitSurface( screenshot_w, screenshot_h, texture_format );
     resizeSurface( screenshot_surface, surface );
 
@@ -2332,19 +2333,14 @@ int ONScripter::getscreenshotCommand()
     screenshot_w = w;
     screenshot_h = h;
 
-    if (screenshot_surface != nullptr && (screenshot_surface->w != render_view_rect.w || screenshot_surface->h != render_view_rect.h)){
-        SDL_FreeSurface(screenshot_surface);
-        screenshot_surface = nullptr;
+    // fix screenshot problem in fullscreen
+    if (!screenshot_surface) {
+        screenshot_surface = AnimationInfo::alloc32bitSurface(screen_width, screen_height, texture_format);
     }
-    if (screenshot_surface == NULL) screenshot_surface = AnimationInfo::alloc32bitSurface(render_view_rect.w, render_view_rect.h, texture_format);
-    if (screen_dirty_flag) {
-        SDL_LockSurface(screenshot_surface);
-        SDL_RenderReadPixels(renderer, &render_view_rect, screenshot_surface->format->format, screenshot_surface->pixels, screenshot_surface->pitch);
-        SDL_UnlockSurface(screenshot_surface);
-    } else {
+    if(screenshot_surface){
         SDL_BlitSurface(accumulation_surface, nullptr, screenshot_surface, nullptr);
     }
-
+    
     return RET_CONTINUE;
 }
 

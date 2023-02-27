@@ -6,9 +6,11 @@ import static com.yuri.onscripter.MainActivity.SHAREDPREF_GAMEURI;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
@@ -25,6 +27,7 @@ public class ONScripter extends SDLActivity {
     private ArrayList<String> m_onsargs;
     // use this to judge whether to use saf
     private DocumentFile m_onsbase;
+    private boolean m_ignorecutout;
 
     // for onsyuri c code
     private native int nativeInitJavaCallbacks();
@@ -120,6 +123,7 @@ public class ONScripter extends SDLActivity {
         Intent intent = getIntent();
 
         m_onsargs = intent.getStringArrayListExtra(SHAREDPREF_GAMECONFIG);
+        m_ignorecutout = intent.getBooleanExtra("ignorecutout", true);
         String uristr = intent.getStringExtra(SHAREDPREF_GAMEURI);
         if(uristr!=null) {
             Uri uri = Uri.parse(uristr);
@@ -145,8 +149,15 @@ public class ONScripter extends SDLActivity {
     }
 
     private void fullscreen() {
+
+        if (m_ignorecutout && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // use cutout
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().setAttributes(lp);
+        }
+
         View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN ;
         decorView.setSystemUiVisibility(uiOptions);
         // hide title for SDL
         try {
