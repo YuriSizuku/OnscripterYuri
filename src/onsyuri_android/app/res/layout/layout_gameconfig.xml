@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#CBFDA0"
     android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/button_stretchfull"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="stretch fullscreen (no navigation bar)" />
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/button_stretchfull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="stretch fullscreen" />
+
+        <CheckBox
+            android:id="@+id/button_ignorecutout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="ignore cutout (android 9 +)" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +70,7 @@
         android:id="@+id/button_alloweditargs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="allow edit start args (for debug)" />
+        android:text="allow edit start args (for debug and custom command)" />
 
     <View
         android:id="@+id/divider"

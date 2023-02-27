@@ -540,6 +540,16 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = SafFile.loadDocUri();
             if (uri!=null) intent.putExtra(SHAREDPREF_GAMEURI, uri.toString());
         }
+
+        boolean ignorecutout = true;
+        try{
+            ignorecutout = m_gameargs.getBoolean("ignorecutout");
+        }
+        catch (JSONException e) {
+            Log.e("## onsyuri_android", e.getMessage());
+        }
+        intent.putExtra("ignorecutout", ignorecutout);
+
         startActivity(intent);
     }
 
@@ -640,6 +650,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateGameConfig(boolean init) {
 
         CheckBox button_strechfull = findViewById(R.id.button_stretchfull);
+        CheckBox button_ignorecutout = findViewById(R.id.button_ignorecutout);
         CheckBox button_gles2sharpness =findViewById(R.id.button_gles2sharpness);
         TextView text_gles2sharpness = findViewById(R.id.text_gles2sharpness);
         CheckBox button_disablevideo = findViewById(R.id.button_disablevideo);
@@ -652,6 +663,7 @@ public class MainActivity extends AppCompatActivity {
                 if(jsonstr==null) m_gameargs = new JSONObject();
                 else m_gameargs = new JSONObject(jsonstr);
                 button_strechfull.setChecked(m_gameargs.getBoolean("strechfull"));
+                button_ignorecutout.setChecked(m_gameargs.getBoolean("ignorecutout"));
                 button_gles2sharpness.setChecked(m_gameargs.getBoolean("sharpness"));
                 button_disablevideo.setChecked(m_gameargs.getBoolean("disablevideo"));
                 button_usesjis.setChecked(m_gameargs.getBoolean("usesjis"));
@@ -662,6 +674,7 @@ public class MainActivity extends AppCompatActivity {
             else { // view -> config
                 if(m_gameargs == null) m_gameargs = new JSONObject();
                 m_gameargs.put("strechfull", button_strechfull.isChecked());
+                m_gameargs.put("ignorecutout", button_ignorecutout.isChecked());
                 m_gameargs.put("sharpness", button_gles2sharpness.isChecked());
                 m_gameargs.put("disablevideo", button_disablevideo.isChecked());
                 m_gameargs.put("usesjis", button_usesjis.isChecked());
