@@ -27,7 +27,7 @@ android {
                 arguments "-Wno-dev",  "-DANDROID_ARM_NEON=TRUE"
             }
         }
-        versionCode 2
+        versionCode 3
         versionName '0.7.2'
     }
     signingConfigs {

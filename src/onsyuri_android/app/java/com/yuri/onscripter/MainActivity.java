@@ -357,7 +357,9 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     window_config.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
                     window_config.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                    window_config.showAtLocation(rootview,  Gravity.BOTTOM, 0, 0);
+                    int gravity = Gravity.BOTTOM;
+                    if(text_gameargs.isEnabled()) gravity = Gravity.CENTER;
+                    window_config.showAtLocation(rootview,  gravity, 0, 0);
                 }
             });
         }
