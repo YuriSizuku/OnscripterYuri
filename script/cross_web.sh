@@ -19,10 +19,9 @@ if [ -z "$TARGETS" ]; then TARGETS=all; fi
 # build ports
 function build_lua()
 {
-    if ! [ -d "${LUA_SRC}_wasm" ]; then cp -rp ${LUA_SRC} ${LUA_SRC}_wasm; fi
-    LUA_SRC=${LUA_SRC}_wasm
     echo "## LUA_SRC=$LUA_SRC"
     if ! [ -d "$PORTBUILD_PATH/lua" ]; then mkdir -p "$PORTBUILD_PATH/lua"; fi
+    make -C $LUA_SRC clean
     make -C $LUA_SRC all PLAT=linux CC=emcc AR="emar rcu" -j$CORE_NUM
     make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH -j$CORE_NUM
 }

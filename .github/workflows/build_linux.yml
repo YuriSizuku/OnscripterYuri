@@ -1,6 +1,8 @@
 name: build linux x86, x64, arm32, arm64
 on:
   push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request: 
+
 permissions:
   contents: write
 
@@ -48,12 +50,12 @@ jobs:
     - name: prepare release
       run: |
         cd build_linux32 
-        mv onsyuri onsyuri_x86_linux
+        mv onsyuri onsyuri_${{  github.ref_name }}_x86_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "./build_linux32/onsyuri_x86_linux"
+        artifacts: "./build_linux32/onsyuri_${{  github.ref_name }}_x86_linux"
         allowUpdates: "true"
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -77,12 +79,12 @@ jobs:
     - name: prepare release
       run: |
         cd build_linux64 
-        mv onsyuri onsyuri_x64_linux
+        mv onsyuri onsyuri_${{  github.ref_name }}_x64_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "./build_linux64/onsyuri_x64_linux"
+        artifacts: "./build_linux64/onsyuri_${{  github.ref_name }}_x64_linux"
         allowUpdates: "true"
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -111,12 +113,12 @@ jobs:
     - name: prepare release
       run: |
         cd build_linuxa32 
-        mv onsyuri onsyuri_arm32_linux
+        mv onsyuri onsyuri_${{  github.ref_name }}_arm32_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "./build_linuxa32/onsyuri_arm32_linux"
+        artifacts: "./build_linuxa32/onsyuri_${{  github.ref_name }}_arm32_linux"
         allowUpdates: "true"
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -145,11 +147,12 @@ jobs:
     - name: prepare release
       run: |
         cd build_linuxa64 
-        mv onsyuri onsyuri_arm64_linux
+        mv onsyuri onsyuri_${{  github.ref_name }}_arm64_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
-        artifacts: "./build_linuxa64/onsyuri_arm64_linux"
+        artifacts: "./build_linuxa64/onsyuri_${{  github.ref_name }}_arm64_linux"
         allowUpdates: "true"
         token: ${{ secrets.GITHUB_TOKEN }}
