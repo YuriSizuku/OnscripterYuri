@@ -12,6 +12,9 @@ function(config_linux TARGET_NAME)
         USE_GLES
         USE_FILELOG
     )
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_link_options(${TARGET_NAME} PRIVATE "-s") 
+    endif()
 
     if(STATIC_PORT_ROOT)
         target_include_directories(${TARGET_NAME} PRIVATE
@@ -25,7 +28,6 @@ function(config_linux TARGET_NAME)
             -static-libstdc++
         )
         target_link_libraries(${TARGET_NAME} PRIVATE # static
-            # -Wl,-Bstatic,--whole-archive -lpthread -Wl,--no-whole-archive
             -Wl,-Bstatic
             lua
             jpeg
@@ -173,6 +175,9 @@ function(config_windows2 TARGET_NAME)
         target_compile_options(${TARGET_NAME} PRIVATE -g)
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
     else()
+        if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+            target_link_options(${TARGET_NAME} PRIVATE "-s") 
+        endif()
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
     endif()
     if(WIN64) 

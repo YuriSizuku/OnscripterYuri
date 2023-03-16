@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(onsyuri_android)
-set(THIRDPARTY_PORT "thirdparty")
 
 # configure path
+set(ONSYURI_DIR ${CMAKE_SOURCE_DIR}/../../../..)
+set(THIRDPARTY_PORT "${ONSYURI_DIR}/thirdparty/port")
 set(SDL2_DIR ${THIRDPARTY_PORT}/SDL2-2.26.3)
 SET(SDL2IMAGE_DIR ${THIRDPARTY_PORT}/SDL2_image-2.6.3)
 set(SDL2TTF_DIR ${THIRDPARTY_PORT}/SDL2_ttf-2.20.2)
@@ -10,23 +11,22 @@ set(SDL2MIXER_DIR ${THIRDPARTY_PORT}/SDL2_mixer-2.6.3)
 set(JPEG_DIR ${THIRDPARTY_PORT}/SDL2_image-2.6.3/external/jpeg)
 set(LUA_DIR ${THIRDPARTY_PORT}/lua-5.4.4)
 set(BZ2_DIR ${THIRDPARTY_PORT}/bzip2-1.0.8)
-set(ONSYURI_DIR ${CMAKE_SOURCE_DIR}/../../../..)
 
 # build sdl2
 set(ANDROID TRUE)
 set(CMAKE_SYSTEM_NAME Linux)
-add_subdirectory(${SDL2_DIR})
+add_subdirectory(${SDL2_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2)
 
 # build sdl2_image
 set(SDL2IMAGE_INSTALL off)
 set(SDL2IMAGE_SAMPLES off)
-add_subdirectory(${SDL2IMAGE_DIR})
+add_subdirectory(${SDL2IMAGE_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2image)
 
 # build sdl2_ttf
 set(SDL2TTF_SAMPLES off)
 set(SDL2TTF_INSTALL off)
 set(SDL2TTF_VENDORED on) # use external ttf in source code
-add_subdirectory(${SDL2TTF_DIR})
+add_subdirectory(${SDL2TTF_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2ttf)
 
 # build sdl2 mixer
 set(SDL2MIXER_SAMPLES off)
@@ -36,10 +36,10 @@ set(SDL2MIXER_FLAC off)
 set(SDL2MIXER_VORBIS_STB on)
 set(SDL2MIXER_VENDORED on)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-dev")
-add_subdirectory(${SDL2MIXER_DIR})
+add_subdirectory(${SDL2MIXER_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2mixer)
 
 # build jpeg
-add_subdirectory(${JPEG_DIR})
+add_subdirectory(${JPEG_DIR} ${ONSYURI_DIR}/build_android/thirdparty/jpeg)
 
 # build lua
 set(LUASRC_DIR ${LUA_DIR}/src)

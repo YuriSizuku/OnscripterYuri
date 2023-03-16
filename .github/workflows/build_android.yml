@@ -1,12 +1,10 @@
 name: build android
 on:
   push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request: 
 
 permissions:
   contents: write
-
-env:
-  BUILD_NAME: onsyuri_android
 
 jobs:
   build_android:
@@ -28,11 +26,12 @@ jobs:
       run: cd script && bash ./cross_android.sh
 
     - name: prepare to release
-      run: cp ./build_android/outputs/apk/release/*.apk ${{ env.BUILD_NAME }}.apk
+      run: cp ./build_android/outputs/apk/release/*.apk onsyuri_${{  github.ref_name }}_android.apk
     
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
-        artifacts: "${{ env.BUILD_NAME }}.apk"
+        artifacts: "onsyuri_${{  github.ref_name }}_android.apk"
         allowUpdates: "true"
         token: ${{ secrets.GITHUB_TOKEN }}

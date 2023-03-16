@@ -7,7 +7,8 @@ if ! [ -d $CMAKELISTS_PATH/thirdparty/build/arch_linux64 ]; then mkdir -p $CMAKE
 if ! [ -d $CMAKELISTS_PATH/thirdparty/build/arch_linuxa64 ]; then mkdir -p $CMAKELISTS_PATH/thirdparty/build/arch_linuxa64; fi
 if ! [ -d $CMAKELISTS_PATH/thirdparty/build/arch_wasm ]; then mkdir -p $CMAKELISTS_PATH/thirdparty/build/arch_wasm; fi
 
-function fetch_port() # urlbase, name, outpath
+# urlbase, name, outpath
+function fetch_port()
 {
     if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$2" ]; then
         echo "## fetch_port $1 $2"
@@ -16,13 +17,7 @@ function fetch_port() # urlbase, name, outpath
     fi
 }
 
-function fetch_stb()
-{
-    STB_NAME=stb
-    STB_SRC=$CMAKELISTS_PATH/thirdparty/port/$STB_NAME
-    git clone https://github.com/nothings/stb.git $STB_SRC
-}
-
+# fetch by curl
 function fetch_lua()
 {
     LUA_NAME=lua-5.4.4
@@ -42,13 +37,6 @@ function fetch_bz2()
     BZ2_NAME=bzip2-1.0.8
     BZ2_SRC=$CMAKELISTS_PATH/thirdparty/port/$BZ2_NAME
     fetch_port https://sourceware.org/pub/bzip2 $BZ2_NAME
-}
-
-function fetch_pulse()
-{
-    PULSE_NAME=pulseaudio-16.1
-    PULSE_SRC=$CMAKELISTS_PATH/thirdparty/port/$PULSE_NAME
-    fetch_port https://freedesktop.org/software/pulseaudio/releases/ $PULSE_NAME
 }
 
 function fetch_sdl2() 
@@ -77,4 +65,19 @@ function fetch_sdl2_mixer()
     SDL2_MIXER_NAME=SDL2_mixer-2.6.3
     SDL2_MIXER_SRC=$CMAKELISTS_PATH/thirdparty/port/$SDL2_MIXER_NAME
     fetch_port https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.3 $SDL2_MIXER_NAME
+}
+
+# fetch unused port
+function fetch_stb()
+{
+    STB_NAME=stb
+    STB_SRC=$CMAKELISTS_PATH/thirdparty/port/$STB_NAME
+    git clone https://github.com/nothings/stb.git $STB_SRC
+}
+
+function fetch_pulse()
+{
+    PULSE_NAME=pulseaudio-16.1
+    PULSE_SRC=$CMAKELISTS_PATH/thirdparty/port/$PULSE_NAME
+    fetch_port https://freedesktop.org/software/pulseaudio/releases/ $PULSE_NAME
 }

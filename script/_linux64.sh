@@ -2,20 +2,21 @@
 
 function build_lua()
 {
-    if ! [ -d "${LUA_SRC}_${PLATFORM}" ]; then cp -rp ${LUA_SRC} "${LUA_SRC}_${PLATFORM}"; fi
-    LUA_SRC=${LUA_SRC}_${PLATFORM}
     echo "## LUA_SRC=$LUA_SRC"
+
+    make -C $LUA_SRC clean
     make -C $LUA_SRC all PLAT=linux CC="gcc -m64" -j$CORE_NUM
     make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH
 }
 
 function build_jpeg()
 {
-    if ! [ -d "${JPEG_SRC}_${PLATFORM}" ]; then cp -rp ${JPEG_SRC} "${JPEG_SRC}_${PLATFORM}"; fi
-    JPEG_SRC=${JPEG_SRC}_${PLATFORM}
-    echo "## SDL2_SRC=$JPEG_SRC"
-    pushd $JPEG_SRC
-    ./configure --host=x86_64-linux-gnu \
+    if ! [ -d "${JPEG_SRC}/build_${PLATFORM}" ]; then mkdir -p "${JPEG_SRC}/build_${PLATFORM}"; fi
+    echo "## JPEG_SRC=$JPEG_SRC"
+
+    export CFLAGS="-m64"
+    pushd "${JPEG_SRC}/build_${PLATFORM}"
+    ../configure --host=x86_64-linux-gnu \
         --prefix=$PORTBUILD_PATH
     make -j$CORE_NUM && make install 
     popd
@@ -23,21 +24,23 @@ function build_jpeg()
 
 function build_bz2()
 {
-    if ! [ -d "${BZ2_SRC}_${PLATFORM}" ]; then cp -rp ${BZ2_SRC} "${BZ2_SRC}_${PLATFORM}"; fi
-    BZ2_SRC=${BZ2_SRC}_${PLATFORM}
     echo "## BZ2_SRC=$BZ2_SRC"
+    
+    make -C $BZ2_SRC clean
     make -C $BZ2_SRC all CC="gcc -m64" -j$CORE_NUM
     make -C $BZ2_SRC install PREFIX=$PORTBUILD_PATH
 }
 
-function build_sdl2() # after pulse
+function build_sdl2()
 {
-    if ! [ -d "${SDL2_SRC}_${PLATFORM}" ]; then cp -rp ${SDL2_SRC} "${SDL2_SRC}_${PLATFORM}"; fi
-    SDL2_SRC=${SDL2_SRC}_${PLATFORM}
+    if ! [ -d "${SDL2_SRC}/build_${PLATFORM}" ]; then mkdir -p "${SDL2_SRC}/build_${PLATFORM}"; fi
     echo "## SDL2_SRC=$SDL2_SRC"
-    pushd $SDL2_SRC
-    export LDFLAGS="-L$PORTBUILD_PATH/lib"
-    ./configure --host=x86_64-linux-gnu \
+
+    export CFLAGS="-Os"
+    export CXXFLAGS="-Os"
+    pushd "${SDL2_SRC}/build_${PLATFORM}"
+    ../configure --host=x86_64-linux-gnu \
+        "CFLAGS=-m64" "CXXFLAGS=-m64" "LDFLAGS=-m64" \
         --disable-3dnow --disable-sse --disable-sse3 \
         --disable-video-wayland --disable-video-offscreen \
         --enable-video-x11  --enable-x11-shared  \
@@ -46,48 +49,50 @@ function build_sdl2() # after pulse
     popd
 }
 
-function build_sdl2_image() # after build_sdl2
+# after build_sdl2
+function build_sdl2_image() 
 {
-    if ! [ -d "${SDL2_IMAGE_SRC}_${PLATFORM}" ]; then cp -rp ${SDL2_IMAGE_SRC} "${SDL2_IMAGE_SRC}_${PLATFORM}"; fi
-    SDL2_IMAGE_SRC=${SDL2_IMAGE_SRC}_${PLATFORM}
+    if ! [ -d "${SDL2_IMAGE_SRC}/build_${PLATFORM}" ]; then mkdir -p "${SDL2_IMAGE_SRC}/build_${PLATFORM}"; fi
     echo "## SDL2_IMAGE_SRC=$SDL2_IMAGE_SRC"
 
-    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is inportant for find SDL path    
-    pushd $SDL2_IMAGE_SRC
-    ./configure --host=x86_64-linux-gnu \
+    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is important for find SDL path    
+    pushd "${SDL2_IMAGE_SRC}/build_${PLATFORM}"
+    ../configure --host=x86_64-linux-gnu \
+        "CFLAGS=-m64" "CXXFLAGS=-m64" "LDFLAGS=-m64" \
         --enable-stb_image \
         --prefix=$PORTBUILD_PATH
-    make -j$CORE_NUM &&  make install  # stb_image.h already included
+    make -j$CORE_NUM &&  make install
     popd
 }
 
-function build_sdl2_ttf() # after build_sdl2
+# after build_sdl2
+function build_sdl2_ttf() 
 {
-    if ! [ -d "${SDL2_TTF_SRC}_${PLATFORM}" ]; then cp -rp ${SDL2_TTF_SRC} "${SDL2_TTF_SRC}_${PLATFORM}"; fi
-    SDL2_TTF_SRC=${SDL2_TTF_SRC}_${PLATFORM}
+    if ! [ -d "${SDL2_TTF_SRC}/build_${PLATFORM}" ]; then mkdir -p "${SDL2_TTF_SRC}/build_${PLATFORM}"; fi
     echo "## SDL2_TTF_SRC=$SDL2_TTF_SRC"
 
-    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is inportant for find SDL path    
-    pushd $SDL2_TTF_SRC
-    ./configure --host=x86_64-linux-gnu \
+    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is important for find SDL path
+    # harfbuzz makes very large 
+    pushd "${SDL2_TTF_SRC}//build_${PLATFORM}" 
+    ../configure --host=x86_64-linux-gnu \
+        "CFLAGS=-m64" "CXXFLAGS=-m64" "LDFLAGS=-m64" \
         --disable-harfbuzz \
         --prefix=$PORTBUILD_PATH
-    make -j$CORE_NUM 
-    make install 
+    make -j$CORE_NUM && make install 
     popd
 }
 
-function build_sdl2_mixer() # after build_sdl2
+# after build_sdl2
+function build_sdl2_mixer() 
 {
-    if ! [ -d "${SDL2_MIXER_SRC}_${PLATFORM}" ]; then cp -rp ${SDL2_MIXER_SRC} "${SDL2_MIXER_SRC}_${PLATFORM}"; fi
-    SDL2_MIXER_SRC=${SDL2_MIXER_SRC}_${PLATFORM}
+    if ! [ -d "${SDL2_MIXER_SRC}/build_${PLATFORM}" ]; then mkdir -p "${SDL2_MIXER_SRC}/build_${PLATFORM}"; fi
     echo "## SDL2_MIXER_SRC=$SDL2_MIXER_SRC"
 
-    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is inportant for find SDL path    
-    pushd $SDL2_MIXER_SRC
-    ./configure --host=x86_64-linux-gnu \
+    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is important for find SDL path    
+    pushd "${SDL2_MIXER_SRC}/build_${PLATFORM}"
+    ../configure --host=x86_64-linux-gnu \
+        "CFLAGS=-m64" "CXXFLAGS=-m64" "LDFLAGS=-m64" \
         --prefix=$PORTBUILD_PATH
-    make -j$CORE_NUM 
-    make install 
+    make -j$CORE_NUM && make install 
     popd
 }

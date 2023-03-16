@@ -28,7 +28,7 @@ android {
             }
         }
         versionCode 3
-        versionName '0.7.2'
+        versionName '0.7.3'
     }
     signingConfigs {
         release {
