@@ -15,12 +15,9 @@
                 "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceRoot}\\build_mingw32"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/asset",
-            "environment": [
-                {"name": "msys2sdk", "value": "D:/Software/env/msys2"},
-            ],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "D:/Software/env/msys2/mingw32/bin/gdb.exe",
+            "miDebuggerPath": "${env:MSYS2_HOME}/mingw32/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "cppdbg GDB launch (Windows) start!",
@@ -40,12 +37,9 @@
                 "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/save"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/asset",
-            "environment": [
-                {"name": "msys2sdk", "value": "D:/Software/env/msys2"},
-            ],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "D:/Software/env/msys2/mingw64/bin/gdb.exe",
+            "miDebuggerPath": "${env:MSYS2_HOME}/mingw64/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "cppdbg GDB launch (Windows) start!",

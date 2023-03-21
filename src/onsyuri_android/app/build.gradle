@@ -32,8 +32,8 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('sign.jks')
             def signPropsFile = file('sign.properties')
+            storeFile file('sign.jks')
             if (signPropsFile.exists()) {
                 Properties signProps = new Properties()
                 signProps.load(new FileInputStream(signPropsFile))
@@ -53,12 +53,16 @@ android {
             minifyEnabled true // this may cause jni crash
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if(file('sign.properties').exists() || System.getenv("SIGN_KEY_ALIAS")) {
+                signingConfig signingConfigs.release
+            }
         }
         debug {
             minifyEnabled false
             debuggable true
-            signingConfig signingConfigs.release
+            if(file('sign.properties').exists() || System.getenv("SIGN_KEY_ALIAS")) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 

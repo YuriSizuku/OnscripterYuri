@@ -1,8 +1,7 @@
 {
     "env": { // edit your env here
-        "msys2sdk": "D:/Software/env/msys2",
-        "vitasdk": "D:/Software/env/sdk/psvsdk",
-        "emsdk": "D:/software/env/sdk/emsdk"
+        "msys2sdk": "${env:MSYS2_HOME}",
+        "emsdk": "${env:EMSDK_HOME}"
     },
     "configurations": [
         {
@@ -47,9 +46,8 @@
             "name": "Linux64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
-                "/usr/include",
-                "/usr/include/SDL2",
-                "/usr/include/lua5.3"
+                "${workspaceFolder}/thirdparty/build/arch_linux64/include",
+                "/usr/include"
             ],
             "defines": [
                 "LINUX",
