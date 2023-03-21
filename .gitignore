@@ -6,6 +6,7 @@ build/**
 build_*/**
 thirdparty/**
 script/*.json
+save
 
 # android
 local.properties
