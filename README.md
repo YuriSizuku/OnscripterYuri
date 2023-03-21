@@ -234,8 +234,15 @@ just build libraries in the target machine, and use these build cache to link.
 Install the dependency for aarch64 cross compiler,  
 
 ``` shell
-# install in the target machine
-sudo apt-get -y install libx11-dev libxext-dev libasound2-dev
+# install in the target machine, aarch64
+sudo apt-get -y install libx11-dev libxext-dev libasound2-dev 
+sudo apt-get -y install libgl1-mesa-dev mesa-utils
+
+# install in the target machine, armhf (if you want to run armhf in aarch64)
+sudo dpkg --add-architecture armhf && sudo apt-get update
+sudo apt-get -y install libc6:armhf 
+sudo apt-get -y install libx11-dev:armhf libxext-dev:armhf libasound2-dev:armhf 
+sudo apt-get -y install libgl1-mesa-dev:armhf mesa-utils:armhf
 
 # install in the local machine
 sudo apt-get -y install tar make cmake curl git
