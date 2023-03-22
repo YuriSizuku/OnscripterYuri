@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win(x86|x64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&style=flat-square)
 
-☘️ An ehancement Onscripter porting to many platforms, especially **web** ！  
+☘️ An enhancement ONScripter project porting to many platforms, especially **web** ！  
 We also support for `windows`, `linux`, `android` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
 Online Demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [luasnow](https://blog.schnee.moe/static/luasnow.html), [noesis1 (lazyload)](https://onsgame.netlify.app/game/noesis1/)  
@@ -19,6 +19,7 @@ New features :
   - [x] scripts to compile or cross compile without pain
   - [x] vscode and android studio project for multi enviroment
   - [x] ci in github action to automaticly build  
+  - [x] use docker to build for all platform
 - platform
   - [x] windows
     - [x] x86, x64 (local or cross compile by mingw, static link)  
@@ -199,7 +200,7 @@ sudo apt-get -y install liblua5.3-dev libgl1-mesa-dev
 # linux32
 sudo dpkg --add-architecture i386 
 sudo apt-get update
-sudo apt-get -y install gcc-multilib g++-multilib
+sudo apt-get -y install gcc-multilib g++-multilib 
 sudo apt-get -y install libsdl2-dev:i386 libsdl2-ttf-dev:i386 libsdl2-image-dev:i386 libsdl2-mixer-dev:i386
 sudo apt-get -y install libbz2-dev:i386 libjpeg-dev:i386 libpng-dev:i386
 sudo apt-get -y install liblua5.3-dev:i386 libgl1-mesa-dev:i386
@@ -228,6 +229,7 @@ sh -c "export BUILD_TYPE=Debug && export EMCSDK=/path/to/emsdk && ./cross_web.sh
 This is aimed for raspberrypi or the other arm64 devices cross compiling.
 As there are many system bindings in SDL2,  
 just build libraries in the target machine, and use these build cache to link.  
+Or you can use `docker_linuxarm64.sh` for cross compile.  
 
 ![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
 
@@ -289,6 +291,15 @@ cd -
 # use ANDROID_HOME or local.properties for sdk
 cd src/onsyuri_android/
 chmod +x ./gradlew && ./gradlew assembleDebug
+```
+
+### (7) cross by docker  
+
+You can easily build all supported platforms by docker, see `docker/docker_xxx.sh` in detail.
+If you want to build for linux arm in x86 platform, install qemu at first.  
+
+```  shell
+sudo apt-get install qemu-user-static binfmt-support
 ```
 
 ## 3. Compatibility  

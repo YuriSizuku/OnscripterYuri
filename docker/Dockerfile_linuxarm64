@@ -1,0 +1,10 @@
+FROM --platform=aarch64  debian:bullseye
+MAINTAINER devseed
+
+RUN  dpkg --add-architecture armhf && apt-get -y update \
+    && apt-get -y install make cmake tar git wget curl \
+    && apt-get -y install build-essential crossbuild-essential-armhf\
+    && apt-get -y install libx11-dev libxext-dev libasound2-dev \
+    && apt-get -y install libgl1-mesa-dev mesa-utils \ 
+    && apt-get -y install libx11-dev:armhf libxext-dev:armhf libasound2-dev:armhf \
+    && apt-get -y install libgl1-mesa-dev:armhf mesa-utils:armhf

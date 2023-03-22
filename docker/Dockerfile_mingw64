@@ -1,0 +1,6 @@
+FROM debian:bullseye
+MAINTAINER devseed
+
+RUN  apt-get -y update \
+    && apt-get -y install make cmake tar git wget curl \
+    && apt-get -y install mingw-w64 zstd pkg-config

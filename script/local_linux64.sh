@@ -16,7 +16,7 @@ if [ -z "$TARGETS" ]; then TARGETS=all; fi
 # USE_STATIC_PORTS=yes
 # SKIP_PORTS=yes
 echo "BUILD_TYPE=$BUILD_TYPE"
-if [ -n "USE_STATIC_PORTS" ]; then
+if [ -n "$USE_STATIC_PORTS" ]; then
     echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
     if [ -z "$SKIP_PORTS" ]; then
         source _fetch.sh

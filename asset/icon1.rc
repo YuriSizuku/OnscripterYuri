@@ -1,1 +1,24 @@
 IDI_ICON1 ICON "icon1.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "CompanyName", "YuriSizuku"
+      VALUE "FileDescription", "An enhancement ONScripter project porting to many platforms, especially web"
+      VALUE "FileVersion", "0.7.3"
+      VALUE "InternalName", "onsyuri"
+      VALUE "OriginalFilename", "onsyuri.exe"
+      VALUE "ProductName", "ONScripterYuri"
+      VALUE "ProductVersion", "0.7.3"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END
