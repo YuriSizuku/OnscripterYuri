@@ -1,0 +1,42 @@
+{
+    "$schema": "https://ghproxy.com/raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "builtin-baseline": "a7b6122f6b6504d16d96117336a0562693579933",
+    "dependencies": [
+        {
+            "name": "sdl2"
+        },
+        {
+            "name": "bzip2"
+        },
+        {
+            "name": "libjpeg-turbo"
+        },
+        {
+            "name": "sdl2-image",
+            "features": [
+                "libjpeg-turbo",
+                "libwebp"
+            ]
+        },
+        {
+            "name": "sdl2-mixer",
+            "features": [
+                "libvorbis"
+            ]
+        },
+        {
+            "name": "sdl2-ttf",
+            "features": [
+                "harfbuzz"
+            ]
+        },
+        {
+            "name": "lua"
+        },
+        {
+            "name": "libogg"
+        }
+    ],
+    "name": "onscripter-yuri",
+    "version": "0.1.0"
+}
