@@ -1,0 +1,19 @@
+FROM debian:bullseye
+MAINTAINER devseed
+
+ENV ANDROID_HOME /opt/sdk/androidsdk
+ENV CMDTOOL_URL  https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+
+RUN apt-get -y update \
+    && apt-get -y install tar git wget p7zip-full \
+    && apt-get -y install openjdk-11-jdk ninja-build
+RUN echo $ANDROID_HOME \
+    && mkdir -p $ANDROID_HOME \
+    && wget -P /tmp  $CMDTOOL_URL > /dev/nul \
+    && 7z x $(ls /tmp/*.zip) -o$ANDROID_HOME \
+    && rm -rf /tmp/*.zip 
+RUN cd $ANDROID_HOME/cmdline-tools/bin \
+    && yes | ./sdkmanager --sdk_root=$ANDROID_HOME --licenses \
+    && yes | ./sdkmanager --sdk_root=$ANDROID_HOME --install \
+        "build-tools;33.0.2" "cmake;3.22.1" \
+        "platform-tools" "platforms;android-31" "ndk;25.2.9519653"

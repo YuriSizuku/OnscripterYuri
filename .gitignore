@@ -14,6 +14,7 @@ src/onsyuri_android/.gradle
 src/onsyuri_android/local.properties
 src/onsyuri_android/.idea/caches
 src/onsyuri_android/.idea/libraries
+src/onsyuri_android/.idea/vcs.xml
 src/onsyuri_android/.idea/modules.xml
 src/onsyuri_android/.idea/workspace.xml
 src/onsyuri_android/.idea/navEditor.xml

@@ -1,0 +1,16 @@
+FROM debian:bullseye
+MAINTAINER devseed
+
+ENV EMSDK_HOME /opt/sdk/emsdk
+ENV EMSDK_VERSION 3.1.34
+
+RUN apt-get -y update \
+    && apt-get -y install make cmake tar xz-utils bzip2 git wget curl \
+    && apt-get -y install python3
+RUN echo $EMSDK_HOME $EMSDK_VERSION \
+    && mkdir -p $EMSDK_HOME \
+    && git clone https://github.com/emscripten-core/emsdk.git $EMSDK_HOME \
+    && cd $EMSDK_HOME  \
+    && ./emsdk install $EMSDK_VERSION \
+    && ./emsdk activate $EMSDK_VERSION \
+    && echo "source $EMSDK_HOME/emsdk_env.sh" > ~.bashrc
