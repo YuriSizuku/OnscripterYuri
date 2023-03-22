@@ -80,7 +80,7 @@ function(config_linux TARGET_NAME)
 
 endfunction()
 
-function(config_windows TARGET_NAME)
+function(config_windows_mingw TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -162,7 +162,7 @@ function(config_windows TARGET_NAME)
     endif()
 endfunction()
 
-function(config_windows2 TARGET_NAME)
+function(config_windows_mingw_2 TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -226,6 +226,68 @@ function(config_windows2 TARGET_NAME)
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
         imm32 winmm gdi32 user32 rpcrt4
     )
+endfunction()
+
+function(config_windows_msvc TARGET_NAME)
+    add_executable(${TARGET_NAME} WIN32 
+        ${ONSYURI_CODE}
+        ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
+    if(MSVC)
+        # get package with cpp package manager like vcpkg
+        find_package(Lua REQUIRED)
+        find_package(SDL2 CONFIG REQUIRED)
+        find_package(SDL2_image CONFIG REQUIRED)
+        find_package(SDL2_ttf CONFIG REQUIRED)
+        find_package(SDL2_mixer CONFIG REQUIRED)
+        find_package(BZip2 REQUIRED)
+        find_package(JPEG REQUIRED)
+
+        message("MSVC enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
+        if(CMAKE_BUILD_TYPE MATCHES "Debug")
+            message("generating debug configuration")
+            target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
+            target_compile_options(${TARGET_NAME} PRIVATE -g)
+            target_link_options(${TARGET_NAME} PRIVATE "/SUBSYSTEM:CONSOLE") 
+        else()
+            target_link_options(${TARGET_NAME} PRIVATE "/SUBSYSTEM:WINDOWS")
+        endif()
+
+        target_compile_definitions(${TARGET_NAME} PRIVATE 
+            _WIN32
+            USE_LUA
+            USE_PARALLEL
+            USE_BUILTIN_LAYER_EFFECTS
+            USE_GLES
+            USE_FILELOG
+        )
+
+        # currently (Windows 11), Windows only supports IA32 (x86) / AMD64 / ARM64
+        if(${CMAKE_VS_PLATFORM_NAME} STREQUAL "ARM64")
+            # ARM64
+            message("ARM NEON vector extension is enabled")
+            target_compile_definitions(${TARGET_NAME} PRIVATE 
+            USE_SIMD
+            USE_SIMD_ARM_NEON
+            )
+        else()
+            # x86(-64)
+            message("x86 SSE2 vector extension is enabled")
+            target_compile_definitions(${TARGET_NAME} PRIVATE 
+            USE_SIMD
+            USE_SIMD_X86_SSE2
+            )
+        endif()
+        # include
+        target_include_directories(${TARGET_NAME} PRIVATE ${LUA_INCLUDE_DIR})
+        target_link_libraries(${TARGET_NAME} PRIVATE ${JPEG_LIBRARIES})
+        # link
+        target_link_libraries(${TARGET_NAME} PRIVATE ${LUA_LIBRARIES})
+        target_link_libraries(${TARGET_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
+        target_include_directories(${TARGET_NAME} PRIVATE ${JPEG_INCLUDE_DIR})
+        target_link_libraries(${TARGET_NAME} PRIVATE BZip2::BZip2)
+    else()
+        message("Windows enviroment for ${TARGET_NAME} not supported!")
+    endif()
 endfunction()
 
 function(config_web TARGET_NAME)
@@ -302,10 +364,14 @@ function(config_platform TARGET_NAME)
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
         config_linux(${TARGET_NAME})
     elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
-        if (CMAKE_SYSROOT) 
-            config_windows2(${TARGET_NAME})
-        else() 
-            config_windows(${TARGET_NAME}) 
+        if(MSVC)
+            config_windows_msvc(${TARGET_NAME})
+        else()
+            if (CMAKE_SYSROOT) 
+                config_windows_mingw_2(${TARGET_NAME})
+            else() 
+                config_windows_mingw(${TARGET_NAME}) 
+            endif()
         endif()
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
         config_web(${TARGET_NAME})
