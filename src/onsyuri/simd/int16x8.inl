@@ -53,7 +53,11 @@ namespace simd {
 #ifdef USE_SIMD_X86_SSE2
     return _mm_packus_epi16(a, b);
 #elif USE_SIMD_ARM_NEON
+#ifdef _MSC_VER
+    return *reinterpret_cast<uint8x16*>(&vuzpq_u8(*reinterpret_cast<uint8x16_t*>(&static_cast<uint16x8_t>(a)), *reinterpret_cast<uint8x16_t*>(&static_cast<uint16x8_t>(b))));
+#else
     return vuzpq_u8(reinterpret_cast<uint8x16_t>(static_cast<uint16x8_t>(a)), reinterpret_cast<uint8x16_t>(static_cast<uint16x8_t>(b))).val[0];
+#endif
 #endif
   }
 
