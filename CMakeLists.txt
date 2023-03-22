@@ -241,6 +241,8 @@ function(config_windows_msvc TARGET_NAME)
         find_package(SDL2_mixer CONFIG REQUIRED)
         find_package(BZip2 REQUIRED)
         find_package(JPEG REQUIRED)
+        find_package(Ogg CONFIG REQUIRED)
+        find_package(Vorbis CONFIG REQUIRED)
 
         message("MSVC enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}")
         if(CMAKE_BUILD_TYPE MATCHES "Debug")
@@ -279,12 +281,36 @@ function(config_windows_msvc TARGET_NAME)
         endif()
         # include
         target_include_directories(${TARGET_NAME} PRIVATE ${LUA_INCLUDE_DIR})
-        target_link_libraries(${TARGET_NAME} PRIVATE ${JPEG_LIBRARIES})
-        # link
-        target_link_libraries(${TARGET_NAME} PRIVATE ${LUA_LIBRARIES})
-        target_link_libraries(${TARGET_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
         target_include_directories(${TARGET_NAME} PRIVATE ${JPEG_INCLUDE_DIR})
+        # link
+        target_link_libraries(${TARGET_NAME} PRIVATE ${JPEG_LIBRARIES})
+        target_link_libraries(${TARGET_NAME} PRIVATE Vorbis::vorbis)
+        target_link_libraries(${TARGET_NAME} PRIVATE Vorbis::vorbisfile)
+        target_link_libraries(${TARGET_NAME} PRIVATE Vorbis::vorbisenc)
+        target_link_libraries(${TARGET_NAME} PRIVATE Ogg::ogg)
+        target_link_libraries(${TARGET_NAME} PRIVATE ${LUA_LIBRARIES})
+        target_link_libraries(${TARGET_NAME}
+            PRIVATE
+            $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+            $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+        )
+        target_link_libraries(${TARGET_NAME}
+            PRIVATE
+            $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
+        )
+        target_link_libraries(${TARGET_NAME}
+            PRIVATE
+            $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
+        )
+        target_link_libraries(${TARGET_NAME}
+            PRIVATE
+            $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
+        )
         target_link_libraries(${TARGET_NAME} PRIVATE BZip2::BZip2)
+        
+        # use /MT
+        set_property(TARGET ${TARGET_NAME} PROPERTY
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     else()
         message("Windows enviroment for ${TARGET_NAME} not supported!")
     endif()
