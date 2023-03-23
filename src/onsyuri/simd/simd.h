@@ -46,7 +46,11 @@
 #endif
 
 #ifdef USE_SIMD_ARM_NEON
+#ifdef _M_ARM64
+#include <arm64_neon.h>
+#else
 #include <arm_neon.h>
+#endif
 #endif
 
 #ifdef __GNUC__
