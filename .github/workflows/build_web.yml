@@ -48,6 +48,7 @@ jobs:
       run: cd script && export EMCSDK=${{ env.EMCSDK }} && bash ./cross_web.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_web
         mkdir ${{ env.BUILD_NAME }} 

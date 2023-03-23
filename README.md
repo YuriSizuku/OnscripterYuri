@@ -23,6 +23,7 @@ New features :
 - platform
   - [x] windows
     - [x] x86, x64 (local or cross compile by mingw, static link)  
+    - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
     - [x] lua script and animation  
     - [x] video by system player
   - [x] linux
@@ -322,4 +323,4 @@ sudo apt-get install qemu-user-static binfmt-support
 ## 5. Todo  
 
 - ~~video support (future plan)~~  partly finish by invoke system player  
-- web preloading (future plan)  
+- ~~web preloading (future plan)~~ might not need ? lazyload partly solved
