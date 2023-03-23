@@ -45,15 +45,17 @@ jobs:
     - name: build onsyuri_x86_linux
       run: |
         cd script 
-        export SKIP_PORTS=yes && USE_STATIC_PORTS=yes && bash ./local_linux32.sh
+        export SKIP_PORTS=yes && export USE_STATIC_PORTS=yes && bash ./local_linux32.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_linux32 
         mv onsyuri onsyuri_${{  github.ref_name }}_x86_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
         artifacts: "./build_linux32/onsyuri_${{  github.ref_name }}_x86_linux"
         allowUpdates: "true"
@@ -74,15 +76,17 @@ jobs:
     - name: build onsyuri_x64_linux
       run: |
         cd script 
-        export SKIP_PORTS=yes && USE_STATIC_PORTS=yes && bash ./local_linux64.sh
+        export SKIP_PORTS=yes && export USE_STATIC_PORTS=yes && bash ./local_linux64.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_linux64 
         mv onsyuri onsyuri_${{  github.ref_name }}_x64_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
         artifacts: "./build_linux64/onsyuri_${{  github.ref_name }}_x64_linux"
         allowUpdates: "true"
@@ -111,12 +115,14 @@ jobs:
         export SKIP_PORTS=yes && bash ./cross_linuxa32.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_linuxa32 
         mv onsyuri onsyuri_${{  github.ref_name }}_arm32_linux
       
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
         artifacts: "./build_linuxa32/onsyuri_${{  github.ref_name }}_arm32_linux"
         allowUpdates: "true"
@@ -145,6 +151,7 @@ jobs:
         export SKIP_PORTS=yes && bash ./cross_linuxa64.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_linuxa64 
         mv onsyuri onsyuri_${{  github.ref_name }}_arm64_linux

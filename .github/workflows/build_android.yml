@@ -26,6 +26,7 @@ jobs:
       run: cd script && bash ./cross_android.sh
 
     - name: prepare to release
+      if: github.event_name == 'push'
       run: cp ./build_android/outputs/apk/release/*.apk onsyuri_${{  github.ref_name }}_android.apk
     
     - name: create release

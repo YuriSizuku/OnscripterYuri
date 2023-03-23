@@ -48,12 +48,14 @@ jobs:
         export SKIP_PORTS=yes && bash ./cross_mingw32.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_mingw32 
         mv onsyuri.exe onsyuri_${{  github.ref_name }}_x86_win.exe
       
     - name: create release
       uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
       with:
         artifacts: "./build_mingw32/onsyuri_${{  github.ref_name }}_x86_win.exe"
         allowUpdates: "true"
@@ -82,6 +84,7 @@ jobs:
         export SKIP_PORTS=yes && bash ./cross_mingw64.sh
     
     - name: prepare release
+      if: github.event_name == 'push'
       run: |
         cd build_mingw64
         mv onsyuri.exe onsyuri_${{  github.ref_name }}_x64_win.exe
