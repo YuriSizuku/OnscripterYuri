@@ -6,6 +6,7 @@
 We also support for `windows`, `linux`, `android` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
 Online Demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [luasnow](https://blog.schnee.moe/static/luasnow.html), [noesis1 (lazyload)](https://onsgame.netlify.app/game/noesis1/)  
+PSV: [psv-OnscripterJH](https://github.com/YuriSizuku/psv-OnscripterJH/releases)  
 Android : [Google PlayStore](https://play.google.com/store/apps/details?id=com.yuri.onscripter)  
 Multi Platform: [github action release](https://github.com/YuriSizuku/OnscripterYuri/releases)  
 
@@ -47,6 +48,7 @@ New features :
   - [x] arbitary resolution `--width`, `--height`  
   - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
 - other
+  - [x]  support English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
   - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
   - [x] long click or touch to invoke menu  
 - onsjh bug fix  
@@ -122,7 +124,6 @@ onsyuri.js
 onsyuri.wasm
 onsyuri_index.json
 [your game files]
-
 ```
 
 ![onsyuri_mo2_webtest3](screenshot/onsyuri_mo2_webtest3.jpg)  
