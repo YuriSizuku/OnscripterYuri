@@ -4,11 +4,10 @@ project(onsyuri)
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     message("Linux enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
-    target_compile_definitions(${TARGET_NAME} PRIVATE 
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+        ${ONSYURI_DEFINES}
         LINUX
-        USE_LUA
         USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS
         USE_GLES
         USE_FILELOG
     )
@@ -95,13 +94,12 @@ function(config_windows_mingw TARGET_NAME)
             target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
         endif()
 
-        target_compile_definitions(${TARGET_NAME} PRIVATE 
+        target_compile_definitions(${TARGET_NAME} PRIVATE
+            ${ONSYURI_DEFINES}
             _WIN32
-            USE_LUA
             USE_PARALLEL
             USE_SIMD
             USE_SIMD_X86_SSE2
-            USE_BUILTIN_LAYER_EFFECTS
             USE_GLES
             USE_FILELOG
         )
@@ -162,7 +160,7 @@ function(config_windows_mingw TARGET_NAME)
     endif()
 endfunction()
 
-function(config_windows_mingw_2 TARGET_NAME)
+function(config_windows_mingw2 TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -188,12 +186,11 @@ function(config_windows_mingw_2 TARGET_NAME)
     set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
 
     # config compile 
-    target_compile_definitions(${TARGET_NAME} PRIVATE 
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+        ${ONSYURI_DEFINES}
         _WIN32
         XMD_H # fix jpeg IN32 problem in jmorecfg.h
-        USE_LUA
         USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS
         USE_GLES
         USE_FILELOG
     )
@@ -255,10 +252,9 @@ function(config_windows_msvc TARGET_NAME)
         endif()
 
         target_compile_definitions(${TARGET_NAME} PRIVATE 
+            ${ONSYURI_DEFINES}
             _WIN32
-            USE_LUA
             USE_PARALLEL
-            USE_BUILTIN_LAYER_EFFECTS
             USE_GLES
             USE_FILELOG
         )
@@ -268,15 +264,15 @@ function(config_windows_msvc TARGET_NAME)
             # ARM64
             message("ARM NEON vector extension is enabled")
             target_compile_definitions(${TARGET_NAME} PRIVATE 
-            USE_SIMD
-            USE_SIMD_ARM_NEON
+                USE_SIMD
+                USE_SIMD_ARM_NEON
             )
         else()
             # x86(-64)
             message("x86 SSE2 vector extension is enabled")
             target_compile_definitions(${TARGET_NAME} PRIVATE 
-            USE_SIMD
-            USE_SIMD_X86_SSE2
+                USE_SIMD
+                USE_SIMD_X86_SSE2
             )
         endif()
         # include
@@ -338,12 +334,11 @@ function(config_web TARGET_NAME)
     target_compile_options(${TARGET_NAME} PRIVATE 
         -Wno-invalid-source-encoding
     )
-    target_compile_definitions(${TARGET_NAME} PRIVATE 
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+        ${ONSYURI_DEFINES}
         WEB
         LINUX
-        USE_LUA
         USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS
     )
     target_link_libraries(${TARGET_NAME} PRIVATE
         lua
@@ -359,11 +354,10 @@ function(config_android TARGET_NAME)
         target_compile_options(${TARGET_NAME} PRIVATE -g)
     endif()
     
-    target_compile_definitions(${TARGET_NAME} PRIVATE 
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+        ${ONSYURI_DEFINES} 
         ANDROID
-        USE_LUA
         USE_PARALLEL
-        USE_BUILTIN_LAYER_EFFECTS
         USE_GLES
         USE_FILELOG
         UTF8_FILESYSTEM
@@ -394,7 +388,7 @@ function(config_platform TARGET_NAME)
             config_windows_msvc(${TARGET_NAME})
         else()
             if (CMAKE_SYSROOT) 
-                config_windows_mingw_2(${TARGET_NAME})
+                config_windows_mingw2(${TARGET_NAME})
             else() 
                 config_windows_mingw(${TARGET_NAME}) 
             endif()
@@ -452,5 +446,10 @@ set(ONSYURI_CODE
     src/onsyuri/builtin_dll/layer_snow.cpp
     src/onsyuri/builtin_dll/ONScripter_effect_cascade.cpp
     src/onsyuri/builtin_dll/ONScripter_effect_trig.cpp
+)
+set(ONSYURI_DEFINES
+    USE_LUA
+    USE_BUILTIN_LAYER_EFFECTS
+    ENABLE_1BYTE_CHAR
 )
 config_platform(${PROJECT_NAME})
