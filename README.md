@@ -5,7 +5,7 @@
 ☘️ An enhancement ONScripter project porting to many platforms, especially **web** ！  
 We also support for `windows`, `linux`, `android` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
-Online Demo: [lifegame](https://blog.schnee.moe/static/lifegame.html), [luasnow](https://blog.schnee.moe/static/luasnow.html), [noesis1 (lazyload)](https://onsgame.netlify.app/game/noesis1/)  
+Online Demo: [lifegame](https://onsgame.netlify.app/lifegame/), [luasnow](https://onsgame.netlify.app/luasnow/), [noesis1 (lazyload)](https://onsgame.netlify.app/noesis1/)  
 PSV: [psv-OnscripterJH](https://github.com/YuriSizuku/psv-OnscripterJH/releases)  
 Android : [Google PlayStore](https://play.google.com/store/apps/details?id=com.yuri.onscripter)  
 Multi Platform: [github action release](https://github.com/YuriSizuku/OnscripterYuri/releases)  
