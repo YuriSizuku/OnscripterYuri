@@ -111,6 +111,15 @@ You can either download the prebuild static elf from the [release](https://githu
 
 ![onsyuri_mo2_linuxtest](screenshot/onsyuri_mo2_linuxtest.jpg)  
 
+- Arch User Repository
+  
+  https://aur.archlinux.org/packages/onscripter-yuri
+  
+  ```
+  # for Arch based distributions, install directly from AUR.
+  yay -S onscripter-yuri
+  ```
+
 ### (3) web
 
 This project can run in a browser through hosted web server.  
