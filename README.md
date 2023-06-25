@@ -323,6 +323,13 @@ sudo apt-get install qemu-user-static binfmt-support
 - general  
   - ~~release file too big~~; This is because of static link all libraries for better compatibility. Partly solved by recomiple SDL libraries.  
 - windows  
+  - ~~windows fullscreen aliasing~~; This is because window high dpi scale problem, use `change high dpi setting` or edit reg as below:  
+  
+  ```bat
+  set app_name=onsyuri.exe
+  reg add "HKCU\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /t reg_sz /v "%~dp0%app_name%" /d "~ HIGHDPIAWARE" /f
+  ```  
+
 - linux  
 - android  
 - web  
