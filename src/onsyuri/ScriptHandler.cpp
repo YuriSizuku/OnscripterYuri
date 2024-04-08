@@ -1169,10 +1169,10 @@ void ScriptHandler::readConfiguration()
         SKIP_SPACE(buf);
         if (!strncmp( buf, "mode", 4 )){
             buf += 4;
-            if      (!strncmp( buf, "1024", 3 )){
+            if      (!strncmp( buf, "1024", 4 )){
                 screen_width  = 1024;
                 screen_height = 768;
-                buf += 3;
+                buf += 4;
             }
             else if (!strncmp( buf, "800", 3 )){
                 screen_width  = 800;
