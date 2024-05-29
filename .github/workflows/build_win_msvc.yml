@@ -112,7 +112,7 @@ jobs:
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
     - name: Set up CMake
-      run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -G "Visual Studio 16 2019" -A ${{env.CMAKE_ARCH}}
+      run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" -G "Visual Studio 16 2019" -A ${{env.CMAKE_ARCH}}
       
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -154,7 +154,7 @@ jobs:
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
     - name: Set up CMake
-      run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -G "Visual Studio 16 2019" -A ${{env.CMAKE_ARCH}}
+      run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" -G "Visual Studio 16 2019" -A ${{env.CMAKE_ARCH}}
       
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}

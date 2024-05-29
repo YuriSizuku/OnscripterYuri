@@ -7,6 +7,7 @@ build_*/**
 thirdparty/**
 script/*.json
 save
+vcpkg/**
 
 # android
 local.properties
