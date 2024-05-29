@@ -19,10 +19,7 @@
             ]
         },
         {
-            "name": "sdl2-mixer",
-            "features": [
-                "libvorbis"
-            ]
+            "name": "sdl2-mixer"
         },
         {
             "name": "sdl2-ttf",
