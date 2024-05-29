@@ -23,7 +23,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: 1c5a340f6e10985e2d92af174a68dbd15c1fa4e1
+        vcpkgGitCommitId: dee924de74e81388140a53c32a919ecec57d20ab
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
@@ -64,7 +64,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: 1c5a340f6e10985e2d92af174a68dbd15c1fa4e1
+        vcpkgGitCommitId: dee924de74e81388140a53c32a919ecec57d20ab
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `x64-windows-static`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
@@ -106,7 +106,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: 1c5a340f6e10985e2d92af174a68dbd15c1fa4e1
+        vcpkgGitCommitId: dee924de74e81388140a53c32a919ecec57d20ab
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
@@ -148,7 +148,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: 1c5a340f6e10985e2d92af174a68dbd15c1fa4e1
+        vcpkgGitCommitId: dee924de74e81388140a53c32a919ecec57d20ab
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
