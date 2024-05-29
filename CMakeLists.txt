@@ -259,7 +259,7 @@ function(config_windows_msvc TARGET_NAME)
             USE_FILELOG
         )
 
-        # currently (Windows 11), Windows only supports IA32 (x86) / AMD64 / ARM64
+        # currently (Windows 11), Windows only supports IA32 (x86) / AMD64 / ARM64 / ARM32
         if(${CMAKE_VS_PLATFORM_NAME} STREQUAL "ARM64")
             # ARM64
             message("ARM NEON vector extension is enabled")
@@ -267,6 +267,9 @@ function(config_windows_msvc TARGET_NAME)
                 USE_SIMD
                 USE_SIMD_ARM_NEON
             )
+        elseif(${CMAKE_VS_PLATFORM_NAME} STREQUAL "ARM")
+            # ARM32
+            message("No hardware vector extension is enabled")
         else()
             # x86(-64)
             message("x86 SSE2 vector extension is enabled")
