@@ -1,6 +1,6 @@
 {
     "$schema": "https://ghproxy.com/raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
-    "builtin-baseline": "dee924de74e81388140a53c32a919ecec57d20ab",
+    "builtin-baseline": "fba75d09065fcc76a25dcf386b1d00d33f5175af",
     "dependencies": [
         {
             "name": "sdl2"
