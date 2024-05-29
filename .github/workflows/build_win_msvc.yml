@@ -138,7 +138,7 @@ jobs:
       BUILD_TYPE: Release
       VCPKG_TRIPLET: arm-windows-static
       CMAKE_ARCH: ARM
-      defaults:
+    defaults:
       run:
         working-directory: ${{github.workspace}}
     steps:
