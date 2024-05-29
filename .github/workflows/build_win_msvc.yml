@@ -107,7 +107,7 @@ jobs:
       uses: lukka/run-vcpkg@v10.7
       with: 
         vcpkgGitCommitId: fba75d09065fcc76a25dcf386b1d00d33f5175af
-        runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]'
+        runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`, `--allow-unsupported`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
@@ -149,7 +149,7 @@ jobs:
       uses: lukka/run-vcpkg@v10.7
       with: 
         vcpkgGitCommitId: fba75d09065fcc76a25dcf386b1d00d33f5175af
-        runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]'
+        runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`, `--allow-unsupported`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
