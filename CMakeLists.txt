@@ -79,6 +79,45 @@ function(config_linux TARGET_NAME)
 
 endfunction()
 
+function(config_darwin TARGET_NAME)
+    add_executable(${TARGET_NAME} ${ONSYURI_CODE})
+    message("Darwin enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+            ${ONSYURI_DEFINES}
+            MACOSX
+            USE_PARALLEL
+            USE_GLES
+            USE_FILELOG
+    )
+    target_compile_options(${TARGET_NAME} PRIVATE
+            -Wno-deprecated-declarations
+            -Wno-invalid-source-encoding
+    )
+
+    include(FindPkgConfig)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
+    pkg_check_modules(LUA REQUIRED lua)
+
+    target_include_directories(${TARGET_NAME} PRIVATE
+            ${LUA_INCLUDE_DIRS}
+            ${SDL2_INCLUDE_DIRS}
+            ${SDL2_TTF_INCLUDE_DIRS}
+            ${SDL2_IMAGE_INCLUDE_DIRS}
+            ${SDL2_MIXER_INCLUDE_DIRS}
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE
+            bz2
+            ${LUA_LINK_LIBRARIES}
+            ${SDL2_LINK_LIBRARIES}
+            ${SDL2_TTF_LINK_LIBRARIES}
+            ${SDL2_IMAGE_LINK_LIBRARIES}
+            ${SDL2_MIXER_LINK_LIBRARIES}
+    )
+endfunction()
+
 function(config_windows_mingw TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
@@ -405,6 +444,8 @@ function(config_platform TARGET_NAME)
         )
     elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
         config_android(${TARGET_NAME})
+    elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+        config_darwin(${TARGET_NAME})
     else()
         message("${CMAKE_SYSTEM_NAME} enviroment for ${TARGET_NAME} not supported!")
     endif()
