@@ -181,15 +181,15 @@ int ONScripter::playWave(Mix_Chunk *chunk, int format, bool loop_flag, int chann
     if (!chunk) return -1;
 
     Mix_Pause( channel );
-    if ( wave_sample[channel] ) Mix_FreeChunk( wave_sample[channel] );
-    wave_sample[channel] = chunk;
-
     if      (channel == 0)               Mix_Volume( channel, voice_volume * MIX_MAX_VOLUME / 100 );
     else if (channel == MIX_BGM_CHANNEL) Mix_Volume( channel, music_volume * MIX_MAX_VOLUME / 100 );
     else                                 Mix_Volume( channel, se_volume * MIX_MAX_VOLUME / 100 );
 
     if ( !(format & SOUND_PRELOAD) )
-        Mix_PlayChannel( channel, wave_sample[channel], loop_flag?-1:0 );
+        Mix_PlayChannel( channel, chunk, loop_flag?-1:0 );
+
+    if ( wave_sample[channel] ) Mix_FreeChunk( wave_sample[channel] );
+    wave_sample[channel] = chunk;
 
     return 0;
 }
