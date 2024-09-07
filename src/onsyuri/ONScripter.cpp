@@ -80,9 +80,17 @@ void ONScripter::calcRenderRect() {
             screen_device_height = device_height;
         }
     }
-    
+
+#ifdef MACOSX
+    int width, height;
+    SDL_GetWindowSize(window, &width, &height);
+    screen_scale_ratio1 = (float)screen_width / width;
+    screen_scale_ratio2 = (float)screen_height / height;
+#else
     screen_scale_ratio1 = (float)screen_width / screen_device_width;
     screen_scale_ratio2 = (float)screen_height / screen_device_height;
+#endif
+
 
     // printf("## calcRenderRect screen %dx%d, screen_device %dx%d,  %.2f, %.2f\n", 
     //     screen_width, screen_height, 
