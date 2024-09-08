@@ -12,7 +12,8 @@ function(config_linux TARGET_NAME)
         USE_FILELOG
     )
     if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
-        target_link_options(${TARGET_NAME} PRIVATE "-s") 
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
     endif()
 
     if(STATIC_PORT_ROOT)
@@ -94,6 +95,11 @@ function(config_darwin TARGET_NAME)
             -Wno-invalid-source-encoding
     )
 
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-flto")
+    endif()
+
     include(FindPkgConfig)
     pkg_check_modules(SDL2 REQUIRED sdl2)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
@@ -130,6 +136,10 @@ function(config_windows_mingw TARGET_NAME)
             target_compile_options(${TARGET_NAME} PRIVATE -g)
             target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
         else()
+            if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+                target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+                target_link_options(${TARGET_NAME} PRIVATE "-flto")
+            endif()
             target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
         endif()
 
@@ -213,7 +223,8 @@ function(config_windows_mingw2 TARGET_NAME)
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
     else()
         if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
-            target_link_options(${TARGET_NAME} PRIVATE "-s") 
+            target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+            target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
         endif()
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
     endif()
@@ -360,7 +371,12 @@ function(config_web TARGET_NAME)
     target_include_directories(${TARGET_NAME} PRIVATE
         ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/include
     )
-    
+
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
+    endif()
+
     # pass flags for emcc
     set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
     set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
@@ -392,7 +408,12 @@ function(config_android TARGET_NAME)
         target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
         target_compile_options(${TARGET_NAME} PRIVATE -g)
     endif()
-    
+
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
+    endif()
+
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES} 
         ANDROID
