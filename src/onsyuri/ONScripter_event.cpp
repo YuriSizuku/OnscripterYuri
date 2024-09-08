@@ -399,10 +399,12 @@ void midiCallback( int sig )
 
 extern "C" void waveCallback( int channel )
 {
-    SDL_Event event;
-    event.type = ONS_CHUNK_EVENT;
-    event.user.code = channel;
-    SDL_PushEvent(&event);
+    if (!Mix_Playing(channel)) {
+        SDL_Event event;
+        event.type = ONS_CHUNK_EVENT;
+        event.user.code = channel;
+        SDL_PushEvent(&event);
+    }
 }
 
 bool ONScripter::trapHandler()
