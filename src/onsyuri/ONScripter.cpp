@@ -56,34 +56,43 @@ static void SDL_Quit_Wrapper()
 #include <emscripten.h>
 #endif
 
-void ONScripter::calcRenderRect() {
-
-    SDL_GetRendererOutputSize(renderer, &device_width, &device_height);
-
-    if((stretch_mode && fullscreen_mode)||(force_window_height && force_window_width)) {
-        screen_device_width = device_width;
-        screen_device_height = device_height;
+inline void alignAspectRatio(const int &sw, const int &sh, int &dw, int &dh) {
+    int swdh = sw * dh;
+    int dwsh = dw * sh;
+    if (swdh == dwsh) {
+        return;
+    }
+    if (swdh > dwsh) {
+        dh = (int)ceil(sh * ((float)dw / sw));
     }
     else {
-        int swdh = screen_width * device_height;
-        int dwsh = device_width * screen_height;
-        if (swdh == dwsh) {
-            screen_device_width = device_width;
-            screen_device_height = device_height;
-        }
-        else if (swdh > dwsh) {
-            screen_device_width = device_width;
-            screen_device_height = (int)ceil(screen_height * ((float)device_width / screen_width));
-        }
-        else {
-            screen_device_width = (int)ceil(screen_width * ((float)device_height / screen_height));
-            screen_device_height = device_height;
-        }
+        dw = (int)ceil(sw * ((float)dh / sh));
+    }
+}
+
+void ONScripter::calcRenderRect() {
+    int width, height;
+    SDL_GetRendererOutputSize(renderer, &width, &height);
+
+    screen_device_width = width;
+    screen_device_height = height;
+
+    bool shouldAlign = (!stretch_mode || !fullscreen_mode) && (!force_window_height || !force_window_width);
+
+    if (shouldAlign) {
+        alignAspectRatio(screen_width, screen_height, screen_device_width, screen_device_height);
     }
 
-#ifdef MACOSX
-    int width, height;
+    render_view_rect.x = (width - screen_device_width) / 2;
+    render_view_rect.y = (height - screen_device_height) / 2;
+    render_view_rect.w = screen_device_width;
+    render_view_rect.h = screen_device_height;
+
+#if defined(MACOSX) || defined(_WIN32)
     SDL_GetWindowSize(window, &width, &height);
+    if (shouldAlign) {
+        alignAspectRatio(screen_width, screen_height, width, height);
+    }
     screen_scale_ratio1 = (float)screen_width / width;
     screen_scale_ratio2 = (float)screen_height / height;
 #else
@@ -91,16 +100,10 @@ void ONScripter::calcRenderRect() {
     screen_scale_ratio2 = (float)screen_height / screen_device_height;
 #endif
 
-
-    // printf("## calcRenderRect screen %dx%d, screen_device %dx%d,  %.2f, %.2f\n", 
-    //     screen_width, screen_height, 
-    //     screen_device_width, screen_device_height, 
-    //     screen_scale_ratio1, screen_scale_ratio2);
-
-    render_view_rect.x = (device_width - screen_device_width) / 2;
-    render_view_rect.y = (device_height - screen_device_height) / 2;
-    render_view_rect.w = screen_device_width;
-    render_view_rect.h = screen_device_height;
+//     printf("## calcRenderRect screen %dx%d, screen_device %dx%d,  %.2f, %.2f\n",
+//         screen_width, screen_height,
+//         screen_device_width, screen_device_height,
+//         screen_scale_ratio1, screen_scale_ratio2);
 
 #if defined(USE_GLES)
     if (gles_renderer) {
