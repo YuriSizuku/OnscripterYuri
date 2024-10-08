@@ -247,6 +247,16 @@ void ONScripter::initSDL()
     Uint32 render_flag = SDL_RENDERER_ACCELERATED;
     if (vsync) render_flag |= SDL_RENDERER_PRESENTVSYNC;
     renderer = SDL_CreateRenderer(window, -1, render_flag);
+
+    if (renderer == NULL) {
+        utils::printError("Failed to use accelerated renderer, fallback to software...\n");
+        renderer = SDL_CreateRenderer(window, -1, 0);
+    }
+    if (renderer == NULL) {
+        utils::printError("Could not create renderer: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
     if(!stretch_mode && !(force_window_height && force_window_width))
     {
         // this prevents to stretch 
