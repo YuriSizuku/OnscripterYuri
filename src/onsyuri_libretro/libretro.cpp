@@ -160,7 +160,6 @@ retro_load_game(const struct retro_game_info* game)
         return false;
 
     char* gamedir = dirname(SDL_strdup(game->path));
-    ons.setArchivePath(gamedir);
     chdir(gamedir);
 
     apply_variables();
