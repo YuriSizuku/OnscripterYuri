@@ -1,11 +1,13 @@
 #include "SDL_libretro.h"
 #include "./deps/SDL/src/audio/SDL_sysaudio.h"
 #include "./deps/SDL/src/events/SDL_keyboard_c.h"
+#include "./deps/SDL/src/events/SDL_mouse_c.h"
 #include "./deps/SDL/src/video/SDL_sysvideo.h"
 
 static SDL_Surface* _surface = NULL;
 static SDL_Surface* _surface_real = NULL;
 static SDL_AudioDevice* _audio = NULL;
+static SDL_VideoDevice* _video = NULL;
 
 static int
 VideoInit(SDL_VideoDevice* device)
@@ -18,6 +20,7 @@ VideoInit(SDL_VideoDevice* device)
     mode.refresh_rate = 60;
     mode.driverdata = NULL;
     SDL_AddBasicVideoDisplay(&mode);
+    _video = device;
     return 0;
 }
 
@@ -80,8 +83,7 @@ UpdateWindowFramebuffer(SDL_VideoDevice* device,
                         int numrects)
 {
     for (int i = 0; i < numrects; i += 1) {
-        SDL_BlitSurface(
-                        _surface, (SDL_Rect*)&rects[i], _surface_real, (SDL_Rect*)&rects[i]);
+        SDL_BlitSurface(_surface, (SDL_Rect*)&rects[i], _surface_real, (SDL_Rect*)&rects[i]);
     }
     return 0;
 }
@@ -311,4 +313,16 @@ SDL_libretro_KeyboardCallback(bool down,
     };
     SDL_Scancode scancode = SDL_GetScancodeFromKey(keycodes[keycode]);
     SDL_SendKeyboardKey(down ? SDL_PRESSED : SDL_RELEASED, scancode);
+}
+
+void
+SDL_libretro_SendMouseMotion(int relative, int x, int y)
+{
+    SDL_SendMouseMotion(_video->grabbed_window, 0, relative, x, y);
+}
+
+void
+SDL_libretro_SendMouseButton(Uint8 state, Uint8 button)
+{
+    SDL_SendMouseButton(_video->grabbed_window, 0, state, button);
 }

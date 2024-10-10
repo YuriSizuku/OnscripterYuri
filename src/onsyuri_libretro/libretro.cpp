@@ -102,7 +102,7 @@ retro_get_system_info(struct retro_system_info* info)
 {
     info->need_fullpath = true;
     info->valid_extensions = "txt|dat|___";
-    info->library_version = "0.1";
+    info->library_version = "0.7.4+1";
     info->library_name = "onsyuri";
     info->block_extract = false;
 }
@@ -228,11 +228,62 @@ PumpJoypadEvents(void)
     }
 }
 
+static Uint8
+to_button(int16_t pressed)
+{
+    if (pressed == 1)
+        return SDL_BUTTON_LEFT;
+    if (pressed == 2)
+        return SDL_BUTTON_RIGHT;
+    return 0;
+}
+
+static void
+PumpMouseEvents(void)
+{
+    int width = ons.getWidth();
+    int height = ons.getHeight();
+    static int16_t x = 0;
+    static int16_t y = 0;
+    static int16_t pressed = 0;
+
+#define mouse(X) input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_##X)
+#define pointer(X) input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_##X)
+    int16_t _x = pointer(X);
+    int16_t _y = pointer(Y);
+    int16_t _pressed = 0;
+    while (input_state_cb(0, RETRO_DEVICE_POINTER, _pressed, RETRO_DEVICE_ID_POINTER_PRESSED))
+        _pressed += 1;
+    if (mouse(LEFT))
+        _pressed = 1;
+    if (mouse(RIGHT))
+        _pressed = 2;
+
+    _x = width * (_x + 0x7fff) / 0xffff;
+    _y = height * (_y + 0x7fff) / 0xffff;
+    if (x != _x || y != _y) {
+        x = _x;
+        y = _y;
+        SDL_libretro_SendMouseMotion(0, x, y);
+    }
+    if (pressed && !_pressed) {
+        SDL_libretro_SendMouseButton(SDL_RELEASED, to_button(pressed));
+        pressed = 0;
+    }
+    if (!pressed && _pressed) {
+        SDL_libretro_SendMouseButton(SDL_PRESSED, to_button(_pressed));
+        pressed = _pressed;
+    }
+#undef mouse
+#undef pointer
+}
+
 void
 retro_run(void)
 {
     input_poll_cb();
     PumpJoypadEvents();
+    PumpMouseEvents();
 
     SDL_libretro_RefreshVideo(video_cb);
     SDL_libretro_ProduceAudio(audio_batch_cb);
