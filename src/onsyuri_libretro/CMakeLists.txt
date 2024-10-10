@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(sdlpop-onscripter C CXX)
+project(onsyuri-libretro C CXX)
 option(LIBRETRO_STATIC "Statically link the libretro core" OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 11)
