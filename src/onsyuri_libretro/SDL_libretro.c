@@ -1,11 +1,15 @@
 #include "SDL_libretro.h"
+#include "SDL_image.h"
 #include "./deps/SDL/src/audio/SDL_sysaudio.h"
 #include "./deps/SDL/src/events/SDL_keyboard_c.h"
 #include "./deps/SDL/src/events/SDL_mouse_c.h"
 #include "./deps/SDL/src/video/SDL_sysvideo.h"
+#include "cursor_png.h"
 
-static SDL_Surface* _surface = NULL;
-static SDL_Surface* _surface_real = NULL;
+static SDL_Surface* _cursor = NULL;
+static SDL_Surface* _surface_fb = NULL;         // backbuffer
+static SDL_Surface* _surface_ons = NULL;        // updated screen
+static SDL_Surface* _surface_retro = NULL;      // screen with mouse cursor
 static SDL_AudioDevice* _audio = NULL;
 static SDL_VideoDevice* _video = NULL;
 
@@ -20,6 +24,11 @@ VideoInit(SDL_VideoDevice* device)
     mode.refresh_rate = 60;
     mode.driverdata = NULL;
     SDL_AddBasicVideoDisplay(&mode);
+
+    _cursor = IMG_Load_RW(SDL_RWFromConstMem(cursor_png, cursor_png_len), 1);
+    if (_cursor == NULL) {
+        return -1;
+    }
     _video = device;
     return 0;
 }
@@ -33,6 +42,7 @@ static void
 VideoFree(SDL_VideoDevice* device)
 {
     SDL_free(device);
+    SDL_FreeSurface(_cursor);
 }
 
 static void
@@ -43,8 +53,9 @@ PumpEvents(SDL_VideoDevice* device)
 void
 DestroyWindowFramebuffer(SDL_VideoDevice* device, SDL_Window* window)
 {
-    SDL_FreeSurface(_surface);
-    SDL_FreeSurface(_surface_real);
+    SDL_FreeSurface(_surface_fb);
+    SDL_FreeSurface(_surface_ons);
+    SDL_FreeSurface(_surface_retro);
 }
 
 int
@@ -62,16 +73,17 @@ CreateWindowFramebuffer(SDL_VideoDevice* device,
 
     /* Create a new one */
     SDL_GetWindowSizeInPixels(window, &w, &h);
-    _surface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
-    _surface_real = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
-    if (!_surface_real) {
+    _surface_fb = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
+    _surface_ons = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
+    _surface_retro = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
+    if (_surface_fb == NULL || _surface_ons == NULL || _surface_retro == NULL) {
         return -1;
     }
 
     /* Save the info and return! */
     *format = surface_format;
-    *pixels = _surface->pixels;
-    *pitch = _surface->pitch;
+    *pixels = _surface_fb->pixels;
+    *pitch = _surface_fb->pitch;
 
     return 0;
 }
@@ -83,7 +95,7 @@ UpdateWindowFramebuffer(SDL_VideoDevice* device,
                         int numrects)
 {
     for (int i = 0; i < numrects; i += 1) {
-        SDL_BlitSurface(_surface, (SDL_Rect*)&rects[i], _surface_real, (SDL_Rect*)&rects[i]);
+        SDL_BlitSurface(_surface_fb, (SDL_Rect*)&rects[i], _surface_ons, (SDL_Rect*)&rects[i]);
     }
     return 0;
 }
@@ -149,13 +161,26 @@ AudioBootStrap DUMMYAUDIO_bootstrap = { "libretro",
 void
 SDL_libretro_RefreshVideo(retro_video_refresh_t video_cb)
 {
-    if (_surface_real == NULL)
+    if (_surface_retro == NULL)
         return;
 
-    video_cb(_surface_real->pixels,
-             _surface_real->w,
-             _surface_real->h,
-             _surface_real->pitch);
+    SDL_Mouse *mouse = SDL_GetMouse();
+
+    if (mouse->cursor_shown) {
+        SDL_Rect mouse_rect = { mouse->x, mouse->y, _cursor->w, _cursor->h };
+        SDL_BlitSurface(_surface_ons, NULL, _surface_retro, NULL);
+        SDL_BlitSurface(_cursor, NULL, _surface_retro, &mouse_rect);
+
+        video_cb(_surface_retro->pixels,
+                 _surface_retro->w,
+                 _surface_retro->h,
+                 _surface_retro->pitch);
+    } else {
+        video_cb(_surface_ons->pixels,
+                 _surface_ons->w,
+                 _surface_ons->h,
+                 _surface_ons->pitch);
+    }
 }
 
 void
@@ -163,11 +188,8 @@ SDL_libretro_ProduceAudio(retro_audio_sample_batch_t audio_batch_cb)
 {
     if (_audio == NULL)
         return;
-
-    SDL_LockAudio();
     _audio->spec.callback(_audio, _audio->work_buffer, _audio->spec.size);
     audio_batch_cb((const int16_t*)_audio->work_buffer, _audio->spec.samples);
-    SDL_UnlockAudio();
 }
 
 void
