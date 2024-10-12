@@ -2,9 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-
 #include <string>
-
 #include "ONScripter.h"
 #include "SDL_libretro.h"
 #include "gbk2utf16.h"
@@ -19,6 +17,8 @@ static retro_input_state_t input_state_cb;
 static retro_audio_sample_batch_t audio_batch_cb;
 
 static SDL_Thread* game_thread;
+static bool classical_mouse = false;
+static double mouse_sensitivity = 1.0;
 
 ONScripter ons;
 Coding2UTF16* coding2utf16 = NULL;
@@ -53,6 +53,23 @@ retro_set_environment(retro_environment_t cb)
             .info = NULL,
             .values = { { "GBK" }, { "SHIFTJIS" }, { NULL } },
             .default_value = "GBK",
+        },
+        {
+            .key = "onsyuri_mouse_mode",
+            .desc = "Mouse Mode",
+            .info = NULL,
+            .values = { { "Touch" }, { "Classical" }, { NULL } },
+            .default_value = "Classical",
+        },
+        {
+            .key = "onsyuri_mouse_sensitivity",
+            .desc = "Classical Mouse Sensitivity",
+            .info = NULL,
+            .values = {
+                { "0.4" }, { "0.6" }, { "0.8" }, { "1.0" }, { "1.2" }, { "1.4" },
+                { "1.6" }, { "1.8" }, { "2.0" }, { "2.2" }, { "2.4" }, { "2.6 "},
+            },
+            .default_value = "1.0",
         },
         NULL,
     };
@@ -102,7 +119,7 @@ retro_get_system_info(struct retro_system_info* info)
 {
     info->need_fullpath = true;
     info->valid_extensions = "txt|dat|___";
-    info->library_version = "0.1";
+    info->library_version = "0.7.4+1";
     info->library_name = "onsyuri";
     info->block_extract = false;
 }
@@ -126,16 +143,26 @@ apply_variables()
 {
     struct retro_variable var = { 0 };
     var.key = "onsyuri_script_encoding";
-    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
-        if (coding2utf16 != NULL) {
-            delete coding2utf16;
-            coding2utf16 = NULL;
-        }
+    // Need restart to change the coding
+    if (coding2utf16 == NULL && environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         if (strcmp(var.value, "SHIFTJIS") == 0) {
             coding2utf16 = new SJIS2UTF16();
         } else {
             coding2utf16 = new GBK2UTF16();
         }
+    }
+    var.key = "onsyuri_mouse_mode";
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+        if (strcmp(var.value, "Classical") == 0) {
+            classical_mouse = true;
+        } else {
+            classical_mouse = false;
+        }
+    }
+    SDL_ShowCursor(classical_mouse ? SDL_ENABLE : SDL_DISABLE);
+    var.key = "onsyuri_mouse_sensitivity";
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+        mouse_sensitivity = SDL_atof(var.value);
     }
 }
 
@@ -160,7 +187,6 @@ retro_load_game(const struct retro_game_info* game)
         return false;
 
     char* gamedir = dirname(SDL_strdup(game->path));
-    ons.setArchivePath(gamedir);
     chdir(gamedir);
 
     apply_variables();
@@ -171,6 +197,8 @@ retro_load_game(const struct retro_game_info* game)
         log_cb(RETRO_LOG_ERROR, "Failed to initialize ONScripter.\n");
         return false;
     }
+
+    SDL_CaptureMouse(SDL_TRUE);
 
     struct retro_keyboard_callback keyboard = {
         .callback = SDL_libretro_KeyboardCallback,
@@ -229,11 +257,88 @@ PumpJoypadEvents(void)
     }
 }
 
+static Uint8
+pressed_to_button(int16_t pressed)
+{
+    if (pressed == 1)
+        return SDL_BUTTON_LEFT;
+    if (pressed == 2)
+        return SDL_BUTTON_RIGHT;
+    return 0;
+}
+
+static void
+PumpMouseEvents(void)
+{
+#define MOUSE(X) input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_##X)
+#define POINTER(X) input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_##X)
+    if (classical_mouse) {
+        static int16_t _left = 0;
+        static int16_t _right = 0;
+        int16_t dx     = MOUSE(X);
+        int16_t dy     = MOUSE(Y);
+        int16_t left  = MOUSE(LEFT);
+        int16_t right = MOUSE(RIGHT);
+
+        if (dx != 0 || dy != 0) {
+            SDL_libretro_SendMouseMotion(1, dx * mouse_sensitivity, dy * mouse_sensitivity);
+        }
+        if (left != _left) {
+            SDL_libretro_SendMouseButton(left ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_LEFT);
+            _left = left;
+        }
+        if (right != _right) {
+            SDL_libretro_SendMouseButton(right ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_RIGHT);
+            _right = right;
+        }
+    } else {
+        static int16_t _x = 0;
+        static int16_t _y = 0;
+        static int16_t _pressed = 0;
+
+        int width = ons.getWidth();
+        int height = ons.getHeight();
+        int16_t x = POINTER(X);
+        int16_t y = POINTER(Y);
+        int16_t pressed = 0;
+        while (input_state_cb(0, RETRO_DEVICE_POINTER, pressed,
+                              RETRO_DEVICE_ID_POINTER_PRESSED))
+            pressed += 1;
+        if (MOUSE(LEFT))
+            pressed = 1;
+        if (MOUSE(RIGHT))
+            pressed = 2;
+
+        x = width * (x + 0x7fff) / 0xffff;
+        y = height * (y + 0x7fff) / 0xffff;
+        if (x != _x || y != _y) {
+            SDL_libretro_SendMouseMotion(0, x, y);
+            _x = x;
+            _y = y;
+        }
+        if (pressed != _pressed) {
+            if (_pressed)
+                SDL_libretro_SendMouseButton(SDL_RELEASED, pressed_to_button(_pressed));
+            else
+                SDL_libretro_SendMouseButton(SDL_PRESSED, pressed_to_button(pressed));
+            _pressed = pressed;
+        }
+    }
+#undef MOUSE
+#undef POINTER
+}
+
 void
 retro_run(void)
 {
+    bool vupdated = false;
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &vupdated) && vupdated) {
+        apply_variables();
+    }
+
     input_poll_cb();
     PumpJoypadEvents();
+    PumpMouseEvents();
 
     SDL_libretro_RefreshVideo(video_cb);
     SDL_libretro_ProduceAudio(audio_batch_cb);
