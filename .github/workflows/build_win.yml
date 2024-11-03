@@ -22,7 +22,7 @@ jobs:
     - name: download thirdparty_build
       if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
       run: |
-        curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
+        curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.7.5beta/thirdparty_build.tar.gz -O
         tar xvzf thirdparty_build.tar.gz
 
   build_win32:
