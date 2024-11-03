@@ -73,7 +73,8 @@ inline void alignAspectRatio(const int &sw, const int &sh, int &dw, int &dh) {
 void ONScripter::calcRenderRect() {
     int width, height;
     SDL_GetRendererOutputSize(renderer, &width, &height);
-
+    device_width = width;
+    device_height = height;
     screen_device_width = width;
     screen_device_height = height;
 

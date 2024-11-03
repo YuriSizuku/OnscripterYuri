@@ -75,7 +75,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4
       with:
         name: onsyuri-${{env.VCPKG_TRIPLET}}
         path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
@@ -117,7 +117,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4
       with:
         name: onsyuri-${{env.VCPKG_TRIPLET}}
         path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
