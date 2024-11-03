@@ -1140,7 +1140,7 @@ bool ONScripter::keyPressEvent( SDL_KeyboardEvent *event )
     }
 
     if ( event_mode & ( WAIT_INPUT_MODE | WAIT_BUTTON_MODE ) ){
-        if ( event->keysym.sym == SDLK_f ){
+        if ( event->keysym.sym == SDLK_f ){ // alt+f for fullscreen
             if ( fullscreen_mode ) menu_windowCommand();
             else                   menu_fullCommand();
         }

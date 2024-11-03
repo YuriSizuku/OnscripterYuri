@@ -7,7 +7,7 @@ TARGETS=$@
 
 # config env
 source ./_fetch.sh
-if [ -z "$EMSDK" ]; then EMSDK=/d/Software/env/sdk/emsdk; fi
+if [ -z "$EMSDK" ]; then EMSDK=/d/Software/sdk/emsdk; fi
 if [ -n "$(uname -a | grep Msys)" ]; then # fix python problem in windows
     if [ -z "$MSYS2SDK" ]; then MSYS2SDK=/d/Software/env/msys2; fi
     PATH=$MSYS2SDK/mingw32/bin/:$PATH

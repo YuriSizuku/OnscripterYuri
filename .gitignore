@@ -1,4 +1,5 @@
 # general
+.vscode/settings.json
 asset/*test*/**
 asset/stdout.txt
 asset/stderr.txt
