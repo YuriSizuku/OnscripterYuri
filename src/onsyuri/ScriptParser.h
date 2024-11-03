@@ -275,6 +275,7 @@ protected:
     int screen_ratio1, screen_ratio2;
     int screen_width, screen_height;
     int screen_device_width, screen_device_height;
+    int device_width, device_height; // should keep this for android
     float screen_scale_ratio1, screen_scale_ratio2;
     SDL_Rect screen_rect;
     SDL_Rect render_view_rect;
