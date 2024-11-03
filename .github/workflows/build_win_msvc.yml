@@ -1,6 +1,7 @@
 name: build windows MSVC x86, x64, ARM64
 on:
   push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request: 
   
 permissions:
   contents: write
@@ -33,7 +34,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4
       with:
         name: onsyuri-${{env.VCPKG_TRIPLET}}
         path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}

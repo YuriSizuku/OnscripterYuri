@@ -8,6 +8,7 @@
             "name": "Mingw32",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
+                "${workspaceFolder}/thirdparty/build/arch_mingw32/include/**",
                 "${msys2sdk}/mingw32/include"
             ],
             "defines": [
@@ -26,6 +27,7 @@
             "name": "Mingw64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
+                "${workspaceFolder}/thirdparty/build/arch_mingw64/include/**",
                 "${msys2sdk}/mingw64/include"
             ],
             "defines": [

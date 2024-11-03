@@ -1,9 +1,11 @@
 # Onscripter-Yuri  
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win(x86|x64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&style=flat-square)
+![GitHub release](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web(wasm)&logo=firefox&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&&logo=android&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_mingw(x86|x64)&logo=mingww64&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win_msvc.yml?label=win_msvc(x86|x64|arm64)&logo=codeblocks&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&logo=linux&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_darwin.yml?label=mac(x64|arm64)&logo=apple&style=flat-square)
 
 ☘️ An enhancement ONScripter project porting to many platforms, especially **web** ！  
-We also support for `windows`, `linux`, `android` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
+We also support for `windows`, `linux`, `mac`, `android`, `retroarch` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
 Online Demo: [lifegame](https://onsgame.netlify.app/lifegame/), [luasnow](https://onsgame.netlify.app/luasnow/), [noesis1 (lazyload)](https://onsgame.netlify.app/noesis1/)  
 PSV: [psv-OnscripterJH](https://github.com/YuriSizuku/psv-OnscripterJH/releases)  
@@ -14,6 +16,45 @@ Multi Platform: [github action release](https://github.com/YuriSizuku/Onscripter
 
 New features :  
 
+- script
+  - [x] lua script and animation  
+  - [x]  support English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
+  - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
+  - [x] long click or touch to invoke menu  
+
+- render
+  - [x] fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
+  - [x] arbitary resolution `--width`, `--height`  
+  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
+
+- platform
+  - [x] windows
+    - [x] x86, x64 (local or cross compile by mingw, static link)  
+    - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
+    - [x] video by system player
+  - [x] linux
+    - [x] x86, x64 (local compile, static or dynamic link)
+    - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
+    - [x] retroarch (contributed by [iyzsong](https://github.com/iyzsong))
+  - [x] mac
+    - [x] x64, arm64 (local compile, contributed by [yujincheng08](https://github.com/yujincheng08))
+  - [x] web (by emscripten)
+    - [x] fs to save in indexdb
+    - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
+    - [x] mobile web with touch, with webui menu
+  - [x] android
+    - [x] SDK level above 21 (android 5.1, Lolipop)  
+    - [x] extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile), and scoped storage
+    - [x] non-english charactor in path
+    - [x] video by system player
+  - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
+
+- bugfix  
+  - [x] fix some bugs in origin version (can not read `00.txt` problem)  
+  - [x] fix lua animation problem
+  - [x] fix android onresume gles null pointer
+  - [x] fix android file stat problem (save not found)
+
 - develop
   - [x] clear camke project structure
   - [x] well documention for develop and usage
@@ -21,41 +62,6 @@ New features :
   - [x] vscode and android studio project for multi enviroment
   - [x] ci in github action to automaticly build  
   - [x] use docker to build for all platform
-- platform
-  - [x] windows
-    - [x] x86, x64 (local or cross compile by mingw, static link)  
-    - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
-    - [x] lua script and animation  
-    - [x] video by system player
-  - [x] linux
-    - [x] x86, x64 (local compile, static or dynamic link)
-    - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
-    - [x] lua scirpt and animation
-  - [x] web (by emscripten)
-    - [x] fs to save in indexdb
-    - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
-    - [x] lua script and animation
-    - [x] mobile web with touch, with webui menu
-  - [x] android
-    - [x] SDK level above 21 (android 5.1, Lolipop)  
-    - [x] extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile), and scoped storage
-    - [x] non-english charactor in path
-    - [x] lua script and animation  
-    - [x] video by system player
-  - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
-- render
-  - [x] fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
-  - [x] arbitary resolution `--width`, `--height`  
-  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
-- other
-  - [x]  support English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
-  - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
-  - [x] long click or touch to invoke menu  
-- onsjh bug fix  
-  - [x] fix some bugs in origin version (can not read `00.txt` problem)  
-  - [x] fix lua animation problem
-  - [x] fix android onresume gles null pointer
-  - [x] fix android file stat problem (save not found)
 
 ## 1. Usage
 
@@ -65,7 +71,7 @@ New features :
 ./onsyuri --help
 ./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf --enc:sjis
 ./onsyuri --width 1280 --height 720 --sharpness=3.1
-./onsyuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
+./onsyuri --fullscreen2 # fullscreen1 alt+f, fullscreen2 f10 (toggle stretch)
 
 Usage: onsyuri [option ...]
   -h, --help            show this help and exit
@@ -82,8 +88,8 @@ Usage: onsyuri [option ...]
       --window          start in windowed mode
       --width 1280      force window width
       --height 720      force window height
-      --fullscreen      start in fullscreen mode (alt+f4 or f11)
-      --fullscreen2     start in fullscreen mode with stretch (f10)
+      --fullscreen      start in fullscreen mode (alt+f or alt+enter)
+      --fullscreen2     start in fullscreen mode with stretch (f10 to toggle stretch)
       --sharpness 3.1    use gles to make image sharp
       --no-video        do not decode video
       --no-vsync        turn off vsync
@@ -113,12 +119,12 @@ You can either download the prebuild static elf from the [release](https://githu
 
 - Arch User Repository
   
-  https://aur.archlinux.org/packages/onscripter-yuri
-  
-  ```
-  # for Arch based distributions, install directly from AUR.
-  yay -S onscripter-yuri
-  ```
+  [aur onscripter-yuri](https://aur.archlinux.org/packages/onscripter-yuri)
+
+``` sh
+# for Arch based distributions, install directly from AUR.
+yay -S onscripter-yuri
+```
 
 ### (3) web
 
