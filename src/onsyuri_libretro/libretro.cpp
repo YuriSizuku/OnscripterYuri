@@ -138,13 +138,15 @@ retro_get_system_av_info(struct retro_system_av_info* info)
     info->timing.sample_rate = 44100.0;
 }
 
-static void
-apply_variables()
+void
+retro_init(void)
 {
+    enum retro_pixel_format pixfmt = RETRO_PIXEL_FORMAT_XRGB8888;
+    environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixfmt);
+
     struct retro_variable var = { 0 };
     var.key = "onsyuri_script_encoding";
-    // Need restart to change the coding
-    if (coding2utf16 == NULL && environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         if (strcmp(var.value, "SHIFTJIS") == 0) {
             coding2utf16 = new SJIS2UTF16();
         } else {
@@ -159,18 +161,10 @@ apply_variables()
             classical_mouse = false;
         }
     }
-    SDL_ShowCursor(classical_mouse ? SDL_ENABLE : SDL_DISABLE);
     var.key = "onsyuri_mouse_sensitivity";
     if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         mouse_sensitivity = SDL_atof(var.value);
     }
-}
-
-void
-retro_init(void)
-{
-    enum retro_pixel_format pixfmt = RETRO_PIXEL_FORMAT_XRGB8888;
-    environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixfmt);
 }
 
 static int
@@ -189,7 +183,6 @@ retro_load_game(const struct retro_game_info* game)
     char* gamedir = dirname(SDL_strdup(game->path));
     chdir(gamedir);
 
-    apply_variables();
     if (ons.openScript() != 0)
         return false;
 
@@ -199,6 +192,7 @@ retro_load_game(const struct retro_game_info* game)
     }
 
     SDL_CaptureMouse(SDL_TRUE);
+    SDL_ShowCursor(classical_mouse ? SDL_ENABLE : SDL_DISABLE);
 
     struct retro_keyboard_callback keyboard = {
         .callback = SDL_libretro_KeyboardCallback,
@@ -331,11 +325,6 @@ PumpMouseEvents(void)
 void
 retro_run(void)
 {
-    bool vupdated = false;
-    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &vupdated) && vupdated) {
-        apply_variables();
-    }
-
     input_poll_cb();
     PumpJoypadEvents();
     PumpMouseEvents();
