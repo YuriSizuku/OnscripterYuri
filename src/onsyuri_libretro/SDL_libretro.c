@@ -188,8 +188,10 @@ SDL_libretro_ProduceAudio(retro_audio_sample_batch_t audio_batch_cb)
 {
     if (_audio == NULL)
         return;
+    SDL_LockAudioDevice(_audio->id);
     _audio->spec.callback(_audio, _audio->work_buffer, _audio->spec.size);
     audio_batch_cb((const int16_t*)_audio->work_buffer, _audio->spec.samples);
+    SDL_UnlockAudioDevice(_audio->id);
 }
 
 void
