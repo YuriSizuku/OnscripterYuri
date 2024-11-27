@@ -273,6 +273,12 @@ void ONScripter::initSDL()
         texture_format = SDL_PIXELFORMAT_ABGR8888;
     max_texture_width = info.max_texture_width;
     max_texture_height = info.max_texture_height;
+    // pick a size limit for blt_texture when using the software renderer
+    if (max_texture_width == 0 || max_texture_height == 0) {
+        max_texture_width = 2048;
+        max_texture_height = 2048;
+    }
+
     SDL_RenderClear(renderer);
 
     underline_value = script_h.screen_height;
