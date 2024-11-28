@@ -183,6 +183,10 @@ retro_load_game(const struct retro_game_info* game)
     char* gamedir = dirname(SDL_strdup(game->path));
     chdir(gamedir);
 
+    // Ignore SDL_AUDIODRIVER and SDL_VIDEODRIVER.
+    SDL_SetHintWithPriority(SDL_HINT_AUDIODRIVER, "libretro", SDL_HINT_OVERRIDE);
+    SDL_SetHintWithPriority(SDL_HINT_VIDEODRIVER, "libretro", SDL_HINT_OVERRIDE);
+
     if (ons.openScript() != 0)
         return false;
 
