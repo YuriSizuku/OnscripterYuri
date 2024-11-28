@@ -128,6 +128,24 @@ VideoBootStrap DUMMY_bootstrap = {
 };
 
 static int
+audio_run(void *data)
+{
+    while (!SDL_AtomicGet(&_audio->shutdown)) {
+        if (SDL_AudioStreamAvailable(_audio->stream) < _audio->callbackspec.size) {
+            SDL_LockAudioDevice(_audio->id);
+            _audio->callbackspec.callback(_audio->callbackspec.userdata,
+                                          _audio->work_buffer,
+                                          _audio->callbackspec.size);
+            SDL_AudioStreamPut(_audio->stream, _audio->work_buffer, _audio->callbackspec.size);
+            SDL_UnlockAudioDevice(_audio->id);
+        } else {
+            SDL_Delay(10);      // 10ms = 100fps > 60fps
+        }
+    }
+    return 0;
+}
+
+static int
 AudioOpen(SDL_AudioDevice* device, const char* devname)
 {
     device->hidden = (void*)0x1;
@@ -138,6 +156,7 @@ AudioOpen(SDL_AudioDevice* device, const char* devname)
     device->spec.samples = 44100 / 60;
     SDL_CalculateAudioSpec(&device->spec);
     _audio = device;
+    SDL_CreateThread(audio_run, "audio", NULL);
     return 0;
 }
 
@@ -186,12 +205,11 @@ SDL_libretro_RefreshVideo(retro_video_refresh_t video_cb)
 void
 SDL_libretro_ProduceAudio(retro_audio_sample_batch_t audio_batch_cb)
 {
+    static int16_t buffer[2048]; // 2048 >= 44100 / 60 * 2
     if (_audio == NULL)
         return;
-    SDL_LockAudioDevice(_audio->id);
-    _audio->spec.callback(_audio, _audio->work_buffer, _audio->spec.size);
-    audio_batch_cb((const int16_t*)_audio->work_buffer, _audio->spec.samples);
-    SDL_UnlockAudioDevice(_audio->id);
+    SDL_AudioStreamGet(_audio->stream, buffer, _audio->spec.size);
+    audio_batch_cb(buffer, _audio->spec.samples);
 }
 
 void
