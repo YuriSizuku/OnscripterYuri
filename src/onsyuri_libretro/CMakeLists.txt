@@ -5,6 +5,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 11)
 
+include(CheckSymbolExists)
+check_symbol_exists(__ARM_NEON "stdint.h" HAVE_NEON)
+
 set(SOURCES
   libretro.cpp
   ../onsyuri/AnimationInfo.cpp
@@ -301,6 +304,9 @@ target_include_directories(onsyuri_libretro PRIVATE
 target_compile_definitions(onsyuri_libretro PRIVATE
    -DUSE_BUILTIN_LAYER_EFFECTS -DENABLE_1BYTE_CHAR
 )
+if (HAVE_NEON)
+  target_compile_definitions(onsyuri_libretro PRIVATE USE_SIMD USE_SIMD_ARM_NEON)
+endif ()
 
 # Follow naming conventions for libretro cores
 set_target_properties(onsyuri_libretro PROPERTIES PREFIX "")
