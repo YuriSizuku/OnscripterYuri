@@ -335,6 +335,19 @@ FILE *fopen_ons(const char *path, const char *mode)
     }
     return fp;
 }
+
+extern "C" void void playVideoWeb(const char *path, bool click_flag, bool loop_flag)
+{
+    EM_ASM(
+        var path = g_onsyuri_module.UTF8ToString($0);
+        playVideo(path, $1, $2);
+    ,path,click_flag,loop_flag);
+
+    while(EM_ASM_INT(return g_onsyuri_module.wait_video;))
+    {
+        SDL_Delay(5);
+    }
+}
 #endif
 
 void parseOption(int argc, char *argv[]) {
