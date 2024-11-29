@@ -373,7 +373,6 @@
                 if (video.src && video.src.startsWith('blob:')) {
                     URL.revokeObjectURL(video.src);
                     video.src='';
-                    console.log('Object URL revoked successfully.');
                 }
                 g_onsyuri_module.wait_video=false;
             }
