@@ -336,7 +336,7 @@ FILE *fopen_ons(const char *path, const char *mode)
     return fp;
 }
 
-extern "C" void void playVideoWeb(const char *path, bool click_flag, bool loop_flag)
+extern "C" void playVideoWeb(const char *path, bool click_flag, bool loop_flag)
 {
     EM_ASM(
         var path = g_onsyuri_module.UTF8ToString($0);

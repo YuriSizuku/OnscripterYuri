@@ -367,6 +367,7 @@
         
         <script type="text/javascript"> // onsyuri video 
             const video=document.getElementById("video");
+
             function videoEnded(){
                 g_onsyuri_module.canvas.style.display="block";
                 video.style.display="none";
@@ -392,6 +393,11 @@
 
                 video.play();
             }
+
+            video.addEventListener('error', function(event) {
+                console.error('The video failed to load: ', event);
+                videoEnded();
+            });
 
         </script>
 
