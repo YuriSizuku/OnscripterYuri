@@ -8,7 +8,8 @@
         <title>Onscripter Yuri v0.7.5</title>
     </head>
     <body style="margin: 0 auto; background-color:black;">
-        <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas>        
+        <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas> 
+        <video id="video" onended="videoEnded()" style="margin: 0 auto; display: none;"></video>        
         <script type="text/javascript"> // universe function
             function scale_full(docobj, ratio=0) {
                 var w = window.innerWidth;
@@ -364,6 +365,42 @@
             }
         </script>
         
+        <script type="text/javascript"> // onsyuri video 
+            const video=document.getElementById("video");
+
+            function videoEnded(){
+                g_onsyuri_module.canvas.style.display="block";
+                video.style.display="none";
+                if (video.src && video.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(video.src);
+                    video.src='';
+                }
+                g_onsyuri_module.wait_video=false;
+            }
+
+            function playVideo(path, click_flag, loop_flag){
+                g_onsyuri_module.wait_video=true;
+                const fileData = g_onsyuri_module.FS.readFile(path, {flags:'r',encoding:'binary'});
+                const videoBlob = new Blob([fileData.buffer], { type: 'video/mp4' });
+                const videoUrl = URL.createObjectURL(videoBlob);
+                video.src = videoUrl;
+
+                g_onsyuri_module.canvas.style.display="none";
+                video.style.display="block";
+
+                video.onclick=click_flag?videoEnded:null;
+                video.loop=loop_flag;
+
+                video.play();
+            }
+
+            video.addEventListener('error', function(event) {
+                console.error('The video failed to load: ', event);
+                videoEnded();
+            });
+
+        </script>
+
         <style>
             #onsyuri_webinfo {
                 position: fixed; 
