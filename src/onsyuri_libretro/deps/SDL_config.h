@@ -56,7 +56,7 @@
 #define HAVE_ALLOCA_H 1
 #define HAVE_CTYPE_H 1
 #define HAVE_FLOAT_H 1
-#define HAVE_ICONV_H 1
+/* #define HAVE_ICONV_H 1 */
 #define HAVE_INTTYPES_H 1
 #define HAVE_LIMITS_H 1
 #define HAVE_MALLOC_H 1
@@ -187,9 +187,9 @@
 #define HAVE_TANF 1
 #define HAVE_TRUNC 1
 #define HAVE_TRUNCF 1
-#define HAVE_FOPEN64 1
+/* #define HAVE_FOPEN64 1 */
 #define HAVE_FSEEKO 1
-#define HAVE_FSEEKO64 1
+/* #define HAVE_FSEEKO64 1 */
 #define HAVE_MEMFD_CREATE 1
 #define HAVE_POSIX_FALLOCATE 1
 #define HAVE_SIGACTION 1
@@ -201,7 +201,7 @@
 #define HAVE_CLOCK_GETTIME 1
 /* #undef HAVE_GETPAGESIZE */
 #define HAVE_MPROTECT 1
-#define HAVE_ICONV 1
+/* #define HAVE_ICONV 1 */
 /* #undef SDL_USE_LIBICONV */
 #define HAVE_PTHREAD_SETNAME_NP 1
 /* #undef HAVE_PTHREAD_SET_NAME_NP */

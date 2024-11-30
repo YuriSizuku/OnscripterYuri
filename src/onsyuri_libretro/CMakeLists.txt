@@ -48,6 +48,7 @@ set(SOURCES
 # configure SDL2 for libretro
 file(COPY deps/SDL_config.h DESTINATION ${CMAKE_SOURCE_DIR}/deps/SDL/include)
 file(COPY deps/SDL_dynapi.h DESTINATION ${CMAKE_SOURCE_DIR}/deps/SDL/src/dynapi)
+file(COPY deps/close_code.h DESTINATION ${CMAKE_SOURCE_DIR}/deps/SDL/include)
 
 # prepare <SDL2/*.h> headers directory for onsyuri
 file(CREATE_LINK ${CMAKE_SOURCE_DIR}/deps/SDL/include
@@ -302,7 +303,8 @@ target_include_directories(onsyuri_libretro PRIVATE
   ../onsyuri
 )
 target_compile_definitions(onsyuri_libretro PRIVATE
-   -DUSE_BUILTIN_LAYER_EFFECTS -DENABLE_1BYTE_CHAR
+   __LIBRETRO__
+   USE_BUILTIN_LAYER_EFFECTS ENABLE_1BYTE_CHAR
 )
 if (HAVE_NEON)
   target_compile_definitions(onsyuri_libretro PRIVATE USE_SIMD USE_SIMD_ARM_NEON)

@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
+
+#ifdef __ANDROID__
+#define DEFAULT_MOUSE_MODE "Touch"
+#else
+#define DEFAULT_MOUSE_MODE "Classical"
+#endif
+
 #include "ONScripter.h"
 #include "SDL_libretro.h"
 #include "gbk2utf16.h"
@@ -59,7 +66,7 @@ retro_set_environment(retro_environment_t cb)
             .desc = "Mouse Mode",
             .info = NULL,
             .values = { { "Touch" }, { "Classical" }, { NULL } },
-            .default_value = "Classical",
+            .default_value = DEFAULT_MOUSE_MODE,
         },
         {
             .key = "onsyuri_mouse_sensitivity",

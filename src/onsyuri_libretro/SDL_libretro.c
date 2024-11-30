@@ -19,8 +19,9 @@ VideoInit(SDL_VideoDevice* device)
     SDL_DisplayMode mode;
     SDL_zero(mode);
     mode.format = SDL_PIXELFORMAT_RGB888;
-    mode.w = 1920;
-    mode.h = 1080;
+    /* We set screen size in CreateWindowFramebuffer later */
+    mode.w = 1;
+    mode.h = 1;
     mode.refresh_rate = 60;
     mode.driverdata = NULL;
     SDL_AddBasicVideoDisplay(&mode);
@@ -84,6 +85,14 @@ CreateWindowFramebuffer(SDL_VideoDevice* device,
     *format = surface_format;
     *pixels = _surface_fb->pixels;
     *pitch = _surface_fb->pitch;
+
+    /* Set screen size to the same as window */
+    SDL_DisplayMode mode;
+    SDL_VideoDisplay* display = SDL_GetDisplayForWindow(window);
+    SDL_GetCurrentDisplayMode(SDL_GetIndexOfDisplay(display), &mode);
+    mode.w = w;
+    mode.h = h;
+    SDL_SetCurrentDisplayMode(display, &mode);
 
     return 0;
 }
