@@ -40,6 +40,10 @@ extern "C" void playVideoAndroid(const char *path);
 extern "C" void playVideoIOS(const char *filename, bool click_flag, bool loop_flag);
 #endif
 
+#if defined(WEB)
+extern "C" void playVideoWeb(const char *filename, bool click_flag, bool loop_flag);
+#endif
+
 #if defined(USE_AVIFILE)
 #include "AVIWrapper.h"
 #endif
@@ -373,6 +377,8 @@ int ONScripter::playMPEG(const char *filename, bool click_flag, bool loop_flag)
     playVideoIOS(absolute_filename, click_flag, loop_flag);
 #elif defined(ANDROID)
     playVideoAndroid(absolute_filename);
+#elif defined(WEB)
+    playVideoWeb(absolute_filename, click_flag, loop_flag);
 #else
     utils::printError( "mpegplay command is disabled.\n" );
 #endif
