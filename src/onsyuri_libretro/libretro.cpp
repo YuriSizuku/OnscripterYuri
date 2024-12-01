@@ -125,8 +125,8 @@ void
 retro_get_system_info(struct retro_system_info* info)
 {
     info->need_fullpath = true;
-    info->valid_extensions = "txt|dat|___";
-    info->library_version = "0.7.4+1";
+    info->valid_extensions = "txt|dat|___|nt2|nt3|ons|/";
+    info->library_version = "0.7.4+2";
     info->library_name = "onsyuri";
     info->block_extract = false;
 }
@@ -187,8 +187,12 @@ retro_load_game(const struct retro_game_info* game)
     if (!game)
         return false;
 
-    char* gamedir = dirname(SDL_strdup(game->path));
-    chdir(gamedir);
+    if (game->path[SDL_strlen(game->path) - 1] == '/') {
+        chdir(game->path);
+    } else {
+        char* gamedir = dirname(SDL_strdup(game->path));
+        chdir(gamedir);
+    }
 
     // Ignore SDL_AUDIODRIVER and SDL_VIDEODRIVER.
     SDL_SetHintWithPriority(SDL_HINT_AUDIODRIVER, "libretro", SDL_HINT_OVERRIDE);
