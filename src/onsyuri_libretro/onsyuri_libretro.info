@@ -1,11 +1,11 @@
 # Software Information
 display_name = "ONScripter Yuri"
-display_version = "0.7.4+1"
+display_version = "0.7.4+2"
 authors = "Studio O.G.A.|jh10001|YuriSizuku"
 categories = "Game engine"
 license = "GPLv2+"
 permissions = ""
-supported_extensions = "txt|dat|___|ons"
+supported_extensions = "txt|dat|___|nt2|nt3|ons|/"
 
 # Hardware Information
 manufacturer = "ONScripter"
