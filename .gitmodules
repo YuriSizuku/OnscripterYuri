@@ -13,3 +13,6 @@
 [submodule "src/onsyuri_libretro/deps/bzip2"]
 	path = src/onsyuri_libretro/deps/bzip2
 	url = https://github.com/libarchive/bzip2.git
+[submodule "src/onsyuri_libretro/deps/lua"]
+	path = src/onsyuri_libretro/deps/lua
+	url = https://github.com/lua/lua.git

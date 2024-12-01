@@ -283,6 +283,50 @@ target_include_directories(bzip2 PUBLIC
   deps/bzip2
 )
 
+add_library(lua STATIC
+  deps/lua/lapi.c
+  deps/lua/lcode.c
+  deps/lua/lctype.c
+  deps/lua/ldebug.c
+  deps/lua/ldo.c
+  deps/lua/ldump.c
+  deps/lua/lfunc.c
+  deps/lua/lgc.c
+  deps/lua/llex.c
+  deps/lua/lmem.c
+  deps/lua/lobject.c
+  deps/lua/lopcodes.c
+  deps/lua/lparser.c
+  deps/lua/lstate.c
+  deps/lua/lstring.c
+  deps/lua/ltable.c
+  deps/lua/ltm.c
+  deps/lua/lundump.c
+  deps/lua/lvm.c
+  deps/lua/lzio.c
+  deps/lua/ltests.c
+  deps/lua/lauxlib.c
+  deps/lua/lbaselib.c
+  deps/lua/ldblib.c
+  deps/lua/liolib.c
+  deps/lua/lmathlib.c
+  deps/lua/loslib.c
+  deps/lua/ltablib.c
+  deps/lua/lstrlib.c
+  deps/lua/lutf8lib.c
+  deps/lua/lbitlib.c
+  deps/lua/loadlib.c
+  deps/lua/lcorolib.c
+  deps/lua/linit.c
+)
+target_compile_definitions(lua PRIVATE
+  LUA_COMPAT_5_2
+)
+target_include_directories(lua PUBLIC
+  deps/lua
+)
+target_link_libraries(lua PUBLIC m)
+
 if (LIBRETRO_STATIC)
   add_library(onsyuri_libretro STATIC ${SOURCES})
 else ()
@@ -296,15 +340,17 @@ else ()
 endif ()
 
 target_link_libraries(onsyuri_libretro
-  bzip2 sdl2 sdl2_image sdl2_mixer sdl2_ttf
+  bzip2 sdl2 sdl2_image sdl2_mixer sdl2_ttf lua
 )
 
 target_include_directories(onsyuri_libretro PRIVATE
   ../onsyuri
+  deps
 )
 target_compile_definitions(onsyuri_libretro PRIVATE
    __LIBRETRO__
    USE_BUILTIN_LAYER_EFFECTS ENABLE_1BYTE_CHAR
+   USE_LUA
 )
 if (HAVE_NEON)
   target_compile_definitions(onsyuri_libretro PRIVATE USE_SIMD USE_SIMD_ARM_NEON)
