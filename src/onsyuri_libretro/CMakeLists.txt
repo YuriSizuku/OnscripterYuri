@@ -244,7 +244,7 @@ target_include_directories(sdl2_mixer PRIVATE
   deps/SDL_mixer/src/codecs
 )
 target_compile_definitions(sdl2_mixer PRIVATE
-  -DMUSIC_MP3_MINIMP3
+  -DMUSIC_WAV -DMUSIC_MP3_MINIMP3
   -DMUSIC_OGG -DOGG_USE_STB
 )
 target_link_libraries(sdl2_mixer sdl2)
