@@ -135,109 +135,32 @@ ONS_Key transKey(ONS_Key key)
     return key;
 }
 
-ONS_Key transJoystickButton(Uint8 button)
+ONS_Key transControllerButton(Uint8 button)
 {
-#if defined(PSP)    
-    SDLKey button_map[] = { SDLK_ESCAPE, /* TRIANGLE */
-                            SDLK_RETURN, /* CIRCLE   */
-                            SDLK_SPACE,  /* CROSS    */
-                            SDLK_RCTRL,  /* SQUARE   */
-                            SDLK_o,      /* LTRIGGER */
-                            SDLK_s,      /* RTRIGGER */
-                            SDLK_DOWN,   /* DOWN     */
-                            SDLK_LEFT,   /* LEFT     */
-                            SDLK_UP,     /* UP       */
-                            SDLK_RIGHT,  /* RIGHT    */
-                            SDLK_0,      /* SELECT   */
-                            SDLK_a,      /* START    */
-                            SDLK_UNKNOWN,/* HOME     */ /* kernel mode only */
-                            SDLK_UNKNOWN,/* HOLD     */};
-    return button_map[button];
-#elif defined(__PS3__)    
-    SDLKey button_map[] = {
-        SDLK_0,      /* SELECT   */
-        SDLK_UNKNOWN,/* L3       */
-        SDLK_UNKNOWN,/* R3       */
-        SDLK_a,      /* START    */
-        SDLK_UP,     /* UP       */
-        SDLK_RIGHT,  /* RIGHT    */
-        SDLK_DOWN,   /* DOWN     */
-        SDLK_LEFT,   /* LEFT     */
-        SDLK_SPACE,  /* L2       */
-        SDLK_RETURN, /* R2       */
-        SDLK_o,      /* L1       */
-        SDLK_s,      /* R1       */
-        SDLK_ESCAPE, /* TRIANGLE */
-        SDLK_RETURN, /* CIRCLE   */
-        SDLK_SPACE,  /* CROSS    */
-        SDLK_RCTRL,  /* SQUARE   */
-        SDLK_UNKNOWN,/* PS       */
-        SDLK_UNKNOWN,
-        SDLK_UNKNOWN,
+    ONS_Key button_map[SDL_CONTROLLER_BUTTON_MAX] = {
+        SDLK_RETURN,            /* A */
+        SDLK_ESCAPE,            /* B */
+        SDLK_RCTRL,             /* X */
+        SDLK_SPACE,             /* Y */
+        SDLK_0,                 /* BACK */
+        SDLK_UNKNOWN,           /* GUIDE */
+        SDLK_a,                 /* START */
+        SDLK_RCTRL,             /* LEFTSTICK */
+        SDLK_RETURN,            /* RIGHTSTICK */
+        SDLK_o,                 /* LEFTSHOULDER */
+        SDLK_s,                 /* RIGHTSHOULDER */
+        SDLK_UP,                /* DPAD_UP */
+        SDLK_DOWN,              /* DPAD_DOWN */
+        SDLK_LEFT,              /* DPAD_LEFT */
+        SDLK_RIGHT,             /* DPAD_RIGHT */
+        SDLK_UNKNOWN,           /* MISC1 */
+        SDLK_UNKNOWN,           /* PADDLE1 */
+        SDLK_UNKNOWN,           /* PADDLE2 */
+        SDLK_UNKNOWN,           /* PADDLE3 */
+        SDLK_UNKNOWN,           /* PADDLE4 */
+        SDLK_UNKNOWN,           /* TOUCHPAD */
     };
     return button_map[button];
-#elif defined(GP2X)
-    SDLKey button_map[] = {
-        SDLK_UP,      /* UP        */
-        SDLK_UNKNOWN, /* UPLEFT    */
-        SDLK_LEFT,    /* LEFT      */
-        SDLK_UNKNOWN, /* DOWNLEFT  */
-        SDLK_DOWN,    /* DOWN      */
-        SDLK_UNKNOWN, /* DOWNRIGHT */
-        SDLK_RIGHT,   /* RIGHT     */
-        SDLK_UNKNOWN, /* UPRIGHT   */
-        SDLK_a,       /* START     */
-        SDLK_0,       /* SELECT    */
-        SDLK_o,       /* L         */
-        SDLK_s,       /* R         */
-        SDLK_RCTRL,   /* A         */
-        SDLK_RETURN,  /* B         */
-        SDLK_SPACE,   /* X         */
-        SDLK_ESCAPE,  /* Y         */
-        SDLK_UNKNOWN, /* VOLUP     */
-        SDLK_UNKNOWN, /* VOLDOWN   */
-        SDLK_UNKNOWN, /* STICK     */
-    };
-    return button_map[button];
-#endif
-    return SDLK_UNKNOWN;
-}
-
-SDL_KeyboardEvent transJoystickAxis(SDL_JoyAxisEvent &jaxis)
-{
-    static int old_axis=-1;
-
-    SDL_KeyboardEvent event;
-
-    ONS_Key axis_map[] = {SDLK_LEFT,  /* AL-LEFT  */
-                         SDLK_RIGHT, /* AL-RIGHT */
-                         SDLK_UP,    /* AL-UP    */
-                         SDLK_DOWN   /* AL-DOWN  */};
-
-    int axis = -1;
-    /* rerofumi: Jan.15.2007 */
-    /* ps3's pad has 0x1b axis (with analog button) */
-    if (jaxis.axis < 2){
-        axis = ((3200 > jaxis.value) && (jaxis.value > -3200) ? -1 :
-                (jaxis.axis * 2 + (jaxis.value>0 ? 1 : 0) ));
-    }
-
-    if (axis != old_axis){
-        if (axis == -1){
-            event.type = SDL_KEYUP;
-            event.keysym.sym = axis_map[old_axis];
-        }
-        else{
-            event.type = SDL_KEYDOWN;
-            event.keysym.sym = axis_map[axis];
-        }
-        old_axis = axis;
-    }
-    else{
-        event.keysym.sym = SDLK_UNKNOWN;
-    }
-    
-    return event;
 }
 
 void ONScripter::flushEventSub( SDL_Event &event )
@@ -1360,12 +1283,31 @@ void ONScripter::runEventLoop()
             if (ret) return;
             break;
 #endif
-          case SDL_JOYBUTTONDOWN:
+
+          case SDL_CONTROLLERDEVICEADDED:
+            utils::printInfo("Open GameController %d\n", event.cdevice.which);
+            if (controller != NULL) {
+                SDL_GameControllerClose(controller);
+                controller = NULL;
+            }
+            controller = SDL_GameControllerOpen(event.cdevice.which);
+            break;
+
+          case SDL_CONTROLLERDEVICEREMOVED:
+            utils::printInfo("Close GameController %d\n", event.cdevice.which);
+            if (controller != NULL) {
+                SDL_GameControllerClose(controller);
+                controller = NULL;
+            }
+            break;
+
+          case SDL_CONTROLLERBUTTONDOWN:
             event.key.type = SDL_KEYDOWN;
-            event.key.keysym.sym = transJoystickButton(event.jbutton.button);
+            event.key.keysym.sym = transControllerButton(event.cbutton.button);
+            event.key.keysym.mod = 0;
             if(event.key.keysym.sym == SDLK_UNKNOWN)
                 break;
-            
+
           case SDL_KEYDOWN:
             event.key.keysym.sym = transKey(event.key.keysym.sym);
             ret = keyDownEvent( &event.key );
@@ -1374,35 +1316,19 @@ void ONScripter::runEventLoop()
             if (ret) return;
             break;
 
-          case SDL_JOYBUTTONUP:
+          case SDL_CONTROLLERBUTTONUP:
             event.key.type = SDL_KEYUP;
-            event.key.keysym.sym = transJoystickButton(event.jbutton.button);
+            event.key.keysym.sym = transControllerButton(event.cbutton.button);
+            event.key.keysym.mod = 0;
             if(event.key.keysym.sym == SDLK_UNKNOWN)
                 break;
-            
+
           case SDL_KEYUP:
             event.key.keysym.sym = transKey(event.key.keysym.sym);
             keyUpEvent( &event.key );
             ret = keyPressEvent( &event.key );
             if (ret) return;
             break;
-
-          case SDL_JOYAXISMOTION:
-          {
-              SDL_KeyboardEvent ke = transJoystickAxis(event.jaxis);
-              if (ke.keysym.sym != SDLK_UNKNOWN){
-                  if (ke.type == SDL_KEYDOWN){
-                      keyDownEvent( &ke );
-                      if (btndown_flag)
-                          keyPressEvent( &ke );
-                  }
-                  else if (ke.type == SDL_KEYUP){
-                      keyUpEvent( &ke );
-                      keyPressEvent( &ke );
-                  }
-              }
-              break;
-          }
 
           case ONS_TIMER_EVENT:
             timerEvent(false);
