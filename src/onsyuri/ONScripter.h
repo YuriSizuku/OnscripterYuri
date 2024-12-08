@@ -611,6 +611,7 @@ private:
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Texture *texture;
+    SDL_GameController *controller;
 
     void setCaption(const char *title, const char *iconstr = NULL);
     void setScreenDirty(bool screen_dirty);
