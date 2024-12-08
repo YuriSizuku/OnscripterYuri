@@ -154,8 +154,11 @@ void ONScripter::initSDL()
 #if defined(ANDROID)
     SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
 #endif
-    if(SDL_InitSubSystem( SDL_INIT_JOYSTICK ) == 0 && SDL_JoystickOpen(0) != NULL)
-        utils::printInfo("Initialize JOYSTICK\n");
+    if(SDL_InitSubSystem( SDL_INIT_GAMECONTROLLER ) == 0)
+        utils::printInfo("Initialize GAMECONTROLLER\n");
+    controller = SDL_GameControllerOpen(0);
+    if(controller != NULL)
+        utils::printInfo("GameController found\n");
 #endif
 
     /* ---------------------------------------- */

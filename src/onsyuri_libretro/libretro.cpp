@@ -300,6 +300,11 @@ PumpMouseEvents(void)
             SDL_libretro_SendMouseButton(right ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_RIGHT);
             _right = right;
         }
+
+        // Keep mouse within the window.
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        SDL_WarpMouseInWindow(NULL, x, y);
     } else {
         static int16_t _x = 0;
         static int16_t _y = 0;
