@@ -3,6 +3,7 @@ project(onsyuri)
 
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
+    install(TARGETS ${TARGET_NAME} RUNTIME)
     message("Linux enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
@@ -43,26 +44,25 @@ function(config_linux TARGET_NAME)
 
     else()
         include(FindPkgConfig)
-        pkg_check_modules(SDL2 REQUIRED sdl2)
+        find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
         pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
         pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
         pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
         pkg_check_modules(JPEG REQUIRED libjpeg)
-
+        find_package(Lua REQUIRED)
         target_include_directories(${TARGET_NAME} PRIVATE
-            /usr/include/lua5.3
+            ${LUA_INCLUDE_DIR}
         )
         target_link_libraries(${TARGET_NAME} PRIVATE
-            -Wl,-Bstatic # avoid libjpeg.so.8 
-            ${JPEG_STATIC_LIBRARIES} 
+            SDL2::SDL2
+            jpeg
             bz2
-            lua5.3
-            -Wl,-Bdynamic
+            lua
             dl
-            ${SDL2_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_IMAGE_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
+            SDL2_ttf
+            SDL2_image
+            SDL2_mixer
+            pthread
         )
     endif()
 
