@@ -342,12 +342,40 @@ PumpMouseEvents(void)
 #undef POINTER
 }
 
+static void
+mouse_autohide(void)
+{
+    static int prev_x = 0;
+    static int prev_y = 0;
+    static uint32_t frames = 0;
+
+    if (!classical_mouse)
+        return;
+
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+
+    if (mouse_x != prev_x || mouse_y != prev_y) {
+        frames = 90;            // hide cursor after 1.5s idle
+        SDL_ShowCursor(SDL_ENABLE);
+    }
+    prev_x = mouse_x;
+    prev_y = mouse_y;
+
+    if (frames > 0) {
+        frames -= 1;
+    } else {
+        SDL_ShowCursor(SDL_DISABLE);
+    }
+}
+
 void
 retro_run(void)
 {
     input_poll_cb();
     PumpJoypadEvents();
     PumpMouseEvents();
+    mouse_autohide();
 
     SDL_libretro_RefreshVideo(video_cb);
     SDL_libretro_ProduceAudio(audio_batch_cb);
