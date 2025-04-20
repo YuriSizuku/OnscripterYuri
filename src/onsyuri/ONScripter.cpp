@@ -1536,6 +1536,17 @@ void ONScripter::quit()
         Mix_FreeMusic( music_info );
         music_info = NULL;
     }
+
+    text_info.deleteSurface();
+    SDL_FreeSurface(image_surface);
+    SDL_FreeSurface(accumulation_surface);
+    SDL_FreeSurface(backup_surface);
+    SDL_FreeSurface(effect_src_surface);
+    SDL_FreeSurface(effect_dst_surface);
+    SDL_FreeSurface(effect_tmp_surface);
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
 }
 
 void ONScripter::disableGetButtonFlag()
