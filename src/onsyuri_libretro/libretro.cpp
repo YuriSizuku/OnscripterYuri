@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
+#include <sys/stat.h>
 
 #ifdef __ANDROID__
 #define DEFAULT_MOUSE_MODE "Touch"
@@ -187,7 +188,13 @@ retro_load_game(const struct retro_game_info* game)
     if (!game)
         return false;
 
-    if (game->path[SDL_strlen(game->path) - 1] == '/') {
+    struct stat sb;
+    if (stat(game->path, &sb) == -1) {
+        log_cb(RETRO_LOG_ERROR, "stat: %s\n", strerror(errno));
+        return false;
+    }
+
+    if (S_ISDIR(sb.st_mode)) {
         chdir(game->path);
     } else {
         char* gamedir = dirname(SDL_strdup(game->path));
