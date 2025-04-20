@@ -243,6 +243,8 @@ retro_reset(void)
 static void
 PumpJoypadEvents(void)
 {
+    static bool _left = false;
+    static bool _right = false;
     static int16_t buttons[16] = { 0 };
     static const int bkeys[16] = {
         [RETRO_DEVICE_ID_JOYPAD_B] = SDLK_SPACE,
@@ -262,14 +264,60 @@ PumpJoypadEvents(void)
         [RETRO_DEVICE_ID_JOYPAD_L3] = SDLK_TAB,
         [RETRO_DEVICE_ID_JOYPAD_R3] = SDLK_q,
     };
+
     for (int i = 0; i < 16; ++i) {
         int16_t state = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, i);
         int k = bkeys[i];
-        if (buttons[i] != state) {
-            buttons[i] = state;
-            SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
-                                SDL_GetScancodeFromKey(k));
+
+        if (buttons[RETRO_DEVICE_ID_JOYPAD_SELECT] && i != RETRO_DEVICE_ID_JOYPAD_SELECT && state) {
+            switch (i) {
+            case RETRO_DEVICE_ID_JOYPAD_UP:
+                SDL_libretro_SendMouseMotion(1, 0, -3 * mouse_sensitivity);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_DOWN:
+                SDL_libretro_SendMouseMotion(1, 0, 3 * mouse_sensitivity);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_LEFT:
+                SDL_libretro_SendMouseMotion(1, -3 * mouse_sensitivity, 0);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_RIGHT:
+                SDL_libretro_SendMouseMotion(1, 3 * mouse_sensitivity, 0);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_A:
+                if (!_left) {
+                    _left = true;
+                    buttons[i] = state;
+                    SDL_libretro_SendMouseButton(SDL_PRESSED, SDL_BUTTON_LEFT);
+                }
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_B:
+                if (!_right) {
+                    _right = true;
+                    buttons[i] = state;
+                    SDL_libretro_SendMouseButton(SDL_PRESSED, SDL_BUTTON_RIGHT);
+                }
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_X:
+                buttons[i] = state;
+                SDL_libretro_SendMouseMotion(0, ons.getWidth() / 2, ons.getHeight() / 2);
+                break;
+            }
+        } else {
+            if (buttons[i] != state) {
+                buttons[i] = state;
+                SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
+                                    SDL_GetScancodeFromKey(k));
+            }
         }
+    }
+
+    if (_left && !buttons[RETRO_DEVICE_ID_JOYPAD_A]) {
+        _left = false;
+        SDL_libretro_SendMouseButton(SDL_RELEASED, SDL_BUTTON_LEFT);
+    }
+    if (_right && !buttons[RETRO_DEVICE_ID_JOYPAD_B]) {
+        _right = false;
+        SDL_libretro_SendMouseButton(SDL_RELEASED, SDL_BUTTON_RIGHT);
     }
 }
 
@@ -308,10 +356,6 @@ PumpMouseEvents(void)
             _right = right;
         }
 
-        // Keep mouse within the window.
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        SDL_WarpMouseInWindow(NULL, x, y);
     } else {
         static int16_t _x = 0;
         static int16_t _y = 0;
@@ -379,9 +423,16 @@ mouse_autohide(void)
 void
 retro_run(void)
 {
+    int x, y;
+
     input_poll_cb();
     PumpJoypadEvents();
     PumpMouseEvents();
+
+    // Keep mouse within the window.
+    SDL_GetMouseState(&x, &y);
+    SDL_WarpMouseInWindow(NULL, x, y);
+
     mouse_autohide();
 
     SDL_libretro_RefreshVideo(video_cb);
