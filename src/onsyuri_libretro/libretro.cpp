@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
+#include <sys/stat.h>
 
 #ifdef __ANDROID__
 #define DEFAULT_MOUSE_MODE "Touch"
@@ -25,6 +26,7 @@ static retro_audio_sample_batch_t audio_batch_cb;
 
 static SDL_Thread* game_thread;
 static bool classical_mouse = false;
+static int mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_SELECT;
 static double mouse_sensitivity = 1.0;
 
 ONScripter ons;
@@ -69,12 +71,24 @@ retro_set_environment(retro_environment_t cb)
             .default_value = DEFAULT_MOUSE_MODE,
         },
         {
+            .key = "onsyuri_mouse_joybtn",
+            .desc = "Emulate mouse with this joypad button pressed",
+            .info = NULL,
+            .values = {
+                { "SELECT" }, { "START" },
+                { "L" }, { "R" }, { "L2" }, { "R2" }, { "L3" }, { "R3" },
+                { NULL },
+            },
+            .default_value = "SELECT",
+        },
+        {
             .key = "onsyuri_mouse_sensitivity",
             .desc = "Classical Mouse Sensitivity",
             .info = NULL,
             .values = {
                 { "0.4" }, { "0.6" }, { "0.8" }, { "1.0" }, { "1.2" }, { "1.4" },
                 { "1.6" }, { "1.8" }, { "2.0" }, { "2.2" }, { "2.4" }, { "2.6 "},
+                { NULL },
             },
             .default_value = "1.0",
         },
@@ -168,10 +182,30 @@ retro_init(void)
             classical_mouse = false;
         }
     }
+    var.key = "onsyuri_mouse_joybtn";
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+        if (strcmp(var.value, "SELECT") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_SELECT;
+        if (strcmp(var.value, "START") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_START;
+        if (strcmp(var.value, "L") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L;
+        if (strcmp(var.value, "R") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R;
+        if (strcmp(var.value, "L2") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L2;
+        if (strcmp(var.value, "R2") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R2;
+        if (strcmp(var.value, "L3") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L3;
+        if (strcmp(var.value, "R3") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R3;
+    }
     var.key = "onsyuri_mouse_sensitivity";
     if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         mouse_sensitivity = SDL_atof(var.value);
     }
+
 }
 
 static int
@@ -187,7 +221,13 @@ retro_load_game(const struct retro_game_info* game)
     if (!game)
         return false;
 
-    if (game->path[SDL_strlen(game->path) - 1] == '/') {
+    struct stat sb;
+    if (stat(game->path, &sb) == -1) {
+        log_cb(RETRO_LOG_ERROR, "stat: %s\n", strerror(errno));
+        return false;
+    }
+
+    if (S_ISDIR(sb.st_mode)) {
         chdir(game->path);
     } else {
         char* gamedir = dirname(SDL_strdup(game->path));
@@ -236,6 +276,8 @@ retro_reset(void)
 static void
 PumpJoypadEvents(void)
 {
+    static bool _left = false;
+    static bool _right = false;
     static int16_t buttons[16] = { 0 };
     static const int bkeys[16] = {
         [RETRO_DEVICE_ID_JOYPAD_B] = SDLK_SPACE,
@@ -255,14 +297,62 @@ PumpJoypadEvents(void)
         [RETRO_DEVICE_ID_JOYPAD_L3] = SDLK_TAB,
         [RETRO_DEVICE_ID_JOYPAD_R3] = SDLK_q,
     };
+
     for (int i = 0; i < 16; ++i) {
         int16_t state = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, i);
         int k = bkeys[i];
-        if (buttons[i] != state) {
-            buttons[i] = state;
-            SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
-                                SDL_GetScancodeFromKey(k));
+
+        if (buttons[mouse_joybtn] && i != mouse_joybtn && state) {
+            switch (i) {
+            case RETRO_DEVICE_ID_JOYPAD_UP:
+                SDL_libretro_SendMouseMotion(1, 0, -3 * mouse_sensitivity);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_DOWN:
+                SDL_libretro_SendMouseMotion(1, 0, 3 * mouse_sensitivity);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_LEFT:
+                SDL_libretro_SendMouseMotion(1, -3 * mouse_sensitivity, 0);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_RIGHT:
+                SDL_libretro_SendMouseMotion(1, 3 * mouse_sensitivity, 0);
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_A:
+                if (!_left) {
+                    _left = true;
+                    buttons[i] = state;
+                    SDL_libretro_SendMouseButton(SDL_PRESSED, SDL_BUTTON_LEFT);
+                }
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_B:
+                if (!_right) {
+                    _right = true;
+                    buttons[i] = state;
+                    SDL_libretro_SendMouseButton(SDL_PRESSED, SDL_BUTTON_RIGHT);
+                }
+                break;
+            case RETRO_DEVICE_ID_JOYPAD_X:
+                buttons[i] = state;
+                SDL_libretro_SendMouseMotion(0, ons.getWidth() / 2, ons.getHeight() / 2);
+                break;
+            }
+        } else {
+            if (buttons[i] != state) {
+                buttons[i] = state;
+                if (i != mouse_joybtn) {
+                    SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
+                                        SDL_GetScancodeFromKey(k));
+                }
+            }
         }
+    }
+
+    if (_left && !buttons[RETRO_DEVICE_ID_JOYPAD_A]) {
+        _left = false;
+        SDL_libretro_SendMouseButton(SDL_RELEASED, SDL_BUTTON_LEFT);
+    }
+    if (_right && !buttons[RETRO_DEVICE_ID_JOYPAD_B]) {
+        _right = false;
+        SDL_libretro_SendMouseButton(SDL_RELEASED, SDL_BUTTON_RIGHT);
     }
 }
 
@@ -301,10 +391,6 @@ PumpMouseEvents(void)
             _right = right;
         }
 
-        // Keep mouse within the window.
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        SDL_WarpMouseInWindow(NULL, x, y);
     } else {
         static int16_t _x = 0;
         static int16_t _y = 0;
@@ -342,12 +428,47 @@ PumpMouseEvents(void)
 #undef POINTER
 }
 
+static void
+mouse_autohide(void)
+{
+    static int prev_x = 0;
+    static int prev_y = 0;
+    static uint32_t frames = 0;
+
+    if (!classical_mouse)
+        return;
+
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+
+    if (mouse_x != prev_x || mouse_y != prev_y) {
+        frames = 90;            // hide cursor after 1.5s idle
+        SDL_ShowCursor(SDL_ENABLE);
+    }
+    prev_x = mouse_x;
+    prev_y = mouse_y;
+
+    if (frames > 0) {
+        frames -= 1;
+    } else {
+        SDL_ShowCursor(SDL_DISABLE);
+    }
+}
+
 void
 retro_run(void)
 {
+    int x, y;
+
     input_poll_cb();
     PumpJoypadEvents();
     PumpMouseEvents();
+
+    // Keep mouse within the window.
+    SDL_GetMouseState(&x, &y);
+    SDL_WarpMouseInWindow(NULL, x, y);
+
+    mouse_autohide();
 
     SDL_libretro_RefreshVideo(video_cb);
     SDL_libretro_ProduceAudio(audio_batch_cb);
