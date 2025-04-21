@@ -27,15 +27,6 @@
 #ifdef USE_BUILTIN_LAYER_EFFECTS
 #include "builtin_layer.h"
 LayerInfo layer_info[MAX_LAYER_NUM];
-
-void deleteLayerInfo() {
-    for (int i=0; i<MAX_LAYER_NUM; ++i) {
-        if (layer_info[i].handler) {
-            delete layer_info[i].handler;
-            layer_info[i].handler = NULL;
-        }
-    }
-}
 #endif
 
 #define VERSION_STR1 "ONScripter"
@@ -265,10 +256,6 @@ void ScriptParser::reset()
     last_effect_link->next = NULL;
 
     current_mode = DEFINE_MODE;
-
-#ifdef USE_BUILTIN_LAYER_EFFECTS
-    deleteLayerInfo();
-#endif
 }
 
 int ScriptParser::openScript()

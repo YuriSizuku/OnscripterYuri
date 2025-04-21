@@ -154,6 +154,8 @@ OldMovieLayer::~OldMovieLayer() {
 
 void OldMovieLayer::om_init()
 {
+  if (initialized) return;
+
   ++om_count;
 
   gv = 0;
@@ -201,6 +203,8 @@ void OldMovieLayer::om_init()
     const int ry = (r.y * 30 / MAX_GLOW) + 4;
     SDL_FillRect(GlowSurface, &r, SDL_MapRGB(GlowSurface->format, ry, ry, ry));
   }
+
+  initialized_om_surfaces = true;
 }
 
 // Called once each frame.  Updates effect parameters.
