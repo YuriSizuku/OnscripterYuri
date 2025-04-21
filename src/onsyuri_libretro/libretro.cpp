@@ -26,6 +26,7 @@ static retro_audio_sample_batch_t audio_batch_cb;
 
 static SDL_Thread* game_thread;
 static bool classical_mouse = false;
+static int mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_SELECT;
 static double mouse_sensitivity = 1.0;
 
 ONScripter ons;
@@ -70,12 +71,24 @@ retro_set_environment(retro_environment_t cb)
             .default_value = DEFAULT_MOUSE_MODE,
         },
         {
+            .key = "onsyuri_mouse_joybtn",
+            .desc = "Emulate mouse with this joypad button pressed",
+            .info = NULL,
+            .values = {
+                { "SELECT" }, { "START" },
+                { "L" }, { "R" }, { "L2" }, { "R2" }, { "L3" }, { "R3" },
+                { NULL },
+            },
+            .default_value = "SELECT",
+        },
+        {
             .key = "onsyuri_mouse_sensitivity",
             .desc = "Classical Mouse Sensitivity",
             .info = NULL,
             .values = {
                 { "0.4" }, { "0.6" }, { "0.8" }, { "1.0" }, { "1.2" }, { "1.4" },
                 { "1.6" }, { "1.8" }, { "2.0" }, { "2.2" }, { "2.4" }, { "2.6 "},
+                { NULL },
             },
             .default_value = "1.0",
         },
@@ -169,10 +182,30 @@ retro_init(void)
             classical_mouse = false;
         }
     }
+    var.key = "onsyuri_mouse_joybtn";
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+        if (strcmp(var.value, "SELECT") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_SELECT;
+        if (strcmp(var.value, "START") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_START;
+        if (strcmp(var.value, "L") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L;
+        if (strcmp(var.value, "R") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R;
+        if (strcmp(var.value, "L2") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L2;
+        if (strcmp(var.value, "R2") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R2;
+        if (strcmp(var.value, "L3") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_L3;
+        if (strcmp(var.value, "R3") == 0)
+            mouse_joybtn = RETRO_DEVICE_ID_JOYPAD_R3;
+    }
     var.key = "onsyuri_mouse_sensitivity";
     if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         mouse_sensitivity = SDL_atof(var.value);
     }
+
 }
 
 static int
@@ -269,7 +302,7 @@ PumpJoypadEvents(void)
         int16_t state = input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, i);
         int k = bkeys[i];
 
-        if (buttons[RETRO_DEVICE_ID_JOYPAD_SELECT] && i != RETRO_DEVICE_ID_JOYPAD_SELECT && state) {
+        if (buttons[mouse_joybtn] && i != mouse_joybtn && state) {
             switch (i) {
             case RETRO_DEVICE_ID_JOYPAD_UP:
                 SDL_libretro_SendMouseMotion(1, 0, -3 * mouse_sensitivity);
@@ -305,8 +338,10 @@ PumpJoypadEvents(void)
         } else {
             if (buttons[i] != state) {
                 buttons[i] = state;
-                SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
-                                    SDL_GetScancodeFromKey(k));
+                if (i != mouse_joybtn) {
+                    SDL_SendKeyboardKey(state ? SDL_PRESSED : SDL_RELEASED,
+                                        SDL_GetScancodeFromKey(k));
+                }
             }
         }
     }
