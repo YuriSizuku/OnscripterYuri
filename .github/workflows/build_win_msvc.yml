@@ -1,8 +1,6 @@
 name: build windows MSVC x86, x64, ARM64
 on:
   pull_request: 
-  workflow_dispatch:
-  push:
 
 permissions:
   contents: write
