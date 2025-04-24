@@ -1,7 +1,7 @@
 name: build windows MSVC x86, x64, ARM64
 on:
   pull_request: 
-  
+
 permissions:
   contents: write
 
@@ -20,9 +20,9 @@ jobs:
       uses: actions/checkout@v3
     
     - name: run vcpkg
-      uses: lukka/run-vcpkg@v10.7
+      uses: lukka/run-vcpkg@v11.5
       with: 
-        vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
+        vcpkgGitCommitId: ce613c41372b23b1f51333815feb3edd87ef8a8b
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
     
@@ -63,7 +63,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
+        vcpkgGitCommitId: ce613c41372b23b1f51333815feb3edd87ef8a8b
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `x64-windows-static`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
@@ -105,7 +105,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
+        vcpkgGitCommitId: ce613c41372b23b1f51333815feb3edd87ef8a8b
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}
