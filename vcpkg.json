@@ -1,40 +1,78 @@
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
-    "builtin-baseline": "10b7a178346f3f0abef60cecd5130e295afd8da4",
+    "builtin-baseline": "ce613c41372b23b1f51333815feb3edd87ef8a8b",
     "dependencies": [
         {
-            "name": "sdl2"
+            "name": "sdl2",
+            "version>=": "2.26.3#1"
         },
         {
-            "name": "bzip2"
+            "name": "bzip2",
+            "version>=": "1.0.8#3"
         },
         {
-            "name": "libjpeg-turbo"
+            "name": "libjpeg-turbo",
+            "version>=": "2.1.5"
         },
         {
             "name": "sdl2-image",
             "features": [
                 "libjpeg-turbo",
                 "libwebp"
-            ]
+            ],
+            "version>=": "2.6.3"
         },
         {
             "name": "sdl2-mixer",
             "features": [
                 "libvorbis"
-            ]
+            ],
+            "version>=": "2.6.3"
         },
         {
             "name": "sdl2-ttf",
             "features": [
                 "harfbuzz"
-            ]
+            ],
+            "version>=": "2.20.2"
         },
         {
-            "name": "lua"
+            "name": "lua",
+            "version>=": "5.4.4#4"
         },
         {
             "name": "libogg"
+        }
+    ],
+    "$fuckMicrosoft": "see https://learn.microsoft.com/en-us/vcpkg/consume/lock-package-versions",
+    "overrides": [
+        {
+            "name": "sdl2",
+            "version": "2.26.3#1"
+        },
+        {
+            "name": "bzip2",
+            "version": "1.0.8#3"
+        },
+        {
+            "name": "libjpeg-turbo",
+            "version": "2.1.5"
+        },
+        {
+            "name": "sdl2-image",
+            "version": "2.6.3"
+        },
+        {
+            "name": "sdl2-mixer",
+            "version": "2.6.3"
+        },
+        {
+            "name": "sdl2-ttf",
+            "version": "2.20.2"
+        },
+        {
+            "name": "lua",
+            "version": "5.4.4#4"
         }
     ],
     "name": "onscripter-yuri",
