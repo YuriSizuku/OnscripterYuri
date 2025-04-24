@@ -286,11 +286,11 @@ sh -c "export BUILD_TYPE=Debug && export SKIP_PORTS=yes && ./local_linux64.sh"
 
 ### (5) cross mingw  
 
-Install mingw cross compiler and tools,  
+Install mingw cross compiler and tools (debain and wsl2 tested)
 
 ``` shell  
 sudo apt-get -y install tar make cmake curl git
-sudo apt-get -y install mingw-w64 zstd # do not install mingw-w64-tools, this pkg-config is broken
+sudo apt-get -y install mingw-w64 zstd pkg-config # use pkg-config is to find sdl2 by compiling sdl2_image, do not install mingw-w64-tools, this pkg-config is broken
 ```
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
