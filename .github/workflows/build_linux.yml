@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   install_thirdparty_build:
-    runs-on: ubuntu-20.04 # default batch, powershell
+    runs-on: ubuntu-22.04 # default batch, powershell
     steps:
     - uses: actions/checkout@v3
     
@@ -26,7 +26,7 @@ jobs:
         tar xvzf thirdparty_build.tar.gz
 
   build_linux32:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: install_thirdparty_build
     steps:
     - uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linux64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: install_thirdparty_build
     steps:
     - uses: actions/checkout@v3
@@ -93,7 +93,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linuxa32:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: install_thirdparty_build
     steps:
     - uses: actions/checkout@v3
@@ -129,7 +129,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
   build_linuxa64:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: install_thirdparty_build
     steps:
     - uses: actions/checkout@v3
