@@ -194,12 +194,12 @@ pacman -S --noconfirm mingw-w64-i686-mesa mingw-w64-x86_64-mesa
 pacman -S --noconfirm mingw-w64-i686-lua mingw-w64-x86_64-lua
 ```
 
-and then use these `local_mingw32.sh` or `local_mingw64.sh` to build.
+and then use these `local_msys2mingw32.sh` or `local_msys2mingw64.sh` to build.
 
 ``` sh
 cd script
 chmod +x *.sh
-sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_mingw32.sh"
+sh -c "export BUILD_TYPE=Debug && export MSYS2_HOME=/path/to/msys2 && ./local_msys2mingw32.sh"
 ```  
 
 ### (2) local linux  
@@ -290,12 +290,19 @@ Install mingw cross compiler and tools (debain and wsl2 tested)
 
 ``` shell  
 sudo apt-get -y install tar make cmake curl git
-sudo apt-get -y install mingw-w64 zstd pkg-config # use pkg-config is to find sdl2 by compiling sdl2_image, do not install mingw-w64-tools, this pkg-config is broken
+# use pkg-config is to find sdl2 by compiling sdl2_image, do not install mingw-w64-tools, this pkg-config is broken
+sudo apt-get -y install mingw-w64 zstd pkg-config 
 ```
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 
-### (6) cross android  
+### (6) cross llvmmingw  
+
+Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${MINGWSDK_HOME}/bin` to path,  
+
+then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash` or `msys2 shell`).
+
+### (7) cross android  
 
 Install android sdk and ndk, then
 
@@ -310,7 +317,7 @@ cd src/onsyuri_android/
 chmod +x ./gradlew && ./gradlew assembleDebug
 ```
 
-### (7) cross by docker  
+### (8) cross by docker  
 
 You can easily build all supported platforms by docker, see `docker/docker_xxx.sh` in detail.
 If you want to build for linux arm in x86 platform, install qemu at first.  

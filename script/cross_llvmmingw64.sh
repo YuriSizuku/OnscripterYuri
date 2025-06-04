@@ -1,5 +1,5 @@
-# bash -c "BUILD_TYPE=Debug  SKIP_PORTS=1 ./cross_mingw64.sh"
-PLATFORM=mingw64
+# bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_llvmmingw64.sh"
+PLATFORM=llvmmingw64
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
 PORTBUILD_PATH=$CMAKELISTS_PATH/thirdparty/build/arch_$PLATFORM
@@ -7,9 +7,9 @@ CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
 TARGETS=$@
 
 # config env
-CC=x86_64-w64-mingw32-gcc
-CXX=x86_64-w64-mingw32-g++
-RC=x86_64-w64-mingw32-windres
+export CC=x86_64-w64-mingw32-clang
+export CXX=x86_64-w64-mingw32-clang++
+export RC=x86_64-w64-mingw32-windres
 
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
@@ -18,13 +18,12 @@ echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
 if [ -z "$SKIP_PORTS" ]; then
     source _fetch.sh
     source _$PLATFORM.sh
-    fetch_jpeg && build_jpeg
-    fetch_bz2 && build_bz2
-    fetch_lua && build_lua
-    fetch_sdl2 && build_sdl2
-    fetch_sdl2_image && build_sdl2_image 
-    fetch_sdl2_ttf && build_sdl2_ttf
-    fetch_sdl2_mixer && build_sdl2_mixer
+    fetch_bz2 ; build_bz2
+    fetch_lua ; build_lua
+    fetch_sdl2 ; build_sdl2
+    fetch_sdl2_image ; build_sdl2_image 
+    fetch_sdl2_ttf ; build_sdl2_ttf
+    fetch_sdl2_mixer ; build_sdl2_mixer
 fi
 
 # config project

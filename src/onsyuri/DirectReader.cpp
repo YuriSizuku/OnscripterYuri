@@ -25,11 +25,9 @@
 #include "DirectReader.h"
 #include "Utils.h"
 #include "coding2utf16.h"
-#if defined(_WIN32) // fix cross mingw32 stdcall symbol 
-#define BZ_API(func) WINAPI func
-#undef _WIN32
+#if defined(_WIN32) 
+#define BZ_IMPORT // fix cross mingw32 stdcall symbol
 #include <bzlib.h>
-#define _WIN32
 #else
 #include <bzlib.h> 
 #endif

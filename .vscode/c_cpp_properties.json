@@ -1,15 +1,16 @@
 {
     "env": { // edit your env here
         "msys2sdk": "${env:MSYS2_HOME}",
+        "mingwsdk" : "${env:MINGWSDK_HOME}",
         "emsdk": "${env:EMSDK_HOME}"
     },
     "configurations": [
         {
-            "name": "Mingw32",
+            "name": "Win_llvmmingw32",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
-                "${workspaceFolder}/thirdparty/build/arch_mingw32/include/**",
-                "${msys2sdk}/mingw32/include"
+                "${workspaceFolder}/thirdparty/build/arch_llvmmingw32/include/**",
+                "${mingwsdk}/include"
             ],
             "defines": [
                 "_WIN32",
@@ -19,16 +20,16 @@
                 "USE_GLES",
                 "USE_FILELOG"
             ],
-            "compilerPath": "${msys2sdk}/mingw32/bin/gcc.exe",
-            "intelliSenseMode": "windows-gcc-x86",
+            "compilerPath": "${mingwsdk}/bin/clang.exe",
+            "intelliSenseMode": "windows-clang-x86",
             "compilerArgs": [ "-m32" ]
         },
         {
-            "name": "Mingw64",
+            "name": "Win_llvmmingw64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
-                "${workspaceFolder}/thirdparty/build/arch_mingw64/include/**",
-                "${msys2sdk}/mingw64/include"
+                "${workspaceFolder}/thirdparty/build/arch_llvmmingw64/include/**",
+                "${mingwsdk}/include"
             ],
             "defines": [
                 "_WIN32",
@@ -40,12 +41,12 @@
                 "USE_GLES",
                 "USE_FILELOG"
             ],
-            "compilerPath": "${msys2sdk}/mingw64/bin/gcc.exe",
-            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "${mingwsdk}/bin/clang.exe",
+            "intelliSenseMode": "windows-clang-x64",
             "compilerArgs": [ "-m64" ]
         },
         {
-            "name": "Linux64",
+            "name": "Linux_x64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
                 "${workspaceFolder}/thirdparty/build/arch_linux64/include",
@@ -63,7 +64,7 @@
             "compilerArgs": []
         },
         {
-            "name": "Linuxa64_cross",
+            "name": "Linux_aacrh64",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
                 "${workspaceFolder}/thirdparty/build/arch_linuxa64/include/**"
@@ -80,7 +81,7 @@
             "compilerArgs": []
         },
         {
-            "name": "Web",
+            "name": "Web_wasm",
             "includePath": [
                 "${workspaceFolder}/src/onsyuri/**",
                 "${workspaceFolder}/thirdparty/build/arch_wasm/include",

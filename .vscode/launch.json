@@ -5,7 +5,7 @@
     "version": "0.2.0",
         "configurations": [
         {
-            "name": "Win32 cppdbg",
+            "name": "Win32 cppdbg msys2",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/build_mingw32/onsyuri.exe",
@@ -27,7 +27,7 @@
             ]
         },
         {
-            "name": "Win64 cppdbg",
+            "name": "Win64 cppdbg msys2",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/build_mingw64/onsyuri.exe",
@@ -35,6 +35,52 @@
                 // "--width", "960", "--height", "544", 
                 "--sharpness", "1.1",  
                 "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/build_mingw64"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${env:MSYS2_HOME}/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+
+        {
+            "name": "Win32 cppdbg llvmmingw",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_llvmmingw32/onsyuri.exe",
+            "args": ["--debug:1", // "--fullscreen2",
+                "--width", "960", "--height", "544", 
+                "--sharpness", "12.1",  
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceRoot}/build_llvmmingw32"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${env:MSYS2_HOME}/mingw32/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+
+        {
+            "name": "Win64 cppdbg llvmmingw",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_llvmmingw64/onsyuri.exe",
+            "args": ["--debug:0", // "--fullscreen2",
+                // "--width", "960", "--height", "544", 
+                "--sharpness", "1.1",  
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/build_llvmmingw64"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}/asset",
             "externalConsole": true,
