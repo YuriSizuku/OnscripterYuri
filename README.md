@@ -300,7 +300,7 @@ then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 
 Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${MINGWSDK_HOME}/bin` to path,  
 
-then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash` or `msys2 shell`).
+then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash (git bash)` or `msys2 shell`).
 
 ### (7) cross android  
 

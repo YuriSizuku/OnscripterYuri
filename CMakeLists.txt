@@ -234,6 +234,7 @@ function(config_windows_mingw TARGET_NAME)
     set(CMAKE_CXX_VISIBILITY_PRESET hidden)
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
+        -D_WIN32_WINNT=0X0400 # support win xp
         _WIN32
         XMD_H # fix jpeg IN32 problem in jmorecfg.h
         USE_PARALLEL
@@ -247,6 +248,7 @@ function(config_windows_mingw TARGET_NAME)
         ${STATIC_PORT_ROOT}/lib
     )
     target_link_options(${TARGET_NAME} PRIVATE 
+        -Wl,--subsystem,windows:4.0
         -static-libgcc
         -static-libstdc++
     )
