@@ -124,7 +124,7 @@ function(config_darwin TARGET_NAME)
     )
 endfunction()
 
-function(config_windows_mingw TARGET_NAME)
+function(config_windows_msys2 TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -209,7 +209,7 @@ function(config_windows_mingw TARGET_NAME)
     endif()
 endfunction()
 
-function(config_windows_mingw2 TARGET_NAME)
+function(config_windows_mingw TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -228,14 +228,10 @@ function(config_windows_mingw2 TARGET_NAME)
         endif()
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
     endif()
-    if(WIN64) 
-        set(ARCH x86_64)
-    else() 
-        set(ARCH i686) 
-    endif()
-    set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
 
     # config compile 
+    set(CMAKE_C_VISIBILITY_PRESET hidden)
+    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
         _WIN32
@@ -245,18 +241,17 @@ function(config_windows_mingw2 TARGET_NAME)
         USE_FILELOG
     )
     target_include_directories(${TARGET_NAME} PRIVATE
-        ${CMAKE_SYSROOT}/include
-        /usr/${ARCH}-w64-mingw32/include
+        ${STATIC_PORT_ROOT}/include
     )
     target_link_directories(${TARGET_NAME} PRIVATE
-        ${CMAKE_SYSROOT}/lib
+        ${STATIC_PORT_ROOT}/lib
     )
     target_link_options(${TARGET_NAME} PRIVATE 
         -static-libgcc
         -static-libstdc++
     )
+
     target_link_libraries(${TARGET_NAME} PRIVATE # static
-        -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive 
         -Wl,-Bstatic
         lua
         bz2
@@ -264,8 +259,8 @@ function(config_windows_mingw2 TARGET_NAME)
         mingw32
         SDL2
         SDL2main
-        SDL2_ttf
         SDL2_image
+        SDL2_ttf
         SDL2_mixer
         ssp
         
@@ -273,6 +268,16 @@ function(config_windows_mingw2 TARGET_NAME)
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
         imm32 winmm gdi32 user32 rpcrt4
     )
+    if (${CMAKE_C_COMPILER} MATCHES "clang") # cmake sdl2_ttf will need freetype
+        target_compile_options(${TARGET_NAME} PRIVATE
+            -Wno-invalid-source-encoding
+            -fno-stack-check
+        )
+        target_link_libraries(${TARGET_NAME} PRIVATE # static
+            -Wl,-Bstatic
+            freetype
+        )
+    endif()
 endfunction()
 
 function(config_windows_msvc TARGET_NAME)
@@ -447,10 +452,10 @@ function(config_platform TARGET_NAME)
         if(MSVC)
             config_windows_msvc(${TARGET_NAME})
         else()
-            if (CMAKE_SYSROOT) 
-                config_windows_mingw2(${TARGET_NAME})
+            if (DEFINED STATIC_PORT_ROOT) 
+                config_windows_mingw(${TARGET_NAME})
             else() 
-                config_windows_mingw(${TARGET_NAME}) 
+                config_windows_msys2(${TARGET_NAME}) 
             endif()
         endif()
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")

@@ -1,4 +1,4 @@
-# bash -c "export BUILD_TYPE=Debug && export SKIP_PORTS=1 && ./cross_mingw32.sh"
+# bash -c "BUILD_TYPE=Debug  SKIP_PORTS=1 ./cross_mingw32.sh"
 PLATFORM=mingw32
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
@@ -9,10 +9,11 @@ TARGETS=$@
 # config env
 CC=i686-w64-mingw32-gcc
 CXX=i686-w64-mingw32-g++
+RC=i686-w64-mingw32-windres
+
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
-# SKIP_PORTS="yes"
 echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
 if [ -z "$SKIP_PORTS" ]; then
     source _fetch.sh
@@ -26,11 +27,15 @@ if [ -z "$SKIP_PORTS" ]; then
     fetch_sdl2_mixer && build_sdl2_mixer
 fi
 
-# config and build project
+# config project
 echo "BUILD_TYPE=$BUILD_TYPE"
-export RC=i686-w64-mingw32-windres
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-    -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
-    -DCMAKE_SYSTEM_NAME="Windows" -DCMAKE_SYSROOT=$PORTBUILD_PATH
+    -DCMAKE_C_COMPILER=$CC \
+    -DCMAKE_CXX_COMPILER=$CXX \
+    -DCMAKE_RC_COMPILER=$RC \
+    -DCMAKE_SYSTEM_NAME="Windows" \
+    -DSTATIC_PORT_ROOT=$PORTBUILD_PATH
+
+# build project
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM
