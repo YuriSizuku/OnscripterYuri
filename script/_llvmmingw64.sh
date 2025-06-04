@@ -30,7 +30,7 @@ function build_bz2()
     echo "## BZ2_SRC=$BZ2_SRC CC=$CC"
     
     make -C $BZ2_SRC clean
-    make -C $BZ2_SRC libbz2 -j$CORE_NUM # this has some problem by mingw
+    make -C $BZ2_SRC bzip2 -j$CORE_NUM # this has some problem by mingw
     make -C $BZ2_SRC install PREFIX=$PORTBUILD_PATH
 }
 
