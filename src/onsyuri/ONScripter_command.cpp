@@ -1578,8 +1578,8 @@ int ONScripter::movemousecursorCommand()
 {
     int x = script_h.readInt() * screen_ratio1 / screen_ratio2;
     int y = script_h.readInt() * screen_ratio1 / screen_ratio2;
-    x = x * screen_device_width / screen_width;
-    y = y * screen_device_width / screen_width;
+    x = x * screen_device_width / screen_width + render_view_rect.x;
+    y = y * screen_device_height / screen_height + render_view_rect.y;
 
     warpMouse(x, y);
     

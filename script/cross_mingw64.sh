@@ -18,13 +18,13 @@ echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
 if [ -z "$SKIP_PORTS" ]; then
     source _fetch.sh
     source _$PLATFORM.sh
-    fetch_jpeg && build_jpeg
-    fetch_bz2 && build_bz2
-    fetch_lua && build_lua
-    fetch_sdl2 && build_sdl2
-    fetch_sdl2_image && build_sdl2_image 
-    fetch_sdl2_ttf && build_sdl2_ttf
-    fetch_sdl2_mixer && build_sdl2_mixer
+    fetch_jpeg ; build_jpeg
+    fetch_bz2 ; build_bz2
+    fetch_lua ; build_lua
+    fetch_sdl2 ; build_sdl2
+    fetch_sdl2_image ; build_sdl2_image 
+    fetch_sdl2_ttf ; build_sdl2_ttf
+    fetch_sdl2_mixer ; build_sdl2_mixer
 fi
 
 # config project

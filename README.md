@@ -143,7 +143,7 @@ onsyuri_index.json
 
 ![onsyuri_mo2_webtest3](screenshot/onsyuri_mo2_webtest3.jpg)  
 
-It will load the game according to `onsyuri_index.json`, whitch is deifned by `<meta onsyuri_index="onsyuri_index.json">` in `onsyuri.html`.  
+It will load the game according to `onsyuri_index.json`, whitch is defined by `<meta onsyuri_index="onsyuri_index.json">` in `onsyuri.html`.  
 
 ``` json
 {
@@ -286,12 +286,25 @@ sh -c "export BUILD_TYPE=Debug && export SKIP_PORTS=yes && ./local_linux64.sh"
 
 ### (5) cross mingw  
 
-Install mingw cross compiler and tools (debain and wsl2 tested)
+Install mingw cross compiler and tools,  
+
+in `debian` or `wsl2`,  
 
 ``` shell  
 sudo apt-get -y install tar make cmake curl git
 # use pkg-config is to find sdl2 by compiling sdl2_image, do not install mingw-w64-tools, this pkg-config is broken
 sudo apt-get -y install mingw-w64 zstd pkg-config 
+```
+
+in `msys2`,  
+
+```shell
+pacman -Syu --noconfirm
+pacman -S --noconfirm make tar vim curl # util tools
+pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb
+pacman -S --noconfirm mingw-w64-x86_64-binutils mingw-w64-x86_64-pkg-config
+pacman -S --noconfirm mingw-w64-i686-gcc mingw-w64-i686-gdb
+pacman -S --noconfirm mingw-w64-i686-binutils mingw-w64-i686-pkg-config
 ```
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
@@ -304,7 +317,7 @@ Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/202406
 
 then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash (git bash)` or `msys2 shell`).
 
-If you want to build compatible for `winxp`, you can use [i686-11.2.0-release-win32-dwarf-rt_v9-rev1](https://github.com/niXman/mingw-builds-binaries/releases/download/11.2.0-rt_v9-rev1/i686-11.2.0-release-win32-dwarf-rt_v9-rev1.7z)
+If you want to build compatible for `winxp`, you can use [i686-11.2.0-release-win32-dwarf-rt_v9-rev1](https://github.com/niXman/mingw-builds-binaries/releases/download/11.2.0-rt_v9-rev1/i686-11.2.0-release-win32-dwarf-rt_v9-rev1.7z). Higher version like `gcc 14` is not available.  
 
 ```sh
 export PATH=/path/to/mingw32/bin:$PATH
