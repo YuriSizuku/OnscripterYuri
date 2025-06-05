@@ -268,6 +268,7 @@ function(config_windows_mingw TARGET_NAME)
         SDL2_image
         SDL2_ttf
         SDL2_mixer
+        # ssp should be used for linux mingw
         ssp
         
         -Wl,-Bdynamic
