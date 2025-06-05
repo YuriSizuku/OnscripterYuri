@@ -223,7 +223,8 @@ function(config_windows_mingw TARGET_NAME)
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
     else()
         if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
-            target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+            # target_compile_options flto might failed, so disable that
+            # target_compile_options(${TARGET_NAME} PRIVATE "-flto")
             target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
         endif()
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
@@ -232,6 +233,9 @@ function(config_windows_mingw TARGET_NAME)
     # config compile 
     set(CMAKE_C_VISIBILITY_PRESET hidden)
     set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+    target_compile_options(${TARGET_NAME} PRIVATE
+        -Wno-invalid-source-encoding
+    )
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
         -D_WIN32_WINNT=0X0400 # support win xp
@@ -270,11 +274,7 @@ function(config_windows_mingw TARGET_NAME)
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
         imm32 winmm gdi32 user32 rpcrt4
     )
-    if (${CMAKE_C_COMPILER} MATCHES "clang") # cmake sdl2_ttf will need freetype
-        target_compile_options(${TARGET_NAME} PRIVATE
-            -Wno-invalid-source-encoding
-            -fno-stack-check
-        )
+    if (EXTRA_SDL_LIB) # cmake sdl2_ttf will need freetype
         target_link_libraries(${TARGET_NAME} PRIVATE # static
             -Wl,-Bstatic
             freetype
