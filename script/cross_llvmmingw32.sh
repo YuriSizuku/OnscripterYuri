@@ -3,18 +3,21 @@ PLATFORM=llvmmingw32
 BUILD_PATH=./../build_${PLATFORM}
 CMAKELISTS_PATH=$(pwd)/..
 PORTBUILD_PATH=$CMAKELISTS_PATH/thirdparty/build/arch_$PLATFORM
-CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
+if [ -z "$CORE_NUM" ]; then 
+    CORE_NUM=$(cat /proc/cpuinfo | grep -c ^processor)
+fi
 TARGETS=$@
 
 # config env
-export CC=i686-w64-mingw32-clang
-export CXX=i686-w64-mingw32-clang++
-export RC=i686-w64-mingw32-windres
+if [ -z "$CC" ]; then
+    export CC=i686-w64-mingw32-clang
+    export CXX=i686-w64-mingw32-clang++
+    export RC=i686-w64-mingw32-windres
+fi
 
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
-# SKIP_PORTS="yes"
 echo "## PORTBUILD_PATH=$PORTBUILD_PATH"
 if [ -z "$SKIP_PORTS" ]; then
     source _fetch.sh
@@ -35,7 +38,8 @@ cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -DCMAKE_CXX_COMPILER=$CXX \
     -DCMAKE_RC_COMPILER=$RC \
     -DCMAKE_SYSTEM_NAME="Windows" \
-    -DSTATIC_PORT_ROOT=$PORTBUILD_PATH
+    -DSTATIC_PORT_ROOT=$PORTBUILD_PATH \
+    -DEXTRA_SDL_LIB=ON
 
 # build project
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM

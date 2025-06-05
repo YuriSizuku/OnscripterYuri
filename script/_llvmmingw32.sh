@@ -6,7 +6,7 @@ function build_lua()
     
     make -C $LUA_SRC clean
     make -C $LUA_SRC all PLAT=mingw -j$CORE_NUM \
-        CC=i686-w64-mingw32-clang AR="i686-w64-mingw32-ar rcu"
+        CC=$CC AR="${CC%-*}-ar rcu"
     cp $LUA_SRC/src/lua.exe  $LUA_SRC/src/lua
     cp $LUA_SRC/src/luac.exe  $LUA_SRC/src/luac
     make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH
@@ -19,7 +19,7 @@ function build_jpeg()
     
     # problems for llvm-mingw
     pushd "${JPEG_SRC}/build_${PLATFORM}"
-    ../configure --host=i686-w64-mingw32 \
+    ../configure --host=${CC%-*} \
         --prefix=$PORTBUILD_PATH
     make -j$CORE_NUM && make install 
     popd
@@ -42,7 +42,7 @@ function build_sdl2()
     export CFLAGS="-Os"
     export CXXFLAGS="-Os"
     pushd "${SDL2_SRC}/build_${PLATFORM}"
-    ../configure --host=i686-w64-mingw32 \
+    ../configure --host=${CC%-*} \
         --disable-3dnow --disable-sse --disable-sse3 \
         --disable-video-vulkan --disable-video-offscreen \
         --prefix=$PORTBUILD_PATH

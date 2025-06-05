@@ -296,11 +296,28 @@ sudo apt-get -y install mingw-w64 zstd pkg-config
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 
+If you want to make compatible for `winxp`, should use gcc below 12.
+
 ### (6) cross llvmmingw  
 
 Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${MINGWSDK_HOME}/bin` to path,  
 
 then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash (git bash)` or `msys2 shell`).
+
+If you want to build compatible for `winxp`, you can use [i686-11.2.0-release-win32-dwarf-rt_v9-rev1](https://github.com/niXman/mingw-builds-binaries/releases/download/11.2.0-rt_v9-rev1/i686-11.2.0-release-win32-dwarf-rt_v9-rev1.7z)
+
+```sh
+export PATH=/path/to/mingw32/bin:$PATH
+export CC=i686-w64-mingw32-gcc
+export CXX=i686-w64-mingw32-g++
+export RC=windres
+
+echo CC=$(which $CC)
+echo CXX=$(which $CXX)
+echo RC=$(which $RC)
+
+bash -c "./cross_llvmmingw32.sh"
+```
 
 ### (7) cross android  
 
