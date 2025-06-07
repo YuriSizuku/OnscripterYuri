@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#202020</color>
+    <color name="gameconfig_background">#4C7131</color>
+    <color name="gamepath_color">#9B6161</color>
 </resources>
