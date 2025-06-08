@@ -23,7 +23,11 @@ jobs:
         SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
         SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
         SIGN_STORE_PASS: ${{ secrets.SIGN_STORE_PASS }}
-      run: cd script && bash ./cross_android.sh
+      run: |
+        cd script 
+        bash ./cross_android.sh
+        cd -
+        file build_android/outputs/apk/release/*.apk
 
     - name: prepare to release
       if: github.event_name == 'push'
