@@ -118,7 +118,7 @@
         android:id="@+id/text_gamepath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_gamepath"
+        android:background="@color/gameconfig_background"
         android:ems="10"
         android:gravity="center"
         android:inputType="textMultiLine"
