@@ -40,6 +40,7 @@ New features :
     - [x] x64, arm64 (local compile, contributed by [yujincheng08](https://github.com/yujincheng08))
   - [x] web (by emscripten)
     - [x] fs to save in indexdb
+    - [x] export and import save by zip file  
     - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
     - [x] mobile web with touch, with webui menu
   - [x] android
@@ -234,11 +235,12 @@ and then use `local_linux32.sh` or `local_linux64.sh` to build.
 ### (3) cross web  
 
 Install [emsdk](https://github.com/emscripten-core/emsdk) and use `cross_web.sh` to build.  
+You need to add `$EMSDK_HOME` and `$MSYS2_HOME` (if windows) user variable at first.  
 
 ``` shell
 cd script
 chmod +x *.sh
-sh -c "export BUILD_TYPE=Debug && export EMCSDK=/path/to/emsdk && ./cross_web.sh"
+sh -c "BUILD_TYPE=Debug EMCSDK_HOME=/path/to/emsdk ./cross_web.sh"
 ```
 
 ### (4) cross linux arm
@@ -313,7 +315,7 @@ If you want to make compatible for `winxp`, should use gcc below 12.
 
 ### (6) cross llvmmingw  
 
-Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${MINGWSDK_HOME}/bin` to path,  
+Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${LLVMMINGW_HOME}/bin` to path,  
 
 then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash (git bash)` or `msys2 shell`).
 

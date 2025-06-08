@@ -10,7 +10,7 @@
     <body style="margin: 0 auto; background-color:black;">
         <canvas id="canvas" oncontextmenu="event.preventDefault()" style="margin: 0 auto; display: block;"></canvas> 
         <video id="video" onended="videoEnded()" style="margin: 0 auto; display: none;"></video>        
-        <script type="text/javascript"> // universe function
+        <script type="text/javascript"> // browser universe function
             function scale_full(docobj, ratio=0) {
                 var w = window.innerWidth;
                 var h = window.innerHeight;
@@ -62,8 +62,36 @@
                     }
                 })
             }
+
+            async function download_data (name, data) {
+                var blob = new Blob([data], {type:'application/octet-stream'});
+                var e = document.createEvent('MouseEvents');
+                var a = document.createElement('a');
+                a.download = name;
+                a.href = window.URL.createObjectURL(blob);
+                a.dataset.downloadurl = ['application/octet-stream', a.download, a.href].join(':');
+                e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                a.dispatchEvent(e);
+            }
+
+            async function upload_data() {
+                return new Promise((res, rej) => {
+                    var i = document.createElement('input');
+                    i.type = 'file';
+                    i.addEventListener('change', () => {
+                        var file = i.files[0];
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            return res(e.target.result)
+                        };
+                        reader.readAsArrayBuffer(file);
+                    });
+                    i.click(); //can not open without user click
+                });
+            }
         </script>
         
+        <script type="text/javascript" src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
         <script type="text/javascript"> // onsyuri web function 
             function em_mkdirs(_FS, path) {
                 var tmpdir="";
@@ -77,6 +105,63 @@
                     }
                     catch{};
                 }
+            }
+
+            function em_lsfiles(_FS, top) {
+                var files = [];
+                var paths = _FS.readdir(top);
+                for(let i=0; i < paths.length; i++) {
+                    paths[i] = top + "/" + paths[i];
+                }
+                while(paths.length > 0) {
+                    path = paths.pop();
+                    if(path.endsWith(".") || path.endsWith("..")) continue;
+                    const stat = _FS.stat(path);
+                    if (_FS.isDir(stat.mode)) {
+                        let tmppaths = _FS.readdir(path);
+                        for (let i=0; i<tmppaths.length; i++) {
+                            paths.push(path + "/" + tmppaths[i]);
+                        }
+                    }
+                    else if (_FS.isFile(stat.mode)) {
+                        files.push(path);   
+                    }
+                    else if (_FS.isLink(stat.mode)) {
+                        // not consider symbol link here
+                    }
+                }
+                return files;
+            }
+
+            function em_export(_FS, paths, name="export.zip") {
+                var zip = new JSZip();
+                for (let i=0; i<paths.length; i++) {
+                    var data = _FS.readFile(paths[i]);
+                    zip.file(paths[i], data, {binary: true});
+                    console.log("## onsyuri_fs: em_export", paths[i]);
+                }
+                zip.generateAsync({type : "arraybuffer"})
+                .then(function(data) {
+                    download_data(name, data);
+                });
+            }
+
+            function em_import(_FS, data) {
+                JSZip.loadAsync(data)
+                .then((zip) => {
+                    zip.forEach((path, obj) => {
+                        if(obj.dir) {
+                            em_mkdirs(_FS, path);
+                        }
+                        else {
+                            obj.async("arraybuffer")
+                            .then((buf) => {
+                                _FS.writeFile(path, new Uint8Array(buf));
+                                console.log("## onsyuri_fs: em_import", path);
+                            });
+                        }
+                    });
+                })
             }
 
             // mount --gamedir other by preload or lazyload
@@ -300,6 +385,16 @@
                 }
             }
 
+            function click_export() {
+                var files = em_lsfiles(g_onsyuri_module.FS, g_onsyuri_index.savedir);
+                em_export(g_onsyuri_module.FS, files);
+            }
+
+            async function click_import() {
+                var data = await upload_data();
+                em_import(g_onsyuri_module.FS, data);
+            }
+
             window.onresize = (event) => {
                 var canvas = document.getElementById('canvas');
                 var ratio = g_fullstrech ? window.innerWidth/window.innerHeight: g_screen_width/g_screen_height;
@@ -310,6 +405,12 @@
                 switch(event.key) {
                     case "F2":
                         toggle_webinfo();
+                        break;
+                    case "F3":
+                        click_export();
+                        break;
+                    case "F4":
+                        click_import();
                         break;
                     case "F9":
                         toggle_webmenu();
@@ -463,12 +564,14 @@
         </div>
 
         <div id="onsyuri_webrmenu" style="display: none;">
-            <button onclick="toggle_stretchfull()">stretch [F10]</button>
-            <button onclick="toggle_screenfull()">full [F11]</button>
-            <button onclick="toggle_onsmenu()">rmenu [Esc]</button>
-            <button onclick="toggle_skip()">skip [Ctrl]</button>
-            <button onclick="toggle_webinfo()">about [F2]</button>
-            <button onclick="toggle_webmenu()">close [F9]</button>
+            <button onclick="toggle_stretchfull()">sfull[F10]</button>
+            <button onclick="toggle_screenfull()">full[F11]</button>
+            <button onclick="toggle_onsmenu()">menu[Esc]</button>
+            <button onclick="toggle_skip()">skip[Ctrl]</button>
+            <button onclick="click_export()">export[F3]</button>
+            <button onclick="click_import()">import[F4]</button>
+            <button onclick="toggle_webinfo()">about[F2]</button>
+            <button onclick="toggle_webmenu()">close[F9]</button>
         </div>
     </body>
 </html>

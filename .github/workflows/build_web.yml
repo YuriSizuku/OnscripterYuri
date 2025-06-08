@@ -7,7 +7,7 @@ permissions:
   contents: write
   
 env:
-  EMSDK: /opt/emsdk
+  EMSDK_HOME: /opt/emsdk
   BUILD_NAME: onsyuri_web
 
 jobs:
@@ -20,14 +20,14 @@ jobs:
       id: check_emsdk
       uses: actions/cache@v3
       with: 
-        path: ${{ env.EMSDK }}
+        path: ${{ env.EMSDK_HOME }}
         key: emsdk
     
     - name: install emsdk
       if: steps.check_emsdk.outputs.cache-hit != 'true'
       run: |
-        git clone https://github.com/emscripten-core/emsdk.git ${{ env.EMSDK }}
-        cd ${{ env.EMSDK }} 
+        git clone https://github.com/emscripten-core/emsdk.git ${{ env.EMSDK_HOME }}
+        cd ${{ env.EMSDK_HOME }} 
         ./emsdk install latest && ./emsdk activate latest
         source ./emsdk_env.sh
         embuilder build sdl2 sdl2_ttf sdl2_image sdl2_mixer bzip2 ogg vorbis mpg123
@@ -42,7 +42,7 @@ jobs:
       uses: actions/cache@v3
       with: 
         key: emsdk
-        path: ${{ env.EMSDK }}
+        path: ${{ env.EMSDK_HOME }}
     
     - name: build onsyuri_web
       run: cd script && export EMCSDK=${{ env.EMCSDK }} && bash ./cross_web.sh
