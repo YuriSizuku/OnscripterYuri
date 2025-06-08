@@ -1,7 +1,7 @@
 {
     "env": { // edit your env here
         "msys2sdk": "${env:MSYS2_HOME}",
-        "mingwsdk" : "${env:MINGWSDK_HOME}",
+        "mingwsdk" : "${env:LLVMMINGW_HOME}",
         "emsdk": "${env:EMSDK_HOME}"
     },
     "configurations": [
