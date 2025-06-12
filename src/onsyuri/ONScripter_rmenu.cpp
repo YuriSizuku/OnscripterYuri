@@ -327,6 +327,7 @@ bool ONScripter::executeSystemLoad()
             nofile_flag = false;
         }
         else{
+            char *pp = MESSAGE_SAVE_EMPTY;
             sprintf( buffer, MESSAGE_SAVE_EMPTY,
                      save_item_name,
                      save_file_info.sjis_no );

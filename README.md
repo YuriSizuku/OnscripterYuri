@@ -18,14 +18,15 @@ New features :
 
 - script
   - [x] lua script and animation  
-  - [x]  support English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
+  - [x] English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
+  - [x] utf8 script // added in [v0.7.6](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.6)
   - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
   - [x] long click or touch to invoke menu  
 
 - render
   - [x] fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
   - [x] arbitary resolution `--width`, `--height`  
-  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
+  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bugs on windows
 
 - platform
   - [x] windows
@@ -40,7 +41,7 @@ New features :
     - [x] x64, arm64 (local compile, contributed by [yujincheng08](https://github.com/yujincheng08))
   - [x] web (by emscripten)
     - [x] fs to save in indexdb
-    - [x] export and import save by zip file  
+    - [x] export and import save by zip file  // added in [v0.7.5beta5](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta5)
     - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
     - [x] mobile web with touch, with webui menu
   - [x] android
@@ -53,6 +54,7 @@ New features :
 - bugfix  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
   - [x] fix lua animation problem
+  - [x] fix button position wrong in fulllscreen, strech fullscreen // added in [v0.7.5beta4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta4)
   - [x] fix android onresume gles null pointer
   - [x] fix android file stat problem (save not found)
 
@@ -83,7 +85,7 @@ Usage: onsyuri [option ...]
   -r, --root path       set the root path to the archives
       --save-dir        set save dir
       --debug:1         print debug info
-      --enc:sjis        use sjis coding script
+      --enc:[gbk|sjis|utf8]  change encoding of the script, default is gbk
 
  render options:
       --window          start in windowed mode
@@ -243,16 +245,9 @@ chmod +x *.sh
 sh -c "BUILD_TYPE=Debug EMCSDK_HOME=/path/to/emsdk ./cross_web.sh"
 ```
 
-### (4) cross linux arm
+### (4) cross linux
 
-This is aimed for raspberrypi or the other arm64 devices cross compiling.
-As there are many system bindings in SDL2,  
-just build libraries in the target machine, and use these build cache to link.  
-Or you can use `docker_linuxarm64.sh` for cross compile.  
-
-![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
-
-Install the dependency for aarch64 cross compiler,  
+Install the dependency for cross compiler,  
 
 ``` shell
 # install in the target machine, aarch64
@@ -267,11 +262,20 @@ sudo apt-get -y install libgl1-mesa-dev:armhf mesa-utils:armhf
 
 # install in the local machine
 sudo apt-get -y install tar make cmake curl git
+sudo apt-get -y install crossbuild-essential-i386
+sudo apt-get -y install crossbuild-essential-x86_64
 sudo apt-get -y install crossbuild-essential-armhf
 sudo apt-get -y install crossbuild-essential-arm64
 ```
 
-then use `cross_linuxa64.sh` or `cross_linuxa32.sh` to compile.  
+then use `cross_linuxa64.sh` or `cross_linuxa32.sh`, `cross_linux32.sh`, `cross_linux64.sh` to compile.  
+
+![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
+
+For raspberrypi or the other arm64 devices cross compiling.
+As there are many system bindings in SDL2,  
+just build libraries in the target machine, and use these build cache to link.  
+Or you can use `docker_linuxarm64.sh` for cross compile.  
 
 ```shell  
 # at first build sdl2 in raspberry pi
@@ -385,4 +389,4 @@ sudo apt-get install qemu-user-static binfmt-support
 ## 5. Todo  
 
 - ~~video support (future plan)~~  partly finish by invoke system player  
-- ~~web preloading (future plan)~~ might not need ? lazyload partly solved
+- ~~web preloading (future plan)~~ might not need ? lazyload partly solved  

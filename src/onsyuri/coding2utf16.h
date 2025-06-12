@@ -26,6 +26,7 @@
 
 class Coding2UTF16{
 public:
+  bool force_utf8=false;
   static char space[4];
   static char minus[4];
   static char bracket[8];

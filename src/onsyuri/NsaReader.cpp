@@ -53,7 +53,8 @@ int NsaReader::open( const char *nsa_path )
 {
     int i;
     bool archive_found = false;
-    char archive_name[256], archive_name2[256];
+    // make archive_name2 smaller, to avoid -Wformat-overflow
+    char archive_name[256], archive_name2[250];
 
     if ( !SarReader::open( "arc.sar" ) ) return 0;
     

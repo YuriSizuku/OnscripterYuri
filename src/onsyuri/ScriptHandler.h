@@ -34,6 +34,12 @@
 #define IS_TWO_BYTE(x) \
         ( ((unsigned char)(x) > (unsigned char)0x80) && ((unsigned char)(x) !=(unsigned char) 0xff) )
 
+#define UTF8_N_BYTE(x) ( \
+    (((unsigned char)(x) & 0x80) == 0x00) ? 1 : ( \
+    (((unsigned char)(x) & 0xE0) == 0xC0) ? 2 : ( \
+    (((unsigned char)(x) & 0xF0) == 0xE0) ? 3 : ( \
+    (((unsigned char)(x) & 0xF8) == 0xF0) ? 4 : 0))))
+
 typedef unsigned char uchar3[3];
 
 class ScriptHandler
