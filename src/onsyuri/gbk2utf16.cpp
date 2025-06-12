@@ -23972,25 +23972,28 @@ static uint16_t gbk_2_utf16_org[][2] = {
 };
 
 void GBK2UTF16::init() {
-	strcpy(space, "　");
-	strcpy(minus, "－");
-	strcpy(bracket,"【】");
-	strcpy(num_str, "０１２３４５６７８９");
-	strcpy(DEFAULT_START_KINSOKU, "」』）］｝、。，．。？！ヽヾゝゞ々ー");
-	strcpy(DEFAULT_END_KINSOKU, "「『（［｛");
-	strcpy(DEFAULT_SAVE_MENU_NAME, "＜保存＞");
-	strcpy(DEFAULT_LOAD_MENU_NAME, "＜载入＞");
-	strcpy(DEFAULT_SAVE_ITEM_NAME, "书签");
-	strcpy(MESSAGE_SAVE_EXIST, "%s%s　%s月%s日%s时%s分");
-	strcpy(MESSAGE_SAVE_EMPTY, "%s%s　————————————");
-	strcpy(MESSAGE_SAVE_CONFIRM, "保存在%s%s？");
-	strcpy(MESSAGE_LOAD_CONFIRM, "读取%s%s？");
-	strcpy(MESSAGE_RESET_CONFIRM, "返回标题？");
-	strcpy(MESSAGE_END_CONFIRM, "退出游戏？");
-	strcpy(MESSAGE_YES, "是");
-	strcpy(MESSAGE_NO, "否");
-	strcpy(MESSAGE_OK, "确定");
-	strcpy(MESSAGE_CANCEL, "取消");
+  if (!force_utf8)
+  {
+    strcpy(space, "　");
+    strcpy(minus, "－");
+    strcpy(bracket,"【】");
+    strcpy(num_str, "０１２３４５６７８９");
+    strcpy(DEFAULT_START_KINSOKU, "」』）］｝、。，．。？！ヽヾゝゞ々ー");
+    strcpy(DEFAULT_END_KINSOKU, "「『（［｛");
+    strcpy(DEFAULT_SAVE_MENU_NAME, "＜保存＞");
+    strcpy(DEFAULT_LOAD_MENU_NAME, "＜载入＞");
+    strcpy(DEFAULT_SAVE_ITEM_NAME, "书签");
+    strcpy(MESSAGE_SAVE_EXIST, "%s%s　%s月%s日%s时%s分");
+    strcpy(MESSAGE_SAVE_EMPTY, "%s%s　————————————");
+    strcpy(MESSAGE_SAVE_CONFIRM, "保存在%s%s？");
+    strcpy(MESSAGE_LOAD_CONFIRM, "读取%s%s？");
+    strcpy(MESSAGE_RESET_CONFIRM, "返回标题？");
+    strcpy(MESSAGE_END_CONFIRM, "退出游戏？");
+    strcpy(MESSAGE_YES, "是");
+    strcpy(MESSAGE_NO, "否");
+    strcpy(MESSAGE_OK, "确定");
+    strcpy(MESSAGE_CANCEL, "取消");  
+  }
 
 	gbk_2_utf16 = new uint16_t[CODINGRIGHT - CODINGLEFT + 1];
 	utf16_2_gbk_4e = new uint16_t[0x9fA5-0x4E00+1];

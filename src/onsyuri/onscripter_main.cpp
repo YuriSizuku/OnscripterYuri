@@ -63,7 +63,7 @@ void optionHelp()
     printf( "  -r, --root path\tset the root path to the archives\n");
     printf( "      --save-dir\tset save dir\n");
     printf( "      --debug:1\t\tprint debug info\n");
-    printf( "      --enc:sjis\tuse sjis coding script\n\n");
+    printf( "      --enc:[gbk|sjis|utf8]\tdefine the encoding of script\n\n");
 
     printf( " render options: \n");
     printf( "      --window\t\tstart in windowed mode\n");
@@ -381,7 +381,14 @@ void parseOption(int argc, char *argv[]) {
                 ons.setDebugLevel(1);
             }
             else if (!strcmp(argv[0]+1, "-enc:sjis")){
-                if (coding2utf16 == NULL) coding2utf16 = new SJIS2UTF16();
+                if(!coding2utf16) coding2utf16 = new SJIS2UTF16();
+            }
+            else if (!strcmp(argv[0]+1, "-enc:gbk")){
+                if(!coding2utf16) coding2utf16 = new GBK2UTF16();
+            }
+            else if (!strcmp(argv[0]+1, "-enc:utf8")){
+                if(!coding2utf16) coding2utf16 = new GBK2UTF16();
+                coding2utf16->force_utf8 = true;
             }
 
             // render options
