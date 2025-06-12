@@ -45,7 +45,10 @@ jobs:
         path: ${{ env.EMSDK_HOME }}
     
     - name: build onsyuri_web
-      run: cd script && export EMCSDK=${{ env.EMCSDK }} && bash ./cross_web.sh
+      run: |
+        sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        cd script 
+        EMCSDK=${{ env.EMCSDK }} bash ./cross_web.sh
     
     - name: prepare release
       if: github.event_name == 'push'

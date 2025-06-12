@@ -51,6 +51,7 @@ jobs:
     
     - name: build onsyuri_${{ matrix.arch.suffix }}_linux
       run: |
+        sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
         cd script
         SKIP_PORTS=yes bash cross_linux${{ matrix.arch.suffix2 }}.sh
     
