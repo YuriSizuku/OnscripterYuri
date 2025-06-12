@@ -1,11 +1,11 @@
-# must use after _fetch.sh from local_linux32.sh
+# must use after _fetch.sh from cross_linux32.sh
 
 function build_lua()
 {
     echo "## LUA_SRC=$LUA_SRC"
 
     make -C $LUA_SRC clean
-    make -C $LUA_SRC all PLAT=linux CC="gcc -m32" -j$CORE_NUM
+    make -C $LUA_SRC all PLAT=linux CC="$CC -m32" -j$CORE_NUM
     make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH
 }
 
@@ -27,7 +27,7 @@ function build_bz2()
     echo "## BZ2_SRC=$BZ2_SRC"
     
     make -C $BZ2_SRC clean
-    make -C $BZ2_SRC all CC="gcc -m32" -j$CORE_NUM
+    make -C $BZ2_SRC all CC="$CC -m32" -j$CORE_NUM
     make -C $BZ2_SRC install PREFIX=$PORTBUILD_PATH
 }
 
