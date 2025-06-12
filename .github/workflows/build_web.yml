@@ -12,7 +12,7 @@ env:
 
 jobs:
   install_emsdk:
-    runs-on: ubuntu-22.04 # default batch, powershell
+    runs-on: ubuntu-24.04 # default batch, powershell
     steps:
     - uses: actions/checkout@v3
     
@@ -33,7 +33,7 @@ jobs:
         embuilder build sdl2 sdl2_ttf sdl2_image sdl2_mixer bzip2 ogg vorbis mpg123
 
   build_web:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: install_emsdk
     steps:
     - uses: actions/checkout@v3
