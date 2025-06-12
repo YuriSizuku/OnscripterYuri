@@ -10,11 +10,11 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "YuriSizuku"
       VALUE "FileDescription", "An enhancement ONScripter project porting to many platforms, especially web"
-      VALUE "FileVersion", "0.7.5"
+      VALUE "FileVersion", "0.7.6"
       VALUE "InternalName", "onsyuri"
       VALUE "OriginalFilename", "onsyuri.exe"
       VALUE "ProductName", "ONScripterYuri"
-      VALUE "ProductVersion", "0.7.5"
+      VALUE "ProductVersion", "0.7.6"
     END
   END
   BLOCK "VarFileInfo"

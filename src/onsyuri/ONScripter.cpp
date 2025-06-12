@@ -155,7 +155,7 @@ void ONScripter::initSDL()
     SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
 #endif
     if(SDL_InitSubSystem( SDL_INIT_GAMECONTROLLER ) == 0)
-        utils::printInfo("Initialize GAMECONTROLLER\n");
+        utils::printInfo("Initialize GameController\n");
     controller = SDL_GameControllerOpen(0);
     if(controller != NULL)
         utils::printInfo("GameController found\n");

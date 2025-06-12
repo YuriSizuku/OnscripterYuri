@@ -215,6 +215,10 @@ const char *ScriptHandler::readToken()
         bool ignore_clickstr_flag = false;
         while(1){
             if ( IS_TWO_BYTE(ch) ){
+                if (coding2utf16->force_utf8 && UTF8_N_BYTE(ch) == 3) {
+                    addStringBuffer( ch );
+                    ch = *++buf;
+                }
                 addStringBuffer( ch );
                 ch = *++buf;
                 if (ch == 0x0a || ch == '\0') break;
@@ -407,12 +411,19 @@ void ScriptHandler::skipToken()
         if ( *buf == 0x0a || *buf == 0 ||
              (!quat_flag && !text_flag && (*buf == ':' || *buf == ';') ) ) break;
         if ( *buf == '"' ) quat_flag = !quat_flag;
-        if ( IS_TWO_BYTE(*buf) ){
-            buf += 2;
-            if ( !quat_flag ) text_flag = true;
+        if (coding2utf16->force_utf8) {
+            int leading = UTF8_N_BYTE(*buf);
+            if(leading >= 2 && !quat_flag) text_flag = true;
+            buf += leading; 
         }
-        else
-            buf++;
+        else {
+            if ( IS_TWO_BYTE(*buf) ){
+                buf += 2;
+                if ( !quat_flag ) text_flag = true;
+            }
+            else
+                buf++;
+        }
     }
     if (text_flag && *buf == 0x0a) buf++;
     
@@ -807,33 +818,46 @@ int ScriptHandler::getStringFromInteger( char *buffer, int no, int num_column, b
     
     return num_column;
 #else
-    int c = 0;
-    if (is_zero_inserted){
-        for (i=0 ; i<num_space ; i++){
-            buffer[c++] = coding2utf16->num_str[0];
-            buffer[c++] = coding2utf16->num_str[1];
+    if(coding2utf16->force_utf8) {
+        if (num_minus == 1) no = -no;
+        char format[6];
+        if (is_zero_inserted)
+            sprintf(format, "%%0%dd", num_column);
+        else
+            sprintf(format, "%%%dd", num_column);
+        sprintf(buffer, format, no);
+        
+        return num_column;
+    }
+    else {
+        int c = 0;
+        if (is_zero_inserted){
+            for (i=0 ; i<num_space ; i++){
+                buffer[c++] = coding2utf16->num_str[0];
+                buffer[c++] = coding2utf16->num_str[1];
+            }
         }
-    }
-    else{
-        for (i=0 ; i<num_space ; i++){
-            buffer[c++] = coding2utf16->space[0];
-            buffer[c++] = coding2utf16->space[1];
+        else{
+            for (i=0 ; i<num_space ; i++){
+                buffer[c++] = coding2utf16->space[0];
+                buffer[c++] = coding2utf16->space[1];
+            }
         }
+        if (num_minus == 1){
+            buffer[c++] = coding2utf16->minus[0];
+            buffer[c++] = coding2utf16->minus[1];
+        }
+        c = (num_column-1)*2;
+        for (i=0 ; i<num_digit ; i++){
+            buffer[c] = coding2utf16->num_str[no % 10 * 2];
+            buffer[c + 1] = coding2utf16->num_str[no % 10 * 2 + 1];
+            no /= 10;
+            c -= 2;
+        }
+        buffer[num_column*2] = '\0';
+    
+        return num_column*2;
     }
-    if (num_minus == 1){
-        buffer[c++] = coding2utf16->minus[0];
-        buffer[c++] = coding2utf16->minus[1];
-    }
-    c = (num_column-1)*2;
-    for (i=0 ; i<num_digit ; i++){
-        buffer[c] = coding2utf16->num_str[no % 10 * 2];
-        buffer[c + 1] = coding2utf16->num_str[no % 10 * 2 + 1];
-        no /= 10;
-        c -= 2;
-    }
-    buffer[num_column*2] = '\0';
-
-    return num_column*2;
 #endif    
 }
 
@@ -1152,8 +1176,13 @@ void ScriptHandler::readConfiguration()
     char *buf = script_buffer;
     while ( buf < script_buffer + script_buffer_length ){
         if (*buf == ';') break;
-        if (IS_TWO_BYTE(*buf)) buf++;
-        buf++;
+        if(coding2utf16->force_utf8) {
+            buf += UTF8_N_BYTE(*buf);
+        }
+        else {
+            if (IS_TWO_BYTE(*buf)) buf++;
+            buf++;
+        }
     }
     
     while ( ++buf >= script_buffer + script_buffer_length ) return;

@@ -116,7 +116,7 @@ void ONScripter::proceedAnimation(int current_time)
 #endif
 
     if (!textgosub_label &&
-        (clickstr_state == CLICK_WAIT || clickstr_state == CLICK_NEWPAGE)){
+        (clickstr_state == CLICK_WAIT || clickstr_state == CLICK_NEWPAGE)) {
         AnimationInfo *anim = &cursor_info[0]; // CLICK_WAIT
         if (clickstr_state == CLICK_NEWPAGE)
             anim = &cursor_info[1];
@@ -127,6 +127,10 @@ void ONScripter::proceedAnimation(int current_time)
                 dst_rect.x += sentence_font.x() * screen_ratio1 / screen_ratio2;
                 dst_rect.y += sentence_font.y() * screen_ratio1 / screen_ratio2;
             }
+            
+            // fix sometimes double cursor
+            if(dst_rect.w > dst_rect.h) dst_rect.w = dst_rect.h;
+
             flushDirect( dst_rect, refreshMode() | (draw_cursor_flag?REFRESH_CURSOR_MODE:0) );
         }
     }
