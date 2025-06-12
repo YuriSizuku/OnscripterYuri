@@ -24,6 +24,7 @@ jobs:
         SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
         SIGN_STORE_PASS: ${{ secrets.SIGN_STORE_PASS }}
       run: |
+        sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
         cd script 
         bash ./cross_android.sh
         cd -
