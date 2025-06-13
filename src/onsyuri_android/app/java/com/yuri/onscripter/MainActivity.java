@@ -31,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -505,7 +507,8 @@ public class MainActivity extends AppCompatActivity {
             if(m_gameargs.getBoolean("strechfull")) onsargs.add("--fullscreen2");
             else onsargs.add("--fullscreen");
             if(m_gameargs.getBoolean("disablevideo")) onsargs.add("--no-video");
-            if(m_gameargs.getBoolean("usesjis")) onsargs.add("--enc:sjis");
+            String encoding = m_gameargs.getString("encoding");
+            onsargs.add("--enc:" + encoding);
             if(m_gameargs.getBoolean("scopedsavedir")) {
                 int idx;
                 if(gamedir.charAt(gamedir.length()-1)!='/') idx =gamedir.lastIndexOf('/', gamedir.length()-2);
@@ -521,7 +524,6 @@ public class MainActivity extends AppCompatActivity {
                     onsargs.add(savedir);
                 }
             }
-
             if(m_gameargs.getBoolean("sharpness")) {
                 String sharpness_value = m_gameargs.getString("sharpness_value");
                 onsargs.add("--sharpness");
@@ -561,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
         updateGameConfig(true);
         LinearLayout layout_config = findViewById(R.id.layout_gameconfig);
 
-        // checkbox or editbox
+        // checkbox, radiobutton, editbox
         for(int i=0; i<layout_config.getChildCount(); i++){
             View v = layout_config.getChildAt(i);
             if(v instanceof LinearLayout){
@@ -576,6 +578,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void afterTextChanged(Editable s) {updateGameConfig(false);}
                     });
+                    else if (v2 instanceof RadioGroup) {
+                        ((RadioGroup)v2).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                updateGameConfig(false);
+                            }
+                        });
+                    }
                 }
             }
             else if(v instanceof CheckBox) { // config checkout
@@ -656,7 +666,9 @@ public class MainActivity extends AppCompatActivity {
         CheckBox button_gles2sharpness =findViewById(R.id.button_gles2sharpness);
         TextView text_gles2sharpness = findViewById(R.id.text_gles2sharpness);
         CheckBox button_disablevideo = findViewById(R.id.button_disablevideo);
-        CheckBox button_usesjis = findViewById(R.id.button_usesjis);
+        RadioButton button_sjis = findViewById(R.id.button_sjis);
+        RadioButton button_gbk = findViewById(R.id.button_gbk);
+        RadioButton button_utf8 = findViewById(R.id.button_utf8);
         CheckBox button_scopedsavedir = findViewById(R.id.button_scopedsavedir);
         CheckBox button_alloweditargs = findViewById(R.id.button_alloweditargs);
         try {
@@ -668,7 +680,11 @@ public class MainActivity extends AppCompatActivity {
                 button_ignorecutout.setChecked(m_gameargs.getBoolean("ignorecutout"));
                 button_gles2sharpness.setChecked(m_gameargs.getBoolean("sharpness"));
                 button_disablevideo.setChecked(m_gameargs.getBoolean("disablevideo"));
-                button_usesjis.setChecked(m_gameargs.getBoolean("usesjis"));
+                String encoding = m_gameargs.getString("encoding");
+                if(encoding.equals("gbk")) button_gbk.setChecked(true);
+                else if(encoding.equals("sjis")) button_sjis.setChecked(true);
+                else if(encoding.equals("utf8")) button_utf8.setChecked(true);
+                else button_gbk.setChecked(true);
                 button_scopedsavedir.setChecked(m_gameargs.getBoolean("scopedsavedir"));
                 button_alloweditargs.setChecked(m_gameargs.getBoolean("alloweditargs"));
                 text_gles2sharpness.setText(m_gameargs.getString("sharpness_value"));
@@ -679,7 +695,7 @@ public class MainActivity extends AppCompatActivity {
                 m_gameargs.put("ignorecutout", button_ignorecutout.isChecked());
                 m_gameargs.put("sharpness", button_gles2sharpness.isChecked());
                 m_gameargs.put("disablevideo", button_disablevideo.isChecked());
-                m_gameargs.put("usesjis", button_usesjis.isChecked());
+                m_gameargs.put("encoding", button_utf8.isPressed() ? "utf8" : button_sjis.isPressed() ?  "sjis" : "gbk");
                 m_gameargs.put("scopedsavedir", button_scopedsavedir.isChecked());
                 m_gameargs.put("alloweditargs", button_alloweditargs.isChecked());
                 String sharpness_value = text_gles2sharpness.getText().toString();
