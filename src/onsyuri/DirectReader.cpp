@@ -411,8 +411,8 @@ void DirectReader::convertCodingToUTF8( char *dst_buf, const char *src_buf )
     unsigned short unicode;
     unsigned char utf8_buf[4];
     
-    while(*src_buf && !coding2utf16->force_utf8){
-        if (IS_TWO_BYTE(*src_buf)){
+    while(*src_buf){
+        if (IS_TWO_BYTE(*src_buf) && !coding2utf16->force_utf8){
             unsigned short index = *(unsigned char*)src_buf++;
             index = index << 8 | (*(unsigned char*)src_buf++);
             unicode = coding2utf16->conv2UTF16(index);
