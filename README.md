@@ -74,6 +74,8 @@ New features :
 
 ### (1) general command
 
+You can also put these option in `ons_args` file.  
+
 ``` bash
 ./onsyuri --help
 ./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf --enc:sjis
