@@ -14,12 +14,16 @@ Multi Platform: [github action release](https://github.com/YuriSizuku/Onscripter
 
 ![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
+**Now it supprts utf8 script with option `--enc:utf8`** !
+As the original `Onsscripter` only support `sjis` or `gbk` encoding, you can aslo convert them to utf8 like `iconv -f gbk -t utf8 0.txt -o 0.txt`.  
+
 New features :  
 
 - script
   - [x] lua script and animation  
-  - [x] English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
-  - [x] utf8 script // added in [v0.7.6](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.6)
+  - [x] English half-width text // since [v0.7.4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.4)
+  - [x] sjis `--enc:sjis` and gbk `--enc:gbk` script
+  - [x] utf8 script `--enc:utf8` // since [v0.7.6](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.6)
   - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
   - [x] long click or touch to invoke menu  
 
@@ -41,7 +45,7 @@ New features :
     - [x] x64, arm64 (local compile, contributed by [yujincheng08](https://github.com/yujincheng08))
   - [x] web (by emscripten)
     - [x] fs to save in indexdb
-    - [x] export and import save by zip file  // added in [v0.7.5beta5](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta5)
+    - [x] export and import save by zip file  // since [v0.7.5beta5](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta5)
     - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
     - [x] mobile web with touch, with webui menu
   - [x] android
@@ -54,7 +58,7 @@ New features :
 - bugfix  
   - [x] fix some bugs in origin version (can not read `00.txt` problem)  
   - [x] fix lua animation problem
-  - [x] fix button position wrong in fulllscreen, strech fullscreen // added in [v0.7.5beta4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta4)
+  - [x] fix button position wrong in fulllscreen, strech fullscreen // since [v0.7.5beta4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta4)
   - [x] fix android onresume gles null pointer
   - [x] fix android file stat problem (save not found)
 
