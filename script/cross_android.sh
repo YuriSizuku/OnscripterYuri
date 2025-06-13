@@ -20,12 +20,12 @@ function prepare_port()
 if [ -z "$SKIP_PORTS" ]; then
     source ./_fetch.sh
     source ./_$PLATFORM.sh
-    fetch_bz2 && prepare_port $BZ2_SRC
-    fetch_lua && prepare_port $LUA_SRC
-    fetch_sdl2 && prepare_port $SDL2_SRC
-    fetch_sdl2_image && prepare_port $SDL2_IMAGE_SRC
-    fetch_sdl2_ttf && prepare_port $SDL2_TTF_SRC
-    fetch_sdl2_mixer && prepare_port $SDL2_MIXER_SRC
+    fetch_bz2 ; prepare_port $BZ2_SRC
+    fetch_lua ; prepare_port $LUA_SRC
+    fetch_sdl2 ; prepare_port $SDL2_SRC
+    fetch_sdl2_image ; prepare_port $SDL2_IMAGE_SRC
+    fetch_sdl2_ttf ; prepare_port $SDL2_TTF_SRC
+    fetch_sdl2_mixer ; prepare_port $SDL2_MIXER_SRC
 fi
 
 # config and build project
