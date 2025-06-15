@@ -60,7 +60,7 @@ retro_set_environment(retro_environment_t cb)
             .key = "onsyuri_script_encoding",
             .desc = "Script Encoding",
             .info = NULL,
-            .values = { { "GBK" }, { "SHIFTJIS" }, { NULL } },
+            .values = { { "GBK" }, { "SHIFTJIS" }, {"UTF-8"}, { NULL } },
             .default_value = "GBK",
         },
         {
@@ -170,6 +170,9 @@ retro_init(void)
     if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
         if (strcmp(var.value, "SHIFTJIS") == 0) {
             coding2utf16 = new SJIS2UTF16();
+        } else if (strcmp(var.value, "UTF-8") == 0) {
+            coding2utf16 = new GBK2UTF16();
+            coding2utf16->force_utf8 = true;
         } else {
             coding2utf16 = new GBK2UTF16();
         }
