@@ -49,7 +49,9 @@ jobs:
     
     - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
       run: |
-        sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h 
+        if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
+          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        fi
         cd script 
         SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
     

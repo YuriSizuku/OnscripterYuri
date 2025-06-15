@@ -46,7 +46,9 @@ jobs:
     
     - name: build onsyuri_web
       run: |
-        sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
+          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        fi
         cd script 
         EMCSDK=${{ env.EMCSDK }} bash ./cross_web.sh
     
