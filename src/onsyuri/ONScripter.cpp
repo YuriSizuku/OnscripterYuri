@@ -664,14 +664,20 @@ int ONScripter::init()
 
     if ( sentence_font.openFont( font_file, screen_ratio1, screen_ratio2 ) == NULL ){
 #if USE_BTXH_CODE 
-		std::string font_file_alternative=((std::string(archive_path) + std::string(font_file)).c_str());
+		std::string font_file_alternative=std::string(archive_path) + std::string(font_file);
 		char* font_file_alternative_c_str = new char[font_file_alternative.length() + 1];
-		strncpy_s(
+#ifdef _MSC_VER
+		strcpy_s(
 			font_file_alternative_c_str, 
 			font_file_alternative.length() + 1, 
-			font_file_alternative.c_str(), 
-			font_file_alternative.length()
+			font_file_alternative.c_str()
 		);
+#else
+		strcpy(
+			font_file_alternative_c_str,
+			font_file_alternative.c_str()
+		);
+#endif
 		if (sentence_font.openFont(font_file_alternative_c_str, screen_ratio1, screen_ratio2) == NULL) {
 			delete[] font_file_alternative_c_str;
 #ifdef _WIN32
@@ -691,7 +697,10 @@ int ONScripter::init()
 			utils::printError("can't open font file: %s\n", font_file);
 			return -1;
 		}
-    }
+#if USE_BTXH_CODE
+		delete[] font_file_alternative_c_str;
+#endif
+	}
     
     return 0;
 }
