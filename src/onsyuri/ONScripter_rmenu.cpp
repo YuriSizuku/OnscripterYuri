@@ -115,8 +115,8 @@ void ONScripter::leaveSystemCall( bool restore_flag )
         event_mode = shelter_event_mode;
         draw_cursor_flag = shelter_draw_cursor_flag;
         if ( event_mode & WAIT_BUTTON_MODE ){
-            int x = shelter_mouse_state.x * screen_device_width / screen_width;
-            int y = shelter_mouse_state.y * screen_device_width / screen_width;
+            int x = shelter_mouse_state.x * screen_device_width / screen_width + render_view_rect.x;
+            int y = shelter_mouse_state.y * screen_device_height / screen_height + render_view_rect.y;
             warpMouse(x, y);
         }
     }
@@ -327,6 +327,7 @@ bool ONScripter::executeSystemLoad()
             nofile_flag = false;
         }
         else{
+            char *pp = MESSAGE_SAVE_EMPTY;
             sprintf( buffer, MESSAGE_SAVE_EMPTY,
                      save_item_name,
                      save_file_info.sjis_no );

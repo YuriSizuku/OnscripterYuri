@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#CBFDA0"
+    android:background="@color/gameconfig_background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -36,7 +36,7 @@
             android:id="@+id/button_gles2sharpness"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="use gles2 sharpness (use hardware render)" />
+            android:text="use gles2 sharpness (hardware renderer)" />
 
         <EditText
             android:id="@+id/text_gles2sharpness"
@@ -55,12 +55,6 @@
         android:text="disable video (skip video command)" />
 
     <CheckBox
-        android:id="@+id/button_usesjis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="use sjis encoding (for Japanese game, default is gbk)" />
-
-    <CheckBox
         android:id="@+id/button_scopedsavedir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,6 +65,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="allow edit start args (for debug and custom command)" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <RadioGroup
+            android:id="@+id/group_encoding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/button_gbk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="gbk" />
+
+            <RadioButton
+                android:id="@+id/button_sjis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="sjis" />
+
+            <RadioButton
+                android:id="@+id/button_utf8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="utf8" />
+        </RadioGroup>
+    </LinearLayout>
 
     <View
         android:id="@+id/divider"

@@ -116,14 +116,14 @@ void optionHelp()
     printf( "  -r, --root path\tset the root path to the archives\n");
     printf( "      --save-dir\tset save dir\n");
     printf( "      --debug:1\t\tprint debug info\n");
-    printf( "      --enc:sjis\tuse sjis coding script\n\n");
+    printf( "      --enc:[gbk|sjis|utf8]\tdefine the encoding of script\n\n");
 
     printf( " render options: \n");
     printf( "      --window\t\tstart in windowed mode\n");
     printf( "      --width 1280\tforce window width\n");
     printf( "      --height 720\tforce window height\n");
-    printf( "      --fullscreen\tstart in fullscreen mode (alt+f4 or f11)\n");
-    printf( "      --fullscreen2\tstart in fullscreen mode with stretch (f10)\n");
+    printf( "      --fullscreen\tstart in fullscreen mode (alt+f or alt+enter)\n");
+    printf( "      --fullscreen2\tstart in fullscreen mode with stretch (f10 toggle stretch)\n");
     printf( "      --sharpness 3.1 \t use gles to make image sharp\n");
     printf( "      --no-video\tdo not decode video\n");
     printf( "      --no-vsync\tturn off vsync\n\n");
@@ -402,6 +402,19 @@ FILE *fopen_ons(const char *path, const char *mode)
     }
     return fp;
 }
+
+extern "C" void playVideoWeb(const char *path, bool click_flag, bool loop_flag)
+{
+    EM_ASM(
+        var path = g_onsyuri_module.UTF8ToString($0);
+        playVideo(path, $1, $2);
+    ,path,click_flag,loop_flag);
+
+    while(EM_ASM_INT(return g_onsyuri_module.wait_video;))
+    {
+        SDL_Delay(5);
+    }
+}
 #endif
 
 void parseOption(int argc, char *argv[]) {
@@ -435,7 +448,14 @@ void parseOption(int argc, char *argv[]) {
                 ons.setDebugLevel(1);
             }
             else if (!strcmp(argv[0]+1, "-enc:sjis")){
-                if (coding2utf16 == NULL) coding2utf16 = new SJIS2UTF16();
+                if(!coding2utf16) coding2utf16 = new SJIS2UTF16();
+            }
+            else if (!strcmp(argv[0]+1, "-enc:gbk")){
+                if(!coding2utf16) coding2utf16 = new GBK2UTF16();
+            }
+            else if (!strcmp(argv[0]+1, "-enc:utf8")){
+                if(!coding2utf16) coding2utf16 = new GBK2UTF16();
+                coding2utf16->force_utf8 = true;
             }
 
             // render options

@@ -25,11 +25,9 @@
 #include "DirectReader.h"
 #include "Utils.h"
 #include "coding2utf16.h"
-#if defined(_WIN32) // fix cross mingw32 stdcall symbol 
-#define BZ_API(func) WINAPI func
-#undef _WIN32
+#if defined(_WIN32) 
+#define BZ_IMPORT // fix cross mingw32 stdcall symbol
 #include <bzlib.h>
-#define _WIN32
 #else
 #include <bzlib.h> 
 #endif
@@ -403,6 +401,10 @@ void DirectReader::convertCodingToEUC( char *buf )
     }
 }
 
+/**
+ * @param dst_buf multibyte char
+ * @param src_buf utf8 char
+ */
 void DirectReader::convertCodingToUTF8( char *dst_buf, const char *src_buf )
 {
     int i, c;
@@ -410,10 +412,10 @@ void DirectReader::convertCodingToUTF8( char *dst_buf, const char *src_buf )
     unsigned char utf8_buf[4];
     
     while(*src_buf){
-        if (IS_TWO_BYTE(*src_buf)){
+        if (IS_TWO_BYTE(*src_buf) && !coding2utf16->force_utf8){
             unsigned short index = *(unsigned char*)src_buf++;
             index = index << 8 | (*(unsigned char*)src_buf++);
-            unicode = coding2utf16->conv2UTF16( index );
+            unicode = coding2utf16->conv2UTF16(index);
             c = coding2utf16->convUTF16ToUTF8(utf8_buf, unicode);
             for (i=0 ; i<c ; i++)
                 *dst_buf++ = utf8_buf[i];
@@ -428,7 +430,7 @@ void DirectReader::convertCodingToUTF8( char *dst_buf, const char *src_buf )
 void DirectReader::convertFromUTF8ToCoding(char *dst_buf, const char *src_buf)
 {
     while(*src_buf){
-        if (*src_buf & 0x80){
+        if ((*src_buf & 0x80) && !coding2utf16->force_utf8){
             unsigned short unicode = coding2utf16->convUTF8ToUTF16(&src_buf);
             unsigned short local = coding2utf16->convUTF162Coding(unicode);
             *dst_buf++ = (local>>8);

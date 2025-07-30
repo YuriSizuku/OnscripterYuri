@@ -1,11 +1,11 @@
-# must use after _fetch.sh from local_linux64.sh
+# must use after _fetch.sh from cross_linux64.sh
 
 function build_lua()
 {
     echo "## LUA_SRC=$LUA_SRC"
 
     make -C $LUA_SRC clean
-    make -C $LUA_SRC all PLAT=linux CC="gcc -m64" -j$CORE_NUM
+    make -C $LUA_SRC all PLAT=linux CC="$CC -m64" -j$CORE_NUM
     make -C $LUA_SRC install INSTALL_TOP=$PORTBUILD_PATH
 }
 
