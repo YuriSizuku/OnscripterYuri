@@ -51,6 +51,7 @@ extern "C" void waveCallback(int channel);
 #include <Windows.h>
 #endif
 #include <string>
+#include <iostream>
 #endif
 
 #define DEFAULT_AUDIOBUF  4096
@@ -399,36 +400,120 @@ void ONScripter::setCDNumber(int cdrom_drive_number)
 
 void ONScripter::setFontFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&default_font, filename);
+#if USE_BTXH_CODE && defined _WIN32
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setRegistryFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&registry_file, filename);
+#if USE_BTXH_CODE && defined _WIN32
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setDLLFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&dll_file, filename);
+#if USE_BTXH_CODE && defined _WIN32
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setArchivePath(const char *path)
 {
+#if USE_BTXH_CODE && defined _WIN32
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, path, -1, wide_str, wide_len);
+	/*printf("wide_len = %d\n", wide_len);
+	printf("%ws", wide_str);
+	puts("");*/
+
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	//printf("acp_len = %d\n", acp_len);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	//printf("acp_str = %s\n", acp_str);
+	const char* path_temp = path;
+	path = acp_str;
+#endif
+	// printf("ONScripter::setArchivePath - %s\n", path);
     if (archive_path) delete[] archive_path;
     archive_path = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( archive_path, RELATIVEPATH "%s%c", path, DELIMITER );
+
+	// printf("ONScripter::setArchivePath - %s\n", archive_path);
     g_stdoutpath = std::string(archive_path) + "stdout.txt";
     g_stderrpath = std::string(archive_path) + "stderr.txt";
+#if USE_BTXH_CODE && defined _WIN32
+	path = path_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setSaveDir(const char *path)
 {
+#if USE_BTXH_CODE && defined _WIN32
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, path, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* path_temp = path;
+	path = acp_str;
+#endif
     if (save_dir) delete[] save_dir;
     save_dir = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( save_dir, RELATIVEPATH "%s%c", path, DELIMITER );
     script_h.setSaveDir(save_dir);
     g_stdoutpath = std::string(save_dir) + "stdout.txt";
     g_stderrpath = std::string(save_dir) + "stderr.txt";
+#if USE_BTXH_CODE && defined _WIN32
+	path = path_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setFullscreenMode(int mode)

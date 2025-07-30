@@ -1006,6 +1006,7 @@ int ScriptHandler::readScript( char *path )
 
     if (fp == NULL){
 #if USE_BTXH_CODE
+		printf("ScriptHandler::readScript - %s\n",archive_path);
 #ifdef _WIN32
 		MessageBox(NULL,
 			"Can't open any of the following:\n"
