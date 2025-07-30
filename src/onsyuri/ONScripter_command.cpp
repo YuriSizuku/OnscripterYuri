@@ -43,6 +43,9 @@ extern "C" void smpegCallback();
     
 #define CONTINUOUS_PLAY
 
+#include "coding2utf16.h"
+extern Coding2UTF16 *coding2utf16;
+
 int ONScripter::yesnoboxCommand()
 {
     bool yesno_flag = true;
@@ -556,10 +559,13 @@ int ONScripter::splitCommand()
 
         unsigned int c=0;
         while(save_buf[c] != delimiter && save_buf[c] != '\0'){
-            if (IS_TWO_BYTE(save_buf[c]))
-                c += 2;
-            else
-                c++;
+            if(coding2utf16->force_utf8) {
+                c += UTF8_N_BYTE(save_buf[c]);
+            }
+            else {
+                if (IS_TWO_BYTE(save_buf[c])) c += 2;
+                else c++;
+            }
         }
         
         if (c < 256) 
@@ -1578,8 +1584,8 @@ int ONScripter::movemousecursorCommand()
 {
     int x = script_h.readInt() * screen_ratio1 / screen_ratio2;
     int y = script_h.readInt() * screen_ratio1 / screen_ratio2;
-    x = x * screen_device_width / screen_width;
-    y = y * screen_device_width / screen_width;
+    x = x * screen_device_width / screen_width + render_view_rect.x;
+    y = y * screen_device_height / screen_height + render_view_rect.y;
 
     warpMouse(x, y);
     
@@ -2215,7 +2221,7 @@ int ONScripter::gettagCommand()
 
     if (buf[0] == '[')
         buf++;
-    else if (zenkakko_flag && buf[0] == "��"[0] && buf[1] == "��"[1])
+    else if (zenkakko_flag && buf[0] == coding2utf16->bracket[0] && buf[1] ==  coding2utf16->bracket[1])
         buf += 2;
     else
         buf = NULL;
@@ -2237,11 +2243,14 @@ int ONScripter::gettagCommand()
             if (buf){
                 const char *buf_start = buf;
                 while(*buf != '/' && *buf != 0 && *buf != ']' && 
-                      (!zenkakko_flag || buf[0] != "��"[0] || buf[1] != "��"[1])){
-                    if (IS_TWO_BYTE(*buf))
-                        buf += 2;
-                    else
-                        buf++;
+                      (!zenkakko_flag || buf[0] != coding2utf16->bracket[0] || buf[1] != coding2utf16->bracket[1])) {
+                    if(coding2utf16->force_utf8) {
+                        buf += UTF8_N_BYTE(*buf);
+                    }
+                    else {
+                        if (IS_TWO_BYTE(*buf)) buf += 2;
+                        else buf++;
+                    }
                 }
                 setStr( &script_h.getVariableData(script_h.pushed_variable.var_no).str, buf_start, buf-buf_start );
             }
@@ -2519,15 +2528,24 @@ int ONScripter::getlogCommand()
             char *p2 = buf = new char[page->text_count];
             count = 0;
             for (int i=0 ; i<page->text_count ; i++){
-                if (IS_TWO_BYTE(*p)){
-                    p2[count++] = *p++;
-                    p2[count++] = *p++;
+                if (coding2utf16->force_utf8) {
+                    int leading = UTF8_N_BYTE(*p);
+                    for(int j=0; i < leading; j++) {
+                        p2[count++] = *p++;
+                    }
                     i++;
                 }
-                else if (*p != 0x0a)
-                    p2[count++] = *p++;
-                else
-                    p++;
+                else {
+                    if (IS_TWO_BYTE(*p)){
+                        p2[count++] = *p++;
+                        p2[count++] = *p++;
+                        i++;
+                    }
+                    else if (*p != 0x0a)
+                        p2[count++] = *p++;
+                    else
+                        p++;
+                }
             }
         }
     
@@ -4024,6 +4042,7 @@ void ONScripter::NSDCallCommand(int texnum, const char *str1, int proc, const ch
         char *p = (char*)start[num_param-1], *p2 = (char*)start[num_param-1];
         while(*p){
             if (IS_TWO_BYTE(*p)){
+                if(coding2utf16->force_utf8 && UTF8_N_BYTE(*p)==3) *p2++ = *p++;
                 *p2++ = *p++;
                 *p2++ = *p++;
             }

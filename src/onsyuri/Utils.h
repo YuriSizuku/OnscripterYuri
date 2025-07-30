@@ -23,6 +23,10 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#if defined(__LIBRETRO__)
+#undef ANDROID
+#endif
+
 #ifdef ANDROID
 #include <android/log.h>
 #elif defined(WINRT)

@@ -1,4 +1,5 @@
 # general
+.vscode/settings.json
 asset/*test*/**
 asset/stdout.txt
 asset/stderr.txt
@@ -20,8 +21,10 @@ src/onsyuri_android/.idea/vcs.xml
 src/onsyuri_android/.idea/modules.xml
 src/onsyuri_android/.idea/workspace.xml
 src/onsyuri_android/.idea/navEditor.xml
+src/onsyuri_android/.idea/migrations.xml
 src/onsyuri_android/.idea/assetWizardSettings.xml
 src/onsyuri_android/.idea/deploymentTargetDropDown.xml
+src/onsyuri_android/.idea/deploymentTargetSelector.xml
 src/onsyuri_android/.idea/inspectionProfiles
 src/onsyuri_android/app/cpp/thirdparty/**
 src/onsyuri_android/app/.cxx/**

@@ -1,4 +1,4 @@
-# sh -c "export BUILD_TYPE=Debug && export EMSDK=/d/Software/env/sdk/emsdk && export MSYS2SDK=/d/Software/env/msys2 && ./cross_web.sh"
+# sh -c "BUILD_TYPE=Debug ./cross_web.sh"
 BUILD_PATH=$(pwd)/../build_web
 CMAKELISTS_PATH=$(pwd)/..
 PORTBUILD_PATH=$CMAKELISTS_PATH/thirdparty/build/arch_wasm
@@ -7,12 +7,10 @@ TARGETS=$@
 
 # config env
 source ./_fetch.sh
-if [ -z "$EMSDK" ]; then EMSDK=/d/Software/env/sdk/emsdk; fi
 if [ -n "$(uname -a | grep Msys)" ]; then # fix python problem in windows
-    if [ -z "$MSYS2SDK" ]; then MSYS2SDK=/d/Software/env/msys2; fi
-    PATH=$MSYS2SDK/mingw32/bin/:$PATH
+    PATH=$MSYS2_HOME/mingw32/bin/:$PATH
 fi
-source "$EMSDK/emsdk_env.sh"
+source "$EMSDK_HOME/emsdk_env.sh"
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 

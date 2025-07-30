@@ -1,0 +1,72 @@
+name: build linux x86, x64, arm32, arm64
+on:
+  push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request: 
+
+permissions:
+  contents: write
+
+jobs:
+  install_thirdparty_build:
+    runs-on: ubuntu-22.04 # default batch, powershell
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: check or download thirdparty_build cache
+      id: check_thirdparty_build
+      uses: actions/cache@v3
+      with: 
+        path: ./thirdparty
+        key: thirdparty_build
+    
+    - name: download thirdparty_build
+      if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
+      run: |
+        curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
+        tar xvzf thirdparty_build.tar.gz
+
+  build_linux:
+    strategy:
+      matrix: 
+        arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}, {suffix2: a32, suffix: arm32}, {suffix2: a64, suffix: arm64}]
+    
+    runs-on: ubuntu-22.04
+    needs: install_thirdparty_build
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: get thirdparty_build cache
+      uses: actions/cache@v3
+      with: 
+        key: thirdparty_build
+        path: ./thirdparty
+    
+    - name: prepare enviroment
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install gcc-multilib g++-multilib
+        sudo apt-get -y install crossbuild-essential-i386
+        sudo apt-get -y install crossbuild-essential-armhf
+        sudo apt-get -y install crossbuild-essential-arm64
+    
+    - name: build onsyuri_${{ matrix.arch.suffix }}_linux
+      run: |
+        if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
+          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        fi
+        cd script
+        SKIP_PORTS=yes bash cross_linux${{ matrix.arch.suffix2 }}.sh
+    
+    - name: prepare release
+      if: github.event_name == 'push'
+      run: |
+        cd build_linux${{ matrix.arch.suffix2 }}
+        mv onsyuri onsyuri_${{  github.ref_name }}_${{ matrix.arch.suffix }}_linux
+      
+    - name: create release
+      uses: ncipollo/release-action@v1
+      if: github.event_name == 'push'
+      with:
+        artifacts: "build_linux${{ matrix.arch.suffix2 }}/onsyuri_*"
+        allowUpdates: "true"
+        token: ${{ secrets.GITHUB_TOKEN }}

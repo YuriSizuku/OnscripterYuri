@@ -29,9 +29,11 @@ function build_bz2()
     echo "## BZ2_SRC=$BZ2_SRC CC=$CC"
     
     make -C $BZ2_SRC clean
-    make -C $BZ2_SRC -j$CORE_NUM # this has some problem by mingw
+    # this has some problem by mingw, as can not find export function
+    make -C $BZ2_SRC -j$CORE_NUM 
     make -C $BZ2_SRC install PREFIX=$PORTBUILD_PATH
 
+    # get from msys2, need to install zstd
     pushd $CMAKELISTS_PATH/thirdparty/port/
     curl -fsSL https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-bzip2-1.0.8-2-any.pkg.tar.zst -O
     tar xf mingw-w64-x86_64-bzip2-1.0.8-2-any.pkg.tar.zst mingw64/lib/libbz2.a
@@ -39,7 +41,6 @@ function build_bz2()
     rm -rf mingw64
     popd
 }
-
 
 function build_sdl2()
 {
@@ -63,7 +64,10 @@ function build_sdl2_image()
     if ! [ -d "${SDL2_IMAGE_SRC}/build_${PLATFORM}" ]; then mkdir -p "${SDL2_IMAGE_SRC}/build_${PLATFORM}"; fi
     echo "## SDL2_IMAGE_SRC=$SDL2_IMAGE_SRC"
 
-    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig # this is important for find SDL path
+    # this is important for find SDL path
+    # if not usING pkg-config in linux, must add SDL2.dll dir to $PATH
+    # llvm-mingw failed for autoconf becuase of la.lnkscript: unknown file type
+    export PKG_CONFIG_PATH=${PORTBUILD_PATH}/lib/pkgconfig 
     # stb_image.h already included
     pushd "${SDL2_IMAGE_SRC}/build_${PLATFORM}"
     ../configure --host=x86_64-w64-mingw32 \

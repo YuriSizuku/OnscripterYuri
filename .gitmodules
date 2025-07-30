@@ -1,0 +1,18 @@
+[submodule "src/onsyuri_libretro/deps/SDL"]
+	path = src/onsyuri_libretro/deps/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "src/onsyuri_libretro/deps/SDL_mixer"]
+	path = src/onsyuri_libretro/deps/SDL_mixer
+	url = https://github.com/libsdl-org/SDL_mixer.git
+[submodule "src/onsyuri_libretro/deps/SDL_ttf"]
+	path = src/onsyuri_libretro/deps/SDL_ttf
+	url = https://github.com/libsdl-org/SDL_ttf.git
+[submodule "src/onsyuri_libretro/deps/SDL_image"]
+	path = src/onsyuri_libretro/deps/SDL_image
+	url = https://github.com/libsdl-org/SDL_image.git
+[submodule "src/onsyuri_libretro/deps/bzip2"]
+	path = src/onsyuri_libretro/deps/bzip2
+	url = https://github.com/libarchive/bzip2.git
+[submodule "src/onsyuri_libretro/deps/lua"]
+	path = src/onsyuri_libretro/deps/lua
+	url = https://github.com/lua/lua.git

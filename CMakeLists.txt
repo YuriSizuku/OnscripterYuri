@@ -3,6 +3,7 @@ project(onsyuri)
 
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
+    install(TARGETS ${TARGET_NAME} RUNTIME)
     message("Linux enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
@@ -12,7 +13,8 @@ function(config_linux TARGET_NAME)
         USE_FILELOG
     )
     if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
-        target_link_options(${TARGET_NAME} PRIVATE "-s") 
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
     endif()
 
     if(STATIC_PORT_ROOT)
@@ -42,26 +44,25 @@ function(config_linux TARGET_NAME)
 
     else()
         include(FindPkgConfig)
-        pkg_check_modules(SDL2 REQUIRED sdl2)
+        find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
         pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
         pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
         pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
         pkg_check_modules(JPEG REQUIRED libjpeg)
-
+        find_package(Lua REQUIRED)
         target_include_directories(${TARGET_NAME} PRIVATE
-            /usr/include/lua5.3
+            ${LUA_INCLUDE_DIR}
         )
         target_link_libraries(${TARGET_NAME} PRIVATE
-            -Wl,-Bstatic # avoid libjpeg.so.8 
-            ${JPEG_STATIC_LIBRARIES} 
+            SDL2::SDL2
+            jpeg
             bz2
-            lua5.3
-            -Wl,-Bdynamic
+            lua
             dl
-            ${SDL2_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_IMAGE_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
+            SDL2_ttf
+            SDL2_image
+            SDL2_mixer
+            pthread
         )
     endif()
 
@@ -79,7 +80,51 @@ function(config_linux TARGET_NAME)
 
 endfunction()
 
-function(config_windows_mingw TARGET_NAME)
+function(config_darwin TARGET_NAME)
+    add_executable(${TARGET_NAME} ${ONSYURI_CODE})
+    message("Darwin enviroment for ${TARGET_NAME}, type ${CMAKE_BUILD_TYPE}, compiler ${CMAKE_C_COMPILER}")
+    target_compile_definitions(${TARGET_NAME} PRIVATE
+            ${ONSYURI_DEFINES}
+            MACOSX
+            USE_PARALLEL
+            USE_GLES
+            USE_FILELOG
+    )
+    target_compile_options(${TARGET_NAME} PRIVATE
+            -Wno-deprecated-declarations
+            -Wno-invalid-source-encoding
+    )
+
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-flto")
+    endif()
+
+    include(FindPkgConfig)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
+    pkg_check_modules(LUA REQUIRED lua)
+
+    target_include_directories(${TARGET_NAME} PRIVATE
+            ${LUA_INCLUDE_DIRS}
+            ${SDL2_INCLUDE_DIRS}
+            ${SDL2_TTF_INCLUDE_DIRS}
+            ${SDL2_IMAGE_INCLUDE_DIRS}
+            ${SDL2_MIXER_INCLUDE_DIRS}
+    )
+    target_link_libraries(${TARGET_NAME} PRIVATE
+            bz2
+            ${LUA_LINK_LIBRARIES}
+            ${SDL2_LINK_LIBRARIES}
+            ${SDL2_TTF_LINK_LIBRARIES}
+            ${SDL2_IMAGE_LINK_LIBRARIES}
+            ${SDL2_MIXER_LINK_LIBRARIES}
+    )
+endfunction()
+
+function(config_windows_msys2 TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -91,6 +136,10 @@ function(config_windows_mingw TARGET_NAME)
             target_compile_options(${TARGET_NAME} PRIVATE -g)
             target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
         else()
+            if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+                target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+                target_link_options(${TARGET_NAME} PRIVATE "-flto")
+            endif()
             target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
         endif()
 
@@ -160,7 +209,7 @@ function(config_windows_mingw TARGET_NAME)
     endif()
 endfunction()
 
-function(config_windows_mingw2 TARGET_NAME)
+function(config_windows_mingw TARGET_NAME)
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
@@ -174,20 +223,22 @@ function(config_windows_mingw2 TARGET_NAME)
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,console") 
     else()
         if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
-            target_link_options(${TARGET_NAME} PRIVATE "-s") 
+            # target_compile_options flto might failed, so disable that
+            # target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+            target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
         endif()
         target_link_options(${TARGET_NAME} PRIVATE "-Wl,-subsystem,windows")
     endif()
-    if(WIN64) 
-        set(ARCH x86_64)
-    else() 
-        set(ARCH i686) 
-    endif()
-    set(CMAKE_RC_COMPILER "${ARCH}-w64-mingw32-windres")
 
     # config compile 
+    set(CMAKE_C_VISIBILITY_PRESET hidden)
+    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+    target_compile_options(${TARGET_NAME} PRIVATE
+        -Wno-invalid-source-encoding
+    )
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES}
+        -D_WIN32_WINNT=0X0400 # support win xp
         _WIN32
         XMD_H # fix jpeg IN32 problem in jmorecfg.h
         USE_PARALLEL
@@ -195,18 +246,18 @@ function(config_windows_mingw2 TARGET_NAME)
         USE_FILELOG
     )
     target_include_directories(${TARGET_NAME} PRIVATE
-        ${CMAKE_SYSROOT}/include
-        /usr/${ARCH}-w64-mingw32/include
+        ${STATIC_PORT_ROOT}/include
     )
     target_link_directories(${TARGET_NAME} PRIVATE
-        ${CMAKE_SYSROOT}/lib
+        ${STATIC_PORT_ROOT}/lib
     )
     target_link_options(${TARGET_NAME} PRIVATE 
+        -Wl,--subsystem,windows:4.0
         -static-libgcc
         -static-libstdc++
     )
+
     target_link_libraries(${TARGET_NAME} PRIVATE # static
-        -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive 
         -Wl,-Bstatic
         lua
         bz2
@@ -214,15 +265,22 @@ function(config_windows_mingw2 TARGET_NAME)
         mingw32
         SDL2
         SDL2main
-        SDL2_ttf
         SDL2_image
+        SDL2_ttf
         SDL2_mixer
+        # ssp should be used for linux mingw
         ssp
         
         -Wl,-Bdynamic
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
         imm32 winmm gdi32 user32 rpcrt4
     )
+    if (EXTRA_SDL_LIB) # cmake sdl2_ttf will need freetype
+        target_link_libraries(${TARGET_NAME} PRIVATE # static
+            -Wl,-Bstatic
+            freetype
+        )
+    endif()
 endfunction()
 
 function(config_windows_msvc TARGET_NAME)
@@ -324,7 +382,12 @@ function(config_web TARGET_NAME)
     target_include_directories(${TARGET_NAME} PRIVATE
         ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/include
     )
-    
+
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
+    endif()
+
     # pass flags for emcc
     set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
     set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
@@ -356,7 +419,12 @@ function(config_android TARGET_NAME)
         target_compile_definitions(${TARGET_NAME} PRIVATE _DEBUG)
         target_compile_options(${TARGET_NAME} PRIVATE -g)
     endif()
-    
+
+    if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
+        target_compile_options(${TARGET_NAME} PRIVATE "-flto")
+        target_link_options(${TARGET_NAME} PRIVATE "-s" "-flto")
+    endif()
+
     target_compile_definitions(${TARGET_NAME} PRIVATE
         ${ONSYURI_DEFINES} 
         ANDROID
@@ -390,10 +458,10 @@ function(config_platform TARGET_NAME)
         if(MSVC)
             config_windows_msvc(${TARGET_NAME})
         else()
-            if (CMAKE_SYSROOT) 
-                config_windows_mingw2(${TARGET_NAME})
+            if (DEFINED STATIC_PORT_ROOT) 
+                config_windows_mingw(${TARGET_NAME})
             else() 
-                config_windows_mingw(${TARGET_NAME}) 
+                config_windows_msys2(${TARGET_NAME}) 
             endif()
         endif()
     elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
@@ -408,6 +476,8 @@ function(config_platform TARGET_NAME)
         )
     elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
         config_android(${TARGET_NAME})
+    elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+        config_darwin(${TARGET_NAME})
     else()
         message("${CMAKE_SYSTEM_NAME} enviroment for ${TARGET_NAME} not supported!")
     endif()

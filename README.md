@@ -1,9 +1,11 @@
 # Onscripter-Yuri  
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win(x86|x64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&style=flat-square)
+![GitHub release](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web(wasm)&logo=firefox&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&&logo=android&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_mingw(x86|x64)&logo=mingww64&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_msvc(x86|x64|arm64)&logo=codeblocks&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&logo=linux&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_darwin.yml?label=mac(x64|arm64)&logo=apple&style=flat-square)
 
 ☘️ An enhancement ONScripter project porting to many platforms, especially **web** ！  
-We also support for `windows`, `linux`, `android` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
+We also support for `windows`, `linux`, `mac`, `android`, `retroarch` and `psv`. This project is base on [ONScripter-Jh](https://github.com/jh10001/ONScripter-Jh) by `SDL2`.
 
 Online Demo: [lifegame](https://onsgame.netlify.app/lifegame/), [luasnow](https://onsgame.netlify.app/luasnow/), [noesis1 (lazyload)](https://onsgame.netlify.app/noesis1/)  
 PSV: [psv-OnscripterJH](https://github.com/YuriSizuku/psv-OnscripterJH/releases)  
@@ -12,7 +14,53 @@ Multi Platform: [github action release](https://github.com/YuriSizuku/Onscripter
 
 ![onsyuri_webtest_mo2](screenshot/onsyuri_mo2_webtest.png)
 
+**Now it supprts utf8 script with option `--enc:utf8`** !
+As the original `Onsscripter` only support `sjis` or `gbk` encoding, you can aslo convert them to utf8 like `iconv -f gbk -t utf8 0.txt -o 0.txt`.  
+
 New features :  
+
+- script
+  - [x] lua script and animation  
+  - [x] English half-width text // since [v0.7.4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.4)
+  - [x] sjis `--enc:sjis` and gbk `--enc:gbk` script
+  - [x] utf8 script `--enc:utf8` // since [v0.7.6](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.6)
+  - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
+  - [x] long click or touch to invoke menu  
+
+- render
+  - [x] fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
+  - [x] arbitary resolution `--width`, `--height`  
+  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bugs on windows
+
+- platform
+  - [x] windows
+    - [x] x86, x64 (local or cross compile by mingw, static link)  
+    - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
+    - [x] video by system player
+  - [x] linux
+    - [x] x86, x64 (local compile, static or dynamic link)
+    - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
+    - [x] retroarch (contributed by [iyzsong](https://github.com/iyzsong))
+  - [x] mac
+    - [x] x64, arm64 (local compile, contributed by [yujincheng08](https://github.com/yujincheng08))
+  - [x] web (by emscripten)
+    - [x] fs to save in indexdb
+    - [x] export and import save by zip file  // since [v0.7.5beta5](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta5)
+    - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
+    - [x] mobile web with touch, with webui menu
+  - [x] android
+    - [x] SDK level above 21 (android 5.1, Lolipop)  
+    - [x] extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile), and scoped storage
+    - [x] non-english charactor in path
+    - [x] video by system player
+  - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
+
+- bugfix  
+  - [x] fix some bugs in origin version (can not read `00.txt` problem)  
+  - [x] fix lua animation problem
+  - [x] fix button position wrong in fulllscreen, strech fullscreen // since [v0.7.5beta4](https://github.com/YuriSizuku/OnscripterYuri/releases/tag/v0.7.5beta4)
+  - [x] fix android onresume gles null pointer
+  - [x] fix android file stat problem (save not found)
 
 - develop
   - [x] clear camke project structure
@@ -21,51 +69,18 @@ New features :
   - [x] vscode and android studio project for multi enviroment
   - [x] ci in github action to automaticly build  
   - [x] use docker to build for all platform
-- platform
-  - [x] windows
-    - [x] x86, x64 (local or cross compile by mingw, static link)  
-    - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
-    - [x] lua script and animation  
-    - [x] video by system player
-  - [x] linux
-    - [x] x86, x64 (local compile, static or dynamic link)
-    - [x] arm, aarch64 (cross compile, SDL2 build from raspberrypi, static link)
-    - [x] lua scirpt and animation
-  - [x] web (by emscripten)
-    - [x] fs to save in indexdb
-    - [x] lazy load by ~~BrowserFS or worker~~ async fetch to avoid block the audio  
-    - [x] lua script and animation
-    - [x] mobile web with touch, with webui menu
-  - [x] android
-    - [x] SDK level above 21 (android 5.1, Lolipop)  
-    - [x] extern SD card by [SAF](https://github.com/YuriSizuku/android-SafFile), and scoped storage
-    - [x] non-english charactor in path
-    - [x] lua script and animation  
-    - [x] video by system player
-  - [x] psv, see [psv-Onscripter](https://github.com/YuriSizuku/psv-OnscripterJH)
-- render
-  - [x] fullscreen by `--fullscreen` or `alt+enter`, scretch to fullscreen by `--fullscreen2` or `f10`  
-  - [x] arbitary resolution `--width`, `--height`  
-  - [x] gles2 sharpness rendering by `--sharpness 1.0` parameter, fix bug on windows
-- other
-  - [x]  support English half-width text, see [Word wrapping](https://github.com/YuriSizuku/OnscripterYuri/issues/2)
-  - [x] `nt2`, `nt3` script encryption (Mine exclusive format)
-  - [x] long click or touch to invoke menu  
-- onsjh bug fix  
-  - [x] fix some bugs in origin version (can not read `00.txt` problem)  
-  - [x] fix lua animation problem
-  - [x] fix android onresume gles null pointer
-  - [x] fix android file stat problem (save not found)
 
 ## 1. Usage
 
 ### (1) general command
 
+You can also put these option in `ons_args` file.  
+
 ``` bash
 ./onsyuri --help
 ./onsyuri --root /path/to/game --save-dir /path/to/save --font /path/default.ttf --enc:sjis
 ./onsyuri --width 1280 --height 720 --sharpness=3.1
-./onsyuri --fullscreen2 # fullscreen1 alt+f4, fullscreen2 f11
+./onsyuri --fullscreen2 # fullscreen1 alt+f, fullscreen2 f10 (toggle stretch)
 
 Usage: onsyuri [option ...]
   -h, --help            show this help and exit
@@ -76,14 +91,14 @@ Usage: onsyuri [option ...]
   -r, --root path       set the root path to the archives
       --save-dir        set save dir
       --debug:1         print debug info
-      --enc:sjis        use sjis coding script
+      --enc:[gbk|sjis|utf8]  change encoding of the script, default is gbk
 
  render options:
       --window          start in windowed mode
       --width 1280      force window width
       --height 720      force window height
-      --fullscreen      start in fullscreen mode (alt+f4 or f11)
-      --fullscreen2     start in fullscreen mode with stretch (f10)
+      --fullscreen      start in fullscreen mode (alt+f or alt+enter)
+      --fullscreen2     start in fullscreen mode with stretch (f10 to toggle stretch)
       --sharpness 3.1    use gles to make image sharp
       --no-video        do not decode video
       --no-vsync        turn off vsync
@@ -113,12 +128,12 @@ You can either download the prebuild static elf from the [release](https://githu
 
 - Arch User Repository
   
-  https://aur.archlinux.org/packages/onscripter-yuri
-  
-  ```
-  # for Arch based distributions, install directly from AUR.
-  yay -S onscripter-yuri
-  ```
+  [aur onscripter-yuri](https://aur.archlinux.org/packages/onscripter-yuri)
+
+``` sh
+# for Arch based distributions, install directly from AUR.
+yay -S onscripter-yuri
+```
 
 ### (3) web
 
@@ -137,7 +152,7 @@ onsyuri_index.json
 
 ![onsyuri_mo2_webtest3](screenshot/onsyuri_mo2_webtest3.jpg)  
 
-It will load the game according to `onsyuri_index.json`, whitch is deifned by `<meta onsyuri_index="onsyuri_index.json">` in `onsyuri.html`.  
+It will load the game according to `onsyuri_index.json`, whitch is defined by `<meta onsyuri_index="onsyuri_index.json">` in `onsyuri.html`.  
 
 ``` json
 {
@@ -188,12 +203,12 @@ pacman -S --noconfirm mingw-w64-i686-mesa mingw-w64-x86_64-mesa
 pacman -S --noconfirm mingw-w64-i686-lua mingw-w64-x86_64-lua
 ```
 
-and then use these `local_mingw32.sh` or `local_mingw64.sh` to build.
+and then use these `local_msys2mingw32.sh` or `local_msys2mingw64.sh` to build.
 
 ``` sh
 cd script
 chmod +x *.sh
-sh -c "export BUILD_TYPE=Debug && export MSYS2SDK=/path/to/msys2 && ./local_mingw32.sh"
+sh -c "export BUILD_TYPE=Debug && export MSYS2_HOME=/path/to/msys2 && ./local_msys2mingw32.sh"
 ```  
 
 ### (2) local linux  
@@ -228,23 +243,17 @@ and then use `local_linux32.sh` or `local_linux64.sh` to build.
 ### (3) cross web  
 
 Install [emsdk](https://github.com/emscripten-core/emsdk) and use `cross_web.sh` to build.  
+You need to add `$EMSDK_HOME` and `$MSYS2_HOME` (if windows) user variable at first.  
 
 ``` shell
 cd script
 chmod +x *.sh
-sh -c "export BUILD_TYPE=Debug && export EMCSDK=/path/to/emsdk && ./cross_web.sh"
+sh -c "BUILD_TYPE=Debug EMCSDK_HOME=/path/to/emsdk ./cross_web.sh"
 ```
 
-### (4) cross linux arm
+### (4) cross linux
 
-This is aimed for raspberrypi or the other arm64 devices cross compiling.
-As there are many system bindings in SDL2,  
-just build libraries in the target machine, and use these build cache to link.  
-Or you can use `docker_linuxarm64.sh` for cross compile.  
-
-![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
-
-Install the dependency for aarch64 cross compiler,  
+Install the dependency for cross compiler,  
 
 ``` shell
 # install in the target machine, aarch64
@@ -259,11 +268,20 @@ sudo apt-get -y install libgl1-mesa-dev:armhf mesa-utils:armhf
 
 # install in the local machine
 sudo apt-get -y install tar make cmake curl git
+sudo apt-get -y install crossbuild-essential-i386
+sudo apt-get -y install crossbuild-essential-x86_64
 sudo apt-get -y install crossbuild-essential-armhf
 sudo apt-get -y install crossbuild-essential-arm64
 ```
 
-then use `cross_linuxa64.sh` or `cross_linuxa32.sh` to compile.  
+then use `cross_linuxa64.sh` or `cross_linuxa32.sh`, `cross_linux32.sh`, `cross_linux64.sh` to compile.  
+
+![onsyuri_mo2_linuxtest2.png](screenshot/onsyuri_mo2_linuxtest2.png)
+
+For raspberrypi or the other arm64 devices cross compiling.
+As there are many system bindings in SDL2,  
+just build libraries in the target machine, and use these build cache to link.  
+Or you can use `docker_linuxarm64.sh` for cross compile.  
 
 ```shell  
 # at first build sdl2 in raspberry pi
@@ -282,14 +300,51 @@ sh -c "export BUILD_TYPE=Debug && export SKIP_PORTS=yes && ./local_linux64.sh"
 
 Install mingw cross compiler and tools,  
 
+in `debian` or `wsl2`,  
+
 ``` shell  
 sudo apt-get -y install tar make cmake curl git
-sudo apt-get -y install mingw-w64 zstd # do not install mingw-w64-tools, this pkg-config is broken
+# use pkg-config is to find sdl2 by compiling sdl2_image, do not install mingw-w64-tools, this pkg-config is broken
+sudo apt-get -y install mingw-w64 zstd pkg-config 
+```
+
+in `msys2`,  
+
+```shell
+pacman -Syu --noconfirm
+pacman -S --noconfirm make tar vim curl # util tools
+pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb
+pacman -S --noconfirm mingw-w64-x86_64-binutils mingw-w64-x86_64-pkg-config
+pacman -S --noconfirm mingw-w64-i686-gcc mingw-w64-i686-gdb
+pacman -S --noconfirm mingw-w64-i686-binutils mingw-w64-i686-pkg-config
 ```
 
 then use `cross_mingw32.sh` or `cross_mingw64.sh` to compile.
 
-### (6) cross android  
+If you want to make compatible for `winxp`, should use gcc below 12.
+
+### (6) cross llvmmingw  
+
+Download [llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases/tag/20240619) and add `${LLVMMINGW_HOME}/bin` to path,  
+
+then use `cross_llvmmingw32.sh` or `cross_llvmmingw64.sh` to compile (either `bash (git bash)` or `msys2 shell`).
+
+If you want to build compatible for `winxp`, you can use [i686-11.2.0-release-win32-dwarf-rt_v9-rev1](https://github.com/niXman/mingw-builds-binaries/releases/download/11.2.0-rt_v9-rev1/i686-11.2.0-release-win32-dwarf-rt_v9-rev1.7z). Higher version like `gcc 14` is not available.  
+
+```sh
+export PATH=/path/to/mingw32/bin:$PATH
+export CC=i686-w64-mingw32-gcc
+export CXX=i686-w64-mingw32-g++
+export RC=windres
+
+echo CC=$(which $CC)
+echo CXX=$(which $CXX)
+echo RC=$(which $RC)
+
+bash -c "./cross_llvmmingw32.sh"
+```
+
+### (7) cross android  
 
 Install android sdk and ndk, then
 
@@ -304,7 +359,7 @@ cd src/onsyuri_android/
 chmod +x ./gradlew && ./gradlew assembleDebug
 ```
 
-### (7) cross by docker  
+### (8) cross by docker  
 
 You can easily build all supported platforms by docker, see `docker/docker_xxx.sh` in detail.
 If you want to build for linux arm in x86 platform, install qemu at first.  
@@ -340,4 +395,4 @@ sudo apt-get install qemu-user-static binfmt-support
 ## 5. Todo  
 
 - ~~video support (future plan)~~  partly finish by invoke system player  
-- ~~web preloading (future plan)~~ might not need ? lazyload partly solved
+- ~~web preloading (future plan)~~ might not need ? lazyload partly solved  

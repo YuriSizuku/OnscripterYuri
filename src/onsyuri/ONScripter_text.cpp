@@ -76,9 +76,14 @@ void ONScripter::drawGlyph( SDL_Surface *dst_surface, FontInfo *info, SDL_Color 
 {
     unsigned short unicode;
     if (IS_TWO_BYTE(text[0])){
-        unsigned index = ((unsigned char*)text)[0];
-        index = index << 8 | ((unsigned char*)text)[1];
-        unicode = coding2utf16->conv2UTF16( index );
+        if(coding2utf16->force_utf8) {
+            unicode = coding2utf16->convUTF8ToUTF16((const char **)&text);
+        }
+        else {
+            unsigned index = ((unsigned char*)text)[0];
+            index = index << 8 | ((unsigned char*)text)[1];
+            unicode = coding2utf16->conv2UTF16( index );
+        }
     }
     else{
         if ((text[0] & 0xe0) == 0xa0 || (text[0] & 0xe0) == 0xc0) unicode = ((unsigned char*)text)[0] - 0xa0 + 0xff60;
@@ -210,9 +215,11 @@ void ONScripter::drawChar( char* text, FontInfo *info, bool flush_flag, bool loo
     info->old_xy[0] = info->x(false);
     info->old_xy[1] = info->y(false);
 
-    char text2[2] = {text[0], 0};
-    if (IS_TWO_BYTE(text[0])) text2[1] = text[1];
+    char text2[5] = {text[0], 0, 0, 0, 0};
+    if (coding2utf16->force_utf8) strncpy(text2, text, UTF8_N_BYTE(text[0]));
+    else if (IS_TWO_BYTE(text[0])) text2[1] = text[1];
 
+    // draw 2 char or 1 wide char
     for (int i=0 ; i<2 ; i++){
         int xy[2];
         xy[0] = info->x() * screen_ratio1 / screen_ratio2;
@@ -249,6 +256,7 @@ void ONScripter::drawChar( char* text, FontInfo *info, bool flush_flag, bool loo
     if ( lookback_flag ){
         current_page->add( text[0] );
         if (text[1]) current_page->add( text[1] );
+        if (text[2]) current_page->add( text[2] );
     }
 }
 
@@ -267,7 +275,7 @@ void ONScripter::drawString( const char *str, uchar3 color, FontInfo *info, bool
     for ( i=0 ; i<3 ; i++ ) info->color[i] = color[i];
 
     bool skip_whitespace_flag = true;
-    char text[3] = { '\0', '\0', '\0' };
+    char text[5] = { '\0', '\0', '\0', '\0', '\0' };
     while( *str ){
         while (*str == ' ' && skip_whitespace_flag) str++;
 
@@ -322,9 +330,16 @@ void ONScripter::drawString( const char *str, uchar3 color, FontInfo *info, bool
                 for (int i=0 ; i<indent_offset ; i++)
                     info->advanceCharInHankaku(2);
             }
-
-            text[0] = *str++;
-            text[1] = *str++;
+            if (coding2utf16->force_utf8) {
+                int leading = UTF8_N_BYTE(*str);
+                for(int j=0; j<leading; j++) {
+                    text[j] = *str++;
+                }
+            }
+            else {
+                text[0] = *str++;
+                text[1] = *str++;
+            }
             drawChar( text, info, false, false, surface, cache_info );
         }
         else if (*str == 0x0a || (*str == '\\' && info->is_newline_accepted)){
@@ -367,7 +382,7 @@ void ONScripter::restoreTextBuffer(SDL_Surface *surface)
 {
     text_info.fill( 0, 0, 0, 0 );
 
-    char out_text[3] = { '\0','\0','\0' };
+    char out_text[5] = { '\0','\0','\0', '\0', '\0' };
     FontInfo f_info = sentence_font;
     f_info.clear();
     for ( int i=0 ; i<current_page->text_count ; i++ ){
@@ -408,7 +423,14 @@ void ONScripter::restoreTextBuffer(SDL_Surface *surface)
 #endif
 
             if (IS_TWO_BYTE(out_text[0])){
-                out_text[1] = current_page->text[i+1];
+                if (coding2utf16->force_utf8) {
+                    int leading = UTF8_N_BYTE(out_text[0]);
+                    for(int j=1; j<leading; j++)
+                    out_text[j] = current_page->text[i+j];
+                }
+                else {
+                    out_text[1] = current_page->text[i+1];
+                }
                 
                 if ( checkLineBreak( current_page->text+i, &f_info ) )
                     f_info.newLine();
@@ -689,10 +711,17 @@ int ONScripter::textCommand()
             string_buffer_offset++;
             break;
         }
-        else if (IS_TWO_BYTE(buf[string_buffer_offset]))
-            string_buffer_offset += 2;
-        else
-            string_buffer_offset++;
+        else {
+            if (coding2utf16->force_utf8) {
+                string_buffer_offset += UTF8_N_BYTE(buf[string_buffer_offset]);
+            }
+            else {
+                if (IS_TWO_BYTE(buf[string_buffer_offset]))
+                string_buffer_offset += 2;
+                else
+                    string_buffer_offset++;
+            }
+        } 
     }
 
     char *current_script = script_h.getCurrent();
@@ -792,7 +821,7 @@ void ONScripter::processEOT()
 bool ONScripter::processText()
 {
     //utils::printInfo("textCommand %c %d %d %d\n", script_h.getStringBuffer()[ string_buffer_offset ], string_buffer_offset, event_mode, line_enter_status);
-    char out_text[3]= {'\0', '\0', '\0'};
+    char out_text[5]= {'\0', '\0', '\0', '\0', '\0'};
 
     //utils::printInfo("*** textCommand %d (%d,%d)\n", string_buffer_offset, sentence_font.xy[0], sentence_font.xy[1]);
 
@@ -823,8 +852,16 @@ bool ONScripter::processText()
             }
         }
         
-        out_text[0] = script_h.getStringBuffer()[string_buffer_offset];
-        out_text[1] = script_h.getStringBuffer()[string_buffer_offset+1];
+
+        if(coding2utf16->force_utf8) {
+            for(int j=0; j<UTF8_N_BYTE(ch); j++) {
+                out_text[j] = script_h.getStringBuffer()[string_buffer_offset+j];
+            }
+        }
+        else {
+            out_text[0] = script_h.getStringBuffer()[string_buffer_offset];
+            out_text[1] = script_h.getStringBuffer()[string_buffer_offset+1];
+        }
 
         if (script_h.checkClickstr(&script_h.getStringBuffer()[string_buffer_offset]) > 0){
             if (sentence_font.getRemainingLine() <= clickstr_line)
@@ -848,7 +885,12 @@ bool ONScripter::processText()
         }
         
         num_chars_in_sentence++;
-        string_buffer_offset += 2;
+        if(coding2utf16->force_utf8) {
+            string_buffer_offset += UTF8_N_BYTE(ch);
+        }
+        else {
+            string_buffer_offset += 2;
+        }
 
         return true;
     }

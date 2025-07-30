@@ -56,11 +56,21 @@ int NL_dofile(lua_State *state)
     unsigned char *p = buffer;
     unsigned char *p2 = buffer2;
     while(*p){
-        if (IS_TWO_BYTE(*p)){
+        if(coding2utf16->force_utf8) {
+            int leading = UTF8_N_BYTE(*p);
+            for (int j=0; j < leading -1; j++) {
+                *p2++ = *p++;
+                if (*p == '\\') *p2++ = '\\';
+            }
             *p2++ = *p++;
-            if (*p == '\\') *p2++ = '\\';
         }
-        *p2++ = *p++;
+        else {
+            if (IS_TWO_BYTE(*p)){
+                *p2++ = *p++;
+                if (*p == '\\') *p2++ = '\\';
+            }
+            *p2++ = *p++;
+        }
     }
 
     if (luaL_loadbuffer(state, (const char*)buffer2, p2 - buffer2, str) || 
@@ -1149,14 +1159,24 @@ void LUAHandler::loadInitScript()
     buffer[length] = 0;
 
     unsigned char *buffer2 = new unsigned char[length*3/2];
-    unsigned char *p = buffer;
+    unsigned char *p = buffer; // origin lua script 
     unsigned char *p2 = buffer2;
-    while(*p){
-        if (IS_TWO_BYTE(*p)){
+    while(*p) {
+        if(coding2utf16->force_utf8) {
+            int leading = UTF8_N_BYTE(*p);
+            for (int j=0; j < leading -1; j++) {
+                *p2++ = *p++;
+                if (*p == '\\') *p2++ = '\\';
+            }
             *p2++ = *p++;
-            if (*p == '\\') *p2++ = '\\';
         }
-        *p2++ = *p++;
+        else {
+            if (IS_TWO_BYTE(*p)){
+                *p2++ = *p++;
+                if (*p == '\\') *p2++ = '\\';
+            }
+            *p2++ = *p++;
+        }
     }
 
     if (luaL_loadbuffer(state, (const char*)buffer2, p2 - buffer2, INIT_SCRIPT) || 
