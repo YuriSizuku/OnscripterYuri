@@ -61,7 +61,7 @@
             "CMAKE_GENERATOR_PLATFORM": "ARM", 
             "CMAKE_BUILD_TYPE": "Debug",
             "CMAKE_TOOLCHAIN_FILE": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
-            "VCPKG_TARGET_TRIPLET": "arm-windows",
+            "VCPKG_TARGET_TRIPLET": "arm-windows-static",
             "VCPKG_INSTALL_OPTIONS": "--allow-unsupported"
             
           }

@@ -48,11 +48,12 @@ extern "C" void waveCallback(int channel);
 
 #if USE_BTXH_CODE
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 #endif
-#include <string>
-#include <iostream>
+#include <io.h>
 #endif
+
 
 #define DEFAULT_AUDIOBUF  4096
 

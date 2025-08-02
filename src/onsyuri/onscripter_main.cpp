@@ -39,9 +39,10 @@
 #ifdef _WIN32
  // Use version 6.0 manifest in order to use Windows 8 like MessageBox Style
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#define NOMINMAX
 #include <Windows.h>
-#endif
 #include <io.h>
+#endif
 #endif
 
 ONScripter ons;
@@ -104,8 +105,12 @@ void optionHelp()
 		"      --key-exe file\tset a file (*.EXE) that includes a key table\n"
 		"      --fontcache\tcache default font\n"
 		;
-	if(_isatty(_fileno(stdout)) )printf(helpText);
-	else MessageBox(NULL, helpText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#ifdef _WIN32
+	if(!_isatty(_fileno(stdout)) ) MessageBox(NULL, helpText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#else
+	if(0) printf(helpText);
+#endif
+	else printf(helpText);
 #else
     printf( "Usage: onsyuri [option ...]\n" );
     printf( "  -h, --help\t\tshow this help and exit\n");
@@ -154,9 +159,12 @@ void optionVersion()
                 (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n"
 		"This is free software; see the source for copying conditions.\n"
 		;
-
-	if (_isatty(_fileno(stdout)))printf(versionText);
-	else MessageBox(NULL, versionText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#ifdef _WIN32
+	if (!_isatty(_fileno(stdout))) MessageBox(NULL, versionText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#else
+	if(0) printf(versionText);
+#endif
+	else printf(versionText);
 #else
     printf("Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n");
     printf("Copyright (c) 2001-2018 Ogapee.\n\

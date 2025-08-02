@@ -34,6 +34,7 @@
 
 #if USE_BTXH_CODE
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 #endif
 #endif
