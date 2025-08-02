@@ -53,14 +53,25 @@
 #include <propvarutil.h>     // InitPropVariantFromString
 #include <propkey.h>
 #include <io.h>
-DWORD WINAPI SendToast(LPVOID messageParam);
-BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text);
-BOOL isToastAvailable(void) {
-	return 1;
-}
-void EnsureShortcutWithAppID(char *title, char *archive_path);
-HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPathW, const char* exePathW, const wchar_t* appId, char *archive_path);
+#include <versionhelpers.h>
+#include <roapi.h>
+// #include <winstring.h>
+#include <combaseapi.h>
+// #include <corewrappers.h>
+#define USE_TOAST 1
 
+BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text);
+BOOL EnsureShortcutWithAppID(char *title, char *archive_path);
+HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPathW, const char* exePathW, const wchar_t* appId, char *archive_path);
+#if USE_TOAST
+DWORD WINAPI SendToast(LPVOID messageParam);
+BOOL TrySendToastDynamic(const wchar_t* message);
+DWORD WINAPI ThreadToast(LPVOID lpParam);
+struct ToastParam {
+	const wchar_t* message;
+	bool result;
+};
+#endif
 #endif
 
 #ifdef USE_BTXH_CODE
@@ -3403,16 +3414,23 @@ int ONScripter::captionCommand()
 	printf("Width: %d  Height: %d\n", screen_device_width, screen_device_height);
 #endif
 	puts(wm_title_string);
+
 	if (screen_device_width >= 1280 || screen_device_height >= 720) {
-		if (isToastAvailable()) {
+#if USE_TOAST
+		ToastParam param = { L"Press Alt + Enter for fit\nor F10 for stretch", FALSE };
+		if (EnsureShortcutWithAppID(wm_title_string, archive_path) && IsWindows8OrGreater()) {
 			SetCurrentProcessExplicitAppUserModelID(L"YuriShizuku.OnscripterYuri");
-			EnsureShortcutWithAppID(wm_title_string, archive_path);
-			// puts(archive_path);
-			CreateThread(nullptr, 0, SendToast, const_cast<LPVOID>(static_cast<const void*>(L"Press Alt + Enter for fit\nor F10 for stretch")), 0, nullptr);
+			// CreateThread(nullptr, 0, SendToast, const_cast<LPVOID>(static_cast<const void*>(L"Press Alt + Enter for fit\nor F10 for stretch")), 0, nullptr);
+			HANDLE h = CreateThread(nullptr, 0, ThreadToast, &param, 0, nullptr);
+			WaitForSingleObject(h, INFINITE);
+			CloseHandle(h);
 		}
-		else {
+		if (!param.result) {
+#endif
 			SendBalloon(L"OnscripterYuri", L"Press Alt + Enter for fit, or F10 for stretch");
+#if USE_TOAST
 		}
+#endif
 	}
 #if defined _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
@@ -4266,6 +4284,323 @@ void ONScripter::stopSMPEG()
 
 #if USE_BTXH_CODE && defined _WIN32
 
+BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text) {
+	char titleBuf[64] = { '\0' };
+	char infoBuf[256] = { '\0' };
+	WideCharToMultiByte(CP_ACP, 0, title, -1, titleBuf, sizeof(titleBuf) - 1, nullptr, nullptr);
+	titleBuf[sizeof(titleBuf) - 1] = '\0';
+	WideCharToMultiByte(CP_ACP, 0, text, -1, infoBuf, sizeof(infoBuf) - 1, nullptr, nullptr);
+	infoBuf[sizeof(infoBuf) - 1] = '\0';
+	NOTIFYICONDATA nid = { sizeof(nid) };
+	strcpy_s(nid.szInfoTitle, 64, titleBuf);
+	strcpy_s(nid.szInfo, 256, infoBuf);
+	// puts(nid.szInfoTitle);
+	// puts(nid.szInfo);
+	nid.uFlags = NIF_INFO;
+	nid.dwInfoFlags = NIIF_INFO;
+	return ::Shell_NotifyIcon(NIM_ADD, &nid);
+}
+
+BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path="")
+{
+	char appData[MAX_PATH];
+	if (!GetEnvironmentVariable("APPDATA", appData, MAX_PATH)) return FALSE;
+	std::string folderPath = appData;
+	folderPath += "\\Microsoft\\Windows\\Start Menu\\Programs\\OnscripterYuri";
+	DWORD attributes = GetFileAttributesA(folderPath.c_str());
+	if (attributes == INVALID_FILE_ATTRIBUTES || !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+
+		if (CreateDirectoryA(folderPath.c_str(), NULL)) {
+			std::cout << "Successfully created: " << folderPath << std::endl;
+		}
+		else {
+			DWORD err = GetLastError();
+			if (err == ERROR_ALREADY_EXISTS) {
+				std::cout << "Folder already exists, possible to be a file also: " << folderPath << std::endl;
+			}
+			else {
+				std::cerr << "Failed to create the folder: " << err << std::endl;
+			}
+		}
+	}
+	else {
+		std::cout << "Folder already exists: " << folderPath << std::endl;
+	}
+
+	std::string shortcutPath = folderPath;
+	shortcutPath += "\\";
+	shortcutPath += title;
+	shortcutPath += ".lnk";
+
+	DWORD attr = GetFileAttributes(shortcutPath.c_str());
+	if (attr != INVALID_FILE_ATTRIBUTES) return TRUE;
+
+	char exePath[MAX_PATH];
+	GetModuleFileName(nullptr, exePath, MAX_PATH);
+
+	//int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, nullptr, 0);
+	//wchar_t* wide_str = new wchar_t[wide_len + 1];
+	//MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, wide_str, wide_len);
+	puts(archive_path);
+	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriShizuku.OnscripterYuri", archive_path);
+	return FALSE;
+	//delete[] wide_str;
+}
+
+HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPath, const char* exePath, const wchar_t* appId, char *archive_path)
+{
+	Microsoft::WRL::ComPtr<IShellLink> shellLink;
+	HRESULT hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&shellLink));
+	if (FAILED(hr)) return hr;
+	//int acp_len = WideCharToMultiByte(CP_ACP, 0, exePathW, -1, nullptr, 0, nullptr, nullptr);
+	//char* exePath = new char[acp_len + 1];
+	//WideCharToMultiByte(CP_ACP, 0, exePathW, -1, exePath, acp_len, nullptr, nullptr);
+	shellLink->SetPath(exePath);
+	puts(exePath);
+	int archive_path_arg_len = strlen(archive_path) + 6;
+	char *archive_path_arg = new char[archive_path_arg_len];
+	if (strlen(archive_path) == 0) {
+		strcpy_s(archive_path_arg, archive_path_arg_len, "");
+	}
+	else {
+		strcpy_s(archive_path_arg, archive_path_arg_len, "-r \"");
+		strcat_s(archive_path_arg, archive_path_arg_len, archive_path);
+		if (archive_path_arg[strlen(archive_path_arg) - 1] == '\\') {
+			archive_path_arg[strlen(archive_path_arg) - 1] = '\0';
+		}
+		strcat_s(archive_path_arg, archive_path_arg_len, "\"");
+	}
+	puts(archive_path_arg);
+	shellLink->SetArguments(archive_path_arg);
+	delete[] archive_path_arg;
+	Microsoft::WRL::ComPtr<IPropertyStore> propStore;
+	hr = shellLink.As(&propStore);
+	if (FAILED(hr)) return hr;
+
+	PROPVARIANT pv;
+	hr = InitPropVariantFromString(appId, &pv);
+	if (FAILED(hr)) return hr;
+
+	propStore->SetValue(PKEY_AppUserModel_ID, pv);
+	propStore->Commit();
+	PropVariantClear(&pv);
+
+	Microsoft::WRL::ComPtr<IPersistFile> persistFile;
+	hr = shellLink.As(&persistFile);
+	if (FAILED(hr)) return hr;
+	//int acp_len = WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, nullptr, 0, nullptr, nullptr);
+	//char* shortcutPath = new char[acp_len + 1];
+	//WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, shortcutPath, acp_len, nullptr, nullptr);
+	puts(shortcutPath);
+	int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath, -1, nullptr, 0);
+	wchar_t* shortcutPathW = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_ACP, 0, shortcutPath, -1, shortcutPathW, wide_len);
+	return persistFile->Save(shortcutPathW, TRUE);
+	delete[] shortcutPathW;
+}
+
+#if USE_TOAST
+
+BOOL TrySendToastDynamic(const wchar_t* message) {
+	// 动态加载 combase.dll（包含 RoInitialize 等函数）
+	HMODULE hCombase = LoadLibraryW(L"combase.dll");
+	if (!hCombase) return false;
+
+	// 获取函数指针
+	auto pRoInitialize = (decltype(&RoInitialize))GetProcAddress(hCombase, "RoInitialize");
+	auto pRoUninitialize = (decltype(&RoUninitialize))GetProcAddress(hCombase, "RoUninitialize");
+	auto pRoGetActivationFactory = (decltype(&RoGetActivationFactory))GetProcAddress(hCombase, "RoGetActivationFactory");
+	auto pWindowsCreateString = (decltype(&WindowsCreateString))GetProcAddress(hCombase, "WindowsCreateString");
+	auto pWindowsDeleteString = (decltype(&WindowsDeleteString))GetProcAddress(hCombase, "WindowsDeleteString");
+
+	if (!pRoInitialize || !pRoUninitialize || !pRoGetActivationFactory || !pWindowsCreateString || !pWindowsDeleteString) {
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 初始化 WinRT
+	HRESULT hr = pRoInitialize(RO_INIT_MULTITHREADED);
+	if (FAILED(hr)) {
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 设置 AppUserModelID（必须）
+	const wchar_t* appId = L"YuriShizuku.OnscripterYuri";
+	SetCurrentProcessExplicitAppUserModelID(appId);
+
+	// 创建字符串用于获取 ToastNotificationManager
+	HSTRING hToastMgrClass = nullptr;
+	hr = pWindowsCreateString(
+		RuntimeClass_Windows_UI_Notifications_ToastNotificationManager,
+		(UINT32)wcslen(RuntimeClass_Windows_UI_Notifications_ToastNotificationManager),
+		&hToastMgrClass);
+	if (FAILED(hr)) {
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 获取 IToastNotificationManagerStatics 接口
+	ABI::Windows::UI::Notifications::IToastNotificationManagerStatics* toastManager = nullptr;
+	hr = pRoGetActivationFactory(hToastMgrClass, __uuidof(toastManager), (void**)&toastManager);
+	if (FAILED(hr) || !toastManager) {
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 获取 Toast XML 模板
+	ABI::Windows::Data::Xml::Dom::IXmlDocument* toastXml = nullptr;
+	hr = toastManager->GetTemplateContent(
+		ABI::Windows::UI::Notifications::ToastTemplateType_ToastText01, &toastXml);
+	if (FAILED(hr) || !toastXml) {
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 获取文本节点
+	ABI::Windows::Data::Xml::Dom::IXmlNodeList* textNodes = nullptr;
+	HSTRING tagName = nullptr;
+	WindowsCreateString(L"text", wcslen(L"text"), &tagName);
+	// hr = toastXml->GetElementsByTagName(Microsoft::WRL::Wrappers::HStringReference(L"text").Get(), &textNodes);
+	hr = toastXml->GetElementsByTagName(tagName, &textNodes);
+	WindowsDeleteString(tagName);
+	if (FAILED(hr) || !textNodes) {
+		toastXml->Release();
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	ABI::Windows::Data::Xml::Dom::IXmlNode* textNode = nullptr;
+	hr = textNodes->Item(0, &textNode);
+	if (FAILED(hr) || !textNode) {
+		textNodes->Release();
+		toastXml->Release();
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 创建文本节点
+	ABI::Windows::Data::Xml::Dom::IXmlText* xmlText = nullptr;
+	HSTRING data;
+	WindowsCreateString(message, wcslen(message), &data);
+	// hr = toastXml->CreateTextNode(Microsoft::WRL::Wrappers::HStringReference(message).Get(), &xmlText);
+	hr = toastXml->CreateTextNode(data, &xmlText);
+	WindowsDeleteString(data);
+	if (FAILED(hr) || !xmlText) {
+		textNode->Release();
+		textNodes->Release();
+		toastXml->Release();
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	ABI::Windows::Data::Xml::Dom::IXmlNode* textNodeAppend = nullptr;
+	xmlText->QueryInterface(&textNodeAppend);
+	if (!textNodeAppend) {
+		xmlText->Release();
+		textNode->Release();
+		textNodes->Release();
+		toastXml->Release();
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	ABI::Windows::Data::Xml::Dom::IXmlNode* appended = nullptr;
+	hr = textNode->AppendChild(textNodeAppend, &appended);
+	if (FAILED(hr)) {
+		textNodeAppend->Release();
+		xmlText->Release();
+		textNode->Release();
+		textNodes->Release();
+		toastXml->Release();
+		toastManager->Release();
+		pWindowsDeleteString(hToastMgrClass);
+		pRoUninitialize();
+		FreeLibrary(hCombase);
+		return false;
+	}
+
+	// 创建 Toast 通知对象
+	ABI::Windows::UI::Notifications::IToastNotificationFactory* toastFactory = nullptr;
+	HSTRING hToastClass = nullptr;
+	pWindowsCreateString(RuntimeClass_Windows_UI_Notifications_ToastNotification,
+		(UINT32)wcslen(RuntimeClass_Windows_UI_Notifications_ToastNotification),
+		&hToastClass);
+	hr = pRoGetActivationFactory(hToastClass, __uuidof(toastFactory), (void**)&toastFactory);
+	if (FAILED(hr) || !toastFactory) {
+		pWindowsDeleteString(hToastClass);
+		// 清理略
+		return false;
+	}
+
+	ABI::Windows::UI::Notifications::IToastNotification* toast = nullptr;
+	hr = toastFactory->CreateToastNotification(toastXml, &toast);
+	if (FAILED(hr)) {
+		toastFactory->Release();
+		// 清理略
+		return false;
+	}
+
+	ABI::Windows::UI::Notifications::IToastNotifier* notifier = nullptr;
+	HSTRING applicationId;
+	WindowsCreateString(appId, wcslen(appId), &applicationId);
+	// hr = toastManager->CreateToastNotifierWithId(Microsoft::WRL::Wrappers::HStringReference(appId).Get(), &notifier);
+	hr = toastManager->CreateToastNotifierWithId(applicationId, &notifier);
+	WindowsDeleteString(applicationId);
+	if (FAILED(hr)) {
+		toast->Release();
+		toastFactory->Release();
+		// 清理略
+		return false;
+	}
+
+	// 显示通知
+	hr = notifier->Show(toast);
+
+	// 清理
+	notifier->Release();
+	toast->Release();
+	toastFactory->Release();
+	appended->Release();
+	textNodeAppend->Release();
+	xmlText->Release();
+	textNode->Release();
+	textNodes->Release();
+	toastXml->Release();
+	toastManager->Release();
+	pWindowsDeleteString(hToastMgrClass);
+	pWindowsDeleteString(hToastClass);
+	pRoUninitialize();
+	FreeLibrary(hCombase);
+
+	return SUCCEEDED(hr);
+}
+
+DWORD WINAPI ThreadToast(LPVOID lpParam) {
+	ToastParam* p = (ToastParam*)lpParam;
+	p->result = TrySendToastDynamic(p->message);
+	return 0;
+}
+
+
 DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	const wchar_t* message = static_cast<const wchar_t*>(messageParam);
@@ -4402,102 +4737,6 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	CoUninitialize();
 	return 0;
 }
-
-BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text) {
-	char titleBuf[64] = { '\0' };
-	char infoBuf[256] = { '\0' };
-	WideCharToMultiByte(CP_ACP, 0, title, -1, titleBuf, sizeof(titleBuf) - 1, nullptr, nullptr);
-	titleBuf[sizeof(titleBuf) - 1] = '\0';
-	WideCharToMultiByte(CP_ACP, 0, text, -1, infoBuf, sizeof(infoBuf) - 1, nullptr, nullptr);
-	infoBuf[sizeof(infoBuf) - 1] = '\0';
-	NOTIFYICONDATA nid = { sizeof(nid) };
-	strcpy_s(nid.szInfoTitle, 64, titleBuf);
-	strcpy_s(nid.szInfo, 256, infoBuf);
-	// puts(nid.szInfoTitle);
-	// puts(nid.szInfo);
-	nid.uFlags = NIF_INFO;
-	nid.dwInfoFlags = NIIF_INFO;
-	return ::Shell_NotifyIcon(NIM_ADD, &nid);
-}
-
-void EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path="")
-{
-	char appData[MAX_PATH];
-	if (!GetEnvironmentVariable("APPDATA", appData, MAX_PATH)) return;
-
-	std::string shortcutPath = appData;
-	shortcutPath += "\\Microsoft\\Windows\\Start Menu\\Programs\\";
-	shortcutPath += title;
-	shortcutPath += ".lnk";
-
-	// puts(shortcutPath.c_str());
-
-	DWORD attr = GetFileAttributes(shortcutPath.c_str());
-	if (attr != INVALID_FILE_ATTRIBUTES) return;  // 快捷方式已存在
-
-	char exePath[MAX_PATH];
-	GetModuleFileName(nullptr, exePath, MAX_PATH);
-
-	//int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, nullptr, 0);
-	//wchar_t* wide_str = new wchar_t[wide_len + 1];
-	//MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, wide_str, wide_len);
-	puts(archive_path);
-	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriShizuku.OnscripterYuri", archive_path);
-	//delete[] wide_str;
-}
-
-HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPath, const char* exePath, const wchar_t* appId, char *archive_path)
-{
-	Microsoft::WRL::ComPtr<IShellLink> shellLink;
-	HRESULT hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&shellLink));
-	if (FAILED(hr)) return hr;
-	//int acp_len = WideCharToMultiByte(CP_ACP, 0, exePathW, -1, nullptr, 0, nullptr, nullptr);
-	//char* exePath = new char[acp_len + 1];
-	//WideCharToMultiByte(CP_ACP, 0, exePathW, -1, exePath, acp_len, nullptr, nullptr);
-	shellLink->SetPath(exePath);
-	puts(exePath);
-	int archive_path_arg_len = strlen(archive_path) + 6;
-	char *archive_path_arg = new char[archive_path_arg_len];
-	if (strlen(archive_path) == 0) {
-		strcpy_s(archive_path_arg, archive_path_arg_len, "");
-	}
-	else {
-		strcpy_s(archive_path_arg, archive_path_arg_len, "-r \"");
-		strcat_s(archive_path_arg, archive_path_arg_len, archive_path);
-		if (archive_path_arg[strlen(archive_path_arg) - 1] == '\\') {
-			archive_path_arg[strlen(archive_path_arg) - 1] = '\0';
-		}
-		strcat_s(archive_path_arg, archive_path_arg_len, "\"");
-	}
-	puts(archive_path_arg);
-	shellLink->SetArguments(archive_path_arg);
-	delete[] archive_path_arg;
-	Microsoft::WRL::ComPtr<IPropertyStore> propStore;
-	hr = shellLink.As(&propStore);
-	if (FAILED(hr)) return hr;
-
-	PROPVARIANT pv;
-	hr = InitPropVariantFromString(appId, &pv);
-	if (FAILED(hr)) return hr;
-
-	propStore->SetValue(PKEY_AppUserModel_ID, pv);
-	propStore->Commit();
-	PropVariantClear(&pv);
-
-	Microsoft::WRL::ComPtr<IPersistFile> persistFile;
-	hr = shellLink.As(&persistFile);
-	if (FAILED(hr)) return hr;
-	//int acp_len = WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, nullptr, 0, nullptr, nullptr);
-	//char* shortcutPath = new char[acp_len + 1];
-	//WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, shortcutPath, acp_len, nullptr, nullptr);
-	puts(shortcutPath);
-	int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath, -1, nullptr, 0);
-	wchar_t* shortcutPathW = new wchar_t[wide_len + 1];
-	MultiByteToWideChar(CP_ACP, 0, shortcutPath, -1, shortcutPathW, wide_len);
-	return persistFile->Save(shortcutPathW, TRUE);
-	delete[] shortcutPathW;
-}
-
-
+#endif
 
 #endif
