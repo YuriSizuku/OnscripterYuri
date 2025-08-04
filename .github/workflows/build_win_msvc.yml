@@ -158,7 +158,7 @@ jobs:
     - name: run vcpkg
       uses: lukka/run-vcpkg@v10.7
       with: 
-        # vcpkgGitCommitId: fba75d09065fcc76a25dcf386b1d00d33f5175af
+        vcpkgGitCommitId: 903956eff7cb94774a9e805ff573c000afc43e3e
         runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`, `--allow-unsupported`]'
         runVcpkgInstall: true
         prependedCacheKey: ${{env.VCPKG_TRIPLET}}

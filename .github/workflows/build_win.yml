@@ -66,6 +66,8 @@ jobs:
           mingw-w64-${{ matrix.arch.suffix }}-windows-default-manifest
           mingw-w64-${{ matrix.arch.suffix }}-winpthreads
           mingw-w64-${{ matrix.arch.suffix }}-tools
+          mingw-w64-${{ matrix.arch.suffix }}-SDL2
+          mingw-w64-${{ matrix.arch.suffix }}-bzip2
         msystem: MINGW${{ matrix.arch.suffix2 }}
 
     
