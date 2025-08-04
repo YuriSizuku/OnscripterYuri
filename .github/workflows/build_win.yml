@@ -71,15 +71,24 @@ jobs:
         msystem: MINGW${{ matrix.arch.suffix2 }}
 
     
+    # - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
+    #   shell: bash
+    #   run: |
+    #     if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
+    #       sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+    #     fi
+    #     cd script 
+    #     SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
+    
     - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
-      shell: bash
+      shell: msys2 {0}  # 让它根据上面的 msystem=MINGW32 自动选择 mingw32 shell
       run: |
-        if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
-          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+        if [ -z "$(echo ${{ github.ref_name }} | grep merge)" ]; then 
+          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{ github.ref_name }}"/g' src/onsyuri/version.h
         fi
         cd script 
         SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
-    
+
     - name: prepare release
       if: github.event_name == 'push'
       run: |
