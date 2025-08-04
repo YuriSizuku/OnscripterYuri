@@ -287,6 +287,10 @@ function(config_windows_mingw TARGET_NAME)
 endfunction()
 
 function(config_windows_msvc TARGET_NAME)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM")
+        set(CMAKE_SYSTEM_VERSION "10.0.22621.0" CACHE STRING "Windows SDK Version" FORCE)
+        set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION "10.0.22621.0" CACHE STRING "VS Platform Version" FORCE)
+    endif()
     add_executable(${TARGET_NAME} WIN32 
         ${ONSYURI_CODE}
         ${PROJECT_SOURCE_DIR}/asset/icon1.rc)
