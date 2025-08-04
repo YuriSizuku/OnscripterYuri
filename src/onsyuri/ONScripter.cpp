@@ -46,16 +46,6 @@ extern "C" void waveCallback(int channel);
 #endif
 #define USE_BTXH_CODE 1
 
-#include <iostream>
-
-#if defined(_WIN32)
-#pragma message("_WIN32 is defined")
-#endif
-
-#if defined(_WIN32) && _WIN32
-#pragma message("_WIN32 is defined and true")
-#endif
-
 
 #if USE_BTXH_CODE
 #ifdef _WIN32

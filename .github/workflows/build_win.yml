@@ -42,10 +42,26 @@ jobs:
         key: thirdparty_build
         path: ./thirdparty
     
-    - name: Set up MinGW
-      uses: egor-tensin/setup-mingw@v2
+    # - name: Set up MinGW
+    #   uses: egor-tensin/setup-mingw@v2
+    #   with:
+    #     platform: ${{ matrix.arch.suffix }}
+
+    - name: Set up MSYS2
+      uses: msys2/setup-msys2@v2
       with:
-        platform: ${{ matrix.arch.suffix }}
+        update: true
+        install: >-
+          base-devel
+          git
+          mingw-w64-${{ matrix.arch.suffix }}-gcc
+          mingw-w64-${{ matrix.arch.suffix }}-headers
+          mingw-w64-${{ matrix.arch.suffix }}-crt
+          mingw-w64-${{ matrix.arch.suffix }}-windows-default-manifest
+          mingw-w64-${{ matrix.arch.suffix }}-winpthreads
+          mingw-w64-${{ matrix.arch.suffix }}-tools
+        msystem: MINGW${{ matrix.arch.suffix2 }}
+
     
     - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
       run: |
