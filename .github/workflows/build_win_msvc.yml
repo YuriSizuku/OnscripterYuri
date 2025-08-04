@@ -143,63 +143,123 @@ jobs:
         allowUpdates: "true"
         token: ${{secrets.GITHUB_TOKEN}}
 
+  # build_arm32:
+  #   runs-on: windows-2022
+  #   env:
+  #     BUILD_TYPE: Release
+  #     VCPKG_TRIPLET: arm-windows-static
+  #     CMAKE_ARCH: ARM
+  #   defaults:
+  #     run:
+  #       working-directory: ${{github.workspace}}
+  #   steps:
+  #   - name: checkout code
+  #     uses: actions/checkout@v3
+    
+  #   # - name: run vcpkg
+  #   #   uses: lukka/run-vcpkg@v10.7
+  #   #   with: 
+  #   #     vcpkgGitCommitId: 903956eff7cb94774a9e805ff573c000afc43e3e
+  #   #     runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`, `--allow-unsupported`]'
+  #   #     runVcpkgInstall: true
+  #   #     prependedCacheKey: ${{env.VCPKG_TRIPLET}}
+
+  #   - name: Setup MSVC ARM environment
+  #     shell: cmd
+  #     run: |
+  #       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm 10.0.22621.0
+  #       set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+  #       set WindowsSdkVersion=10.0.22621.0
+  #       echo WindowsSdkDir=%WindowsSdkDir%
+  #       echo WindowsSdkVersion=%WindowsSdkVersion%
+
+  #   - name: Run vcpkg install manually
+  #     shell: cmd
+  #     run: |
+  #       set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+  #       set WindowsSdkVersion=10.0.22621.0
+  #       echo WindowsSdkDir=%WindowsSdkDir%
+  #       echo WindowsSdkVersion=%WindowsSdkVersion%
+  #       vcpkg install --recurse --clean-after-build --x-install-root D:/a/OnscripterYuriRT/b/vcpkg_installed --triplet arm-windows-static --allow-unsupported
+ 
+  #   - name: Set up CMake
+  #     run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" -G "Visual Studio 17 2022" -A ${{env.CMAKE_ARCH}}
+      
+  #   - name: Build
+  #     run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    
+  #   - name: Upload artifact
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: onsyuri-${{env.VCPKG_TRIPLET}}
+  #       path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
+    
+  #   - name: prepare release
+  #     run: mv ${{github.workspace}}/build/${{env.BUILD_TYPE}}/onsyuri.exe ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
+      
+  #   - name: create release
+  #     uses: ncipollo/release-action@v1
+  #     with:
+  #       artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
+  #       allowUpdates: "true"
+  #       token: ${{secrets.GITHUB_TOKEN}}
   build_arm32:
     runs-on: windows-2022
     env:
       BUILD_TYPE: Release
       VCPKG_TRIPLET: arm-windows-static
       CMAKE_ARCH: ARM
+      REF_NAME: ${{ github.ref_name }}  # 捕获分支/标签名
     defaults:
       run:
         working-directory: ${{github.workspace}}
     steps:
-    - name: checkout code
+    - name: Checkout code
       uses: actions/checkout@v3
-    
-    # - name: run vcpkg
-    #   uses: lukka/run-vcpkg@v10.7
-    #   with: 
-    #     vcpkgGitCommitId: 903956eff7cb94774a9e805ff573c000afc43e3e
-    #     runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `$[env.VCPKG_INSTALLED_DIR]`, `--triplet`, `${{env.VCPKG_TRIPLET}}`, `--allow-unsupported`]'
-    #     runVcpkgInstall: true
-    #     prependedCacheKey: ${{env.VCPKG_TRIPLET}}
-
-    - name: Setup MSVC ARM environment
+  
+    - name: Build for ARM32
       shell: cmd
       run: |
+        
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm 10.0.22621.0
         set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
         set WindowsSdkVersion=10.0.22621.0
-        echo WindowsSdkDir=%WindowsSdkDir%
-        echo WindowsSdkVersion=%WindowsSdkVersion%
-
-    - name: Run vcpkg install manually
-      shell: cmd
-      run: |
-        set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
-        set WindowsSdkVersion=10.0.22621.0
-        echo WindowsSdkDir=%WindowsSdkDir%
-        echo WindowsSdkVersion=%WindowsSdkVersion%
-        vcpkg install --recurse --clean-after-build --x-install-root D:/a/OnscripterYuriRT/b/vcpkg_installed --triplet arm-windows-static --allow-unsupported
- 
-    - name: Set up CMake
-      run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" -G "Visual Studio 17 2022" -A ${{env.CMAKE_ARCH}}
-      
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-    
+        set WindowsSDK_LIBPATH=%WindowsSdkDir%Lib\%WindowsSdkVersion%\um\arm
+        set INCLUDE=%WindowsSdkDir%Include\%WindowsSdkVersion%\um;%WindowsSdkDir%Include\%WindowsSdkVersion%\shared;%INCLUDE%
+        set LIB=%WindowsSdkDir%Lib\%WindowsSdkVersion%\um\arm;%WindowsSdkDir%Lib\%WindowsSdkVersion%\ucrt\arm;%LIB%
+  
+        
+        echo Selected Windows SDK: %WindowsSdkVersion%
+        if not exist "%WindowsSDK_LIBPATH%\kernel32.lib" (
+          echo ERROR: kernel32.lib not found in expected ARM32 SDK path!
+          dir /s "%WindowsSdkDir%Lib\%WindowsSdkVersion%\*kernel32.lib"
+          exit /b 1
+        )
+  
+        
+        vcpkg install --recurse --clean-after-build --triplet %VCPKG_TRIPLET% --allow-unsupported
+  
+        
+        cmake -B build -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
+          -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake" ^
+          -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
+          -DVCPKG_PLATFORM_TOOLSET=v143 ^
+          -G "Visual Studio 17 2022" -A %CMAKE_ARCH%
+        
+        cmake --build build --config %BUILD_TYPE%
+  
+        
+        copy build\%BUILD_TYPE%\onsyuri.exe onsyuri_%REF_NAME%_arm_win.exe
+  
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: onsyuri-${{env.VCPKG_TRIPLET}}
+        name: onsyuri-arm32
         path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
-    
-    - name: prepare release
-      run: mv ${{github.workspace}}/build/${{env.BUILD_TYPE}}/onsyuri.exe ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
-      
-    - name: create release
+  
+    - name: Create release
       uses: ncipollo/release-action@v1
       with:
         artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
-        allowUpdates: "true"
+        allowUpdates: true
         token: ${{secrets.GITHUB_TOKEN}}
