@@ -70,6 +70,7 @@ jobs:
 
     
     - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
+      shell: bash
       run: |
         if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
           sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
