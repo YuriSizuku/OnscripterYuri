@@ -75,7 +75,6 @@ jobs:
           mingw-w64-${{ matrix.arch.suffix }}-libogg
           mingw-w64-${{ matrix.arch.suffix }}-harfbuzz
           mingw-w64-${{ matrix.arch.suffix }}-libvorbis
-          mingw-w64-${{ matrix.arch.suffix }}-SDL2_image
           mingw-w64-${{ matrix.arch.suffix }}-SDL2_mixer
           mingw-w64-${{ matrix.arch.suffix }}-SDL2_ttf
           

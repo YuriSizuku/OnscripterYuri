@@ -230,9 +230,7 @@ jobs:
         :: 验证环境
         echo VCINSTALLDIR=%VCINSTALLDIR%
         dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
-  
-    - name: Install dependencies
-      run: |
+
         :: 使用覆盖三元组参数
         vcpkg install --triplet %VCPKG_TRIPLET% --clean-after-build ^
           --overlay-triplets="${{ github.workspace }}/triplets" ^
