@@ -68,6 +68,7 @@ jobs:
           mingw-w64-${{ matrix.arch.suffix }}-tools
           mingw-w64-${{ matrix.arch.suffix }}-SDL2
           mingw-w64-${{ matrix.arch.suffix }}-bzip2
+          mingw-w64-${{ matrix.arch.suffix }}-cmake
         msystem: MINGW${{ matrix.arch.suffix2 }}
 
     

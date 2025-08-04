@@ -142,6 +142,7 @@ jobs:
         artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm64_win.exe
         allowUpdates: "true"
         token: ${{secrets.GITHUB_TOKEN}}
+
   build_arm32:
     runs-on: windows-2022
     env:
@@ -166,12 +167,12 @@ jobs:
     - name: Setup MSVC ARM environment
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" arm
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm
 
     - name: Run vcpkg install manually
       shell: cmd
       run: |
-        D:\a\OnscripterYuriRT\OnscripterYuriRT\vcpkg\vcpkg.exe install --recurse --clean-after-build --x-install-root D:/a/OnscripterYuriRT/b/vcpkg_installed --triplet arm-windows-static --allow-unsupported
+        vcpkg install --recurse --clean-after-build --x-install-root D:/a/OnscripterYuriRT/b/vcpkg_installed --triplet arm-windows-static --allow-unsupported
  
     - name: Set up CMake
       run: md build && cd build && cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_TRIPLET}} -DVCPKG_BUILD_TYPE=release -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" -G "Visual Studio 17 2022" -A ${{env.CMAKE_ARCH}}
