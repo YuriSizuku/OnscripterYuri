@@ -226,6 +226,9 @@ jobs:
         setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
         setx WindowsSdkVersion %WINSDK_VERSION%
         setx WindowsTargetPlatformVersion %WINSDK_VERSION%
+        set WindowsSdkDir="C:\Program Files (x86)\Windows Kits\10"
+        set WindowsSdkVersion=%WINSDK_VERSION%
+        set WindowsTargetPlatformVersion=%WINSDK_VERSION%
         
         :: 验证环境
         echo VCINSTALLDIR=%VCINSTALLDIR%
@@ -238,11 +241,26 @@ jobs:
   
     - name: Configure CMake
       run: |
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm %WINSDK_VERSION%
+          
+        :: 设置环境变量
+        setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
+        setx WindowsSdkVersion %WINSDK_VERSION%
+        setx WindowsTargetPlatformVersion %WINSDK_VERSION%
+        set WindowsSdkDir="C:\Program Files (x86)\Windows Kits\10"
+        set WindowsSdkVersion=%WINSDK_VERSION%
+        set WindowsTargetPlatformVersion=%WINSDK_VERSION%
+        
+        :: 验证环境
+        echo VCINSTALLDIR=%VCINSTALLDIR%
+        dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
         cmake -B build -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
           -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake" ^
           -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
           -DCMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION=%WINSDK_VERSION% ^
-          -G "Visual Studio 17 2022" -A %CMAKE_ARCH%
+          -G "Visual Studio 17 2022" -A %CMAKE_ARCH% ^
+          -DCMAKE_SYSTEM_VERSION=%WINSDK_VERSION% ^
+
   
     - name: Build project
       run: cmake --build build --config %BUILD_TYPE%
