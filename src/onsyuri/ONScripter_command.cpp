@@ -3414,7 +3414,7 @@ int ONScripter::captionCommand()
 	printf("Width: %d  Height: %d\n", screen_device_width, screen_device_height);
 #endif
 	puts(wm_title_string);
-
+#if defined _WIN32
 	if (screen_device_width >= 1280 || screen_device_height >= 720) {
 #if USE_TOAST
 		ToastParam param = { L"Press Alt + Enter for fit\nor F10 for stretch", FALSE };
@@ -3432,7 +3432,6 @@ int ONScripter::captionCommand()
 		}
 #endif
 	}
-#if defined _WIN32
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	wm_title_string = wm_title_string_temp;

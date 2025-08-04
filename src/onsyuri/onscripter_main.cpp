@@ -36,7 +36,7 @@
 #include "stdlib.h"
 
 #if USE_BTXH_CODE
-#ifdef _WIN32
+#if _WIN32
  // Use version 6.0 manifest in order to use Windows 8 like MessageBox Style
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define NOMINMAX

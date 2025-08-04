@@ -46,12 +46,22 @@ extern "C" void waveCallback(int channel);
 #endif
 #define USE_BTXH_CODE 1
 
+#include <iostream>
+
+#if defined(_WIN32)
+#pragma message("_WIN32 is defined")
+#endif
+
+#if defined(_WIN32) && _WIN32
+#pragma message("_WIN32 is defined and true")
+#endif
+
+
 #if USE_BTXH_CODE
 #ifdef _WIN32
 #define NOMINMAX
 #include <Windows.h>
 #endif
-#include <io.h>
 #endif
 
 
@@ -805,7 +815,7 @@ int ONScripter::init()
 				+ "Check if \"-f\" parameter is missing from the command.";
 			MessageBox(NULL,
 				LPCSTR(fontErrorPromptString.c_str()),
-				"ONScripterYuri",
+				"OnscripterYuri",
 				MB_OK | MB_ICONERROR);
 #endif
 #else
