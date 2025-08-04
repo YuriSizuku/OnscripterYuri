@@ -31,7 +31,8 @@ jobs:
       matrix: 
         arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}]
     
-    runs-on: ubuntu-22.04
+    # runs-on: ubuntu-22.04
+    runs-on: runs-on: windows-2022
     needs: install_thirdparty_build
     steps:
     - uses: actions/checkout@v3
