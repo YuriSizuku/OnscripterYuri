@@ -167,7 +167,11 @@ jobs:
     - name: Setup MSVC ARM environment
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm 10.0.22621.0
+        set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+        set WindowsSdkVersion=10.0.22621.0\
+        echo WindowsSdkDir=%WindowsSdkDir%
+        echo WindowsSdkVersion=%WindowsSdkVersion%
 
     - name: Run vcpkg install manually
       shell: cmd
