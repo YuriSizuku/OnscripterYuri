@@ -169,13 +169,17 @@ jobs:
       run: |
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm 10.0.22621.0
         set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
-        set WindowsSdkVersion=10.0.22621.0\
+        set WindowsSdkVersion=10.0.22621.0
         echo WindowsSdkDir=%WindowsSdkDir%
         echo WindowsSdkVersion=%WindowsSdkVersion%
 
     - name: Run vcpkg install manually
       shell: cmd
       run: |
+        set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+        set WindowsSdkVersion=10.0.22621.0
+        echo WindowsSdkDir=%WindowsSdkDir%
+        echo WindowsSdkVersion=%WindowsSdkVersion%
         vcpkg install --recurse --clean-after-build --x-install-root D:/a/OnscripterYuriRT/b/vcpkg_installed --triplet arm-windows-static --allow-unsupported
  
     - name: Set up CMake

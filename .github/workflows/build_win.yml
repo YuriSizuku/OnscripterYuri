@@ -70,12 +70,12 @@ jobs:
           mingw-w64-${{ matrix.arch.suffix }}-bzip2
           mingw-w64-${{ matrix.arch.suffix }}-cmake
           mingw-w64-${{ matrix.arch.suffix }}-libjpeg-turbo
-          mingw-w64-${{ matrix.arch.suffix }}-sdl2-image
           mingw-w64-${{ matrix.arch.suffix }}-libwebp
-          mingw-w64-${{ matrix.arch.suffix }}-sdl2-mixer
-          mingw-w64-${{ matrix.arch.suffix }}-sdl2-ttf
           mingw-w64-${{ matrix.arch.suffix }}-lua
           mingw-w64-${{ matrix.arch.suffix }}-libogg
+          mingw-w64-${{ matrix.arch.suffix }}-harfbuzz
+          mingw-w64-${{ matrix.arch.suffix }}-libvorbis
+          
           
         msystem: MINGW${{ matrix.arch.suffix2 }}
 
