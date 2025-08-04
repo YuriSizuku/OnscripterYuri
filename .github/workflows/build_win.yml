@@ -4,7 +4,7 @@ on:
   pull_request: 
   
 permissions:
-  contents: write
+  contents: write 
 
 jobs:
   install_thirdparty_build:
@@ -29,8 +29,13 @@ jobs:
   build_win:
     strategy:
       matrix: 
-        arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}]
-    
+       # arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}]
+
+        arch: [
+          {suffix2: 32, suffix: i686, msystem: MINGW32},
+          {suffix2: 64, suffix: x86_64, msystem: MINGW64}
+        ]
+        
     # runs-on: ubuntu-22.04
     runs-on: windows-2022
     needs: install_thirdparty_build

@@ -196,6 +196,8 @@ function(config_windows_msys2 TARGET_NAME)
             ogg
             mpg123
             shlwapi
+
+            runtimeobject
         )
 
         target_link_libraries(${TARGET_NAME} 
@@ -274,6 +276,7 @@ function(config_windows_mingw TARGET_NAME)
         -Wl,-Bdynamic
         dinput8 shell32 setupapi advapi32 uuid version oleaut32 ole32 
         imm32 winmm gdi32 user32 rpcrt4
+        runtimeobject
     )
     if (EXTRA_SDL_LIB) # cmake sdl2_ttf will need freetype
         target_link_libraries(${TARGET_NAME} PRIVATE # static
@@ -364,7 +367,8 @@ function(config_windows_msvc TARGET_NAME)
             $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
         )
         target_link_libraries(${TARGET_NAME} PRIVATE BZip2::BZip2)
-        
+        target_link_libraries(onsyuri PRIVATE runtimeobject)
+
         # use /MT
         set_property(TARGET ${TARGET_NAME} PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
