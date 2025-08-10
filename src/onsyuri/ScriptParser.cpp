@@ -260,7 +260,6 @@ void ScriptParser::reset()
 
 int ScriptParser::openScript()
 {
-	// printf("ScriptParser::openScript - %s\n",archive_path);
     script_h.cBR = new NsaReader( 0, archive_path, BaseReader::ARCHIVE_TYPE_NS2, key_table );
     if (script_h.cBR->open( nsa_path )){
         delete script_h.cBR;

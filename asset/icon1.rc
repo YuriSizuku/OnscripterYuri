@@ -13,7 +13,7 @@ BEGIN
       VALUE "FileVersion", "0.7.6"
       VALUE "InternalName", "onsyuri"
       VALUE "OriginalFilename", "onsyuri.exe"
-      VALUE "ProductName", "OnscripterYuri"
+      VALUE "ProductName", "ONScripterYuri"
       VALUE "ProductVersion", "0.7.6"
     END
   END

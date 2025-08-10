@@ -9,7 +9,6 @@ thirdparty/**
 script/*.json
 save
 vcpkg/**
-vcpkg_installed/
 
 # android
 local.properties
@@ -31,3 +30,4 @@ src/onsyuri_android/app/cpp/thirdparty/**
 src/onsyuri_android/app/.cxx/**
 src/onsyuri_android/app/debug/**
 src/onsyuri_android/app/release/**
+vcpkg_installed/ 

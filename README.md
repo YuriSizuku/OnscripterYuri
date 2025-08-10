@@ -1,7 +1,7 @@
 # Onscripter-Yuri  
 
 ![GitHub release](https://img.shields.io/github/v/release/YuriSizuku/OnscripterYuri?color=green&label=onsyuri&logo=4chan&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_web.yml?label=web(wasm)&logo=firefox&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_android.yml?label=android(arm|arm64)&&logo=android&style=flat-square)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_msvc(x86|x64|arm64)&logo=codeblocks&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_mingw(x86|x64)&logo=mingww64&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_win.yml?label=win_msvc(x86|x64|arm64)&logo=codeblocks&style=flat-square)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_linux.yml?label=linux(x86|x64|arm|arm64)&logo=linux&style=flat-square)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/OnscripterYuri/build_darwin.yml?label=mac(x64|arm64)&logo=apple&style=flat-square)
 
 ☘️ An enhancement ONScripter project porting to many platforms, especially **web** ！  
@@ -36,7 +36,6 @@ New features :
   - [x] windows
     - [x] x86, x64 (local or cross compile by mingw, static link)  
     - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
-    - [x] arm32 (local msvc, vcpkg)
     - [x] video by system player
   - [x] linux
     - [x] x86, x64 (local compile, static or dynamic link)
@@ -397,4 +396,3 @@ sudo apt-get install qemu-user-static binfmt-support
 
 - ~~video support (future plan)~~  partly finish by invoke system player  
 - ~~web preloading (future plan)~~ might not need ? lazyload partly solved  
-

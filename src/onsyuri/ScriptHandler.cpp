@@ -27,17 +27,6 @@
 #include "Utils.h"
 #include "coding2utf16.h"
 
-#ifdef USE_BTXH_CODE
-#undef USE_BTXH_CODE
-#endif
-#define USE_BTXH_CODE 1
-
-#if USE_BTXH_CODE
-#ifdef _WIN32
-#define NOMINMAX
-#include <Windows.h>
-#endif
-#endif
 #if defined(WEB)
 #include <emscripten.h>
 #endif
@@ -1030,19 +1019,6 @@ int ScriptHandler::readScript( char *path )
     }
 
     if (fp == NULL){
-#if USE_BTXH_CODE
-		printf("ScriptHandler::readScript - %s\n",archive_path);
-#ifdef _WIN32
-		MessageBox(NULL,
-			"Can't open any of the following:\n"
-			"0.txt\n00.txt\nnscript.dat\nnscript.___\n"
-			"Please see the usage using \"--help\" Parameter.\n"
-			"Or put this program into the resource folder/directory.\n"
-			"You can also use -r to specify a resource path, and -f for a TTF font file.",
-			"ONScripterYuri",
-			MB_OK | MB_ICONERROR );
-#endif
-#endif
         utils::printError( "can't open any of 0.txt, 00.txt, nscript.dat and nscript.___\n");
         return -1;
     }
