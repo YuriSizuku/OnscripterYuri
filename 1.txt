@@ -1,0 +1,839 @@
+[DEBUG] To include the environment variables in debug output, pass --debug-env
+[DEBUG] Trying to load bundleconfig from C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\vcpkg-bundle.json
+[DEBUG] Bundle config: readonly=true, usegitregistry=true, embeddedsha=4f8fe05871555c1798dbcb1957d0d595e94f7b57, deployment=VisualStudio, vsversion=17.0
+[DEBUG] VS telemetry opted in at SOFTWARE\WOW6432Node\Microsoft\VSCommon\17.0\SQM\\OptIn
+[DEBUG] Metrics enabled.
+[DEBUG] Feature flag 'binarycaching' unset
+[DEBUG] Feature flag 'compilertracking' unset
+[DEBUG] Feature flag 'registries' unset
+[DEBUG] Feature flag 'versions' unset
+[DEBUG] Feature flag 'dependencygraph' unset
+[DEBUG] Using scripts-root: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\scripts
+[DEBUG] Using builtin-ports: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\ports
+[DEBUG] Using installed-root: C:\GitHub\OnscripterYuriRT\vcpkg_installed
+[DEBUG] Using buildtrees-root: C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds
+[DEBUG] Using packages-root: C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\pkgs
+[DEBUG] Using manifest-root: C:\GitHub\OnscripterYuriRT
+[DEBUG] Using vcpkg-root: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg
+[DEBUG] Using builtin-registry: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\versions
+[DEBUG] Using downloads-root: C:\Users\Weslie\AppData\Local\vcpkg\downloads
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Found path: C:\Program Files\Git\cmd\git.exe
+[DEBUG] 1000: CreateProcessW("C:\Program Files\Git\cmd\git.exe" "--git-dir=C:\Users\Weslie\AppData\Local\vcpkg\registries\git\.git" "--work-tree=C:\Users\Weslie\AppData\Local\vcpkg\registries\git" -c core.autocrlf=false rev-parse f2e1c41da38c71be74ef48684666991929b45418:versions)
+[DEBUG] 1000: cmd_execute_and_stream_data() returned 0 after    59376 us
+[DEBUG] Loading dep info for: bzip2:arm-windows-static
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Found path: C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe
+[DEBUG] 1001: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\0.vcpkg_dep_info.cmake")
+[DEBUG] 1001: cmd_execute_and_stream_data() returned 0 after    47318 us
+[DEBUG] 1002: CreateProcessW("C:\Program Files\Git\cmd\git.exe" "--git-dir=C:\Users\Weslie\AppData\Local\vcpkg\registries\git\.git" "--work-tree=C:\Users\Weslie\AppData\Local\vcpkg\registries\git" -c core.autocrlf=false show ce613c41372b23b1f51333815feb3edd87ef8a8b:versions/baseline.json)
+[DEBUG] 1002: cmd_execute_and_stream_data() returned 0 after    48701 us
+[DEBUG] Loading dep info for: sdl2:arm-windows-static
+[DEBUG] 1003: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\1.vcpkg_dep_info.cmake")
+[DEBUG] 1003: cmd_execute_and_stream_data() returned 0 after    15104 us
+[DEBUG] Loading dep info for: onscripter-yuri:arm-windows-static
+[DEBUG] 1004: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\2.vcpkg_dep_info.cmake")
+[DEBUG] 1004: cmd_execute_and_stream_data() returned 0 after    15858 us
+[DEBUG] Loading dep info for: sdl2-mixer:arm-windows-static
+[DEBUG] 1005: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\3.vcpkg_dep_info.cmake")
+[DEBUG] 1005: cmd_execute_and_stream_data() returned 0 after    15028 us
+[DEBUG] Loading dep info for: harfbuzz:arm-windows-static
+[DEBUG] 1006: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\4.vcpkg_dep_info.cmake")
+[DEBUG] 1006: cmd_execute_and_stream_data() returned 0 after    15423 us
+[DEBUG] Loading dep info for: freetype:arm-windows-static
+[DEBUG] 1007: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\5.vcpkg_dep_info.cmake")
+[DEBUG] 1007: cmd_execute_and_stream_data() returned 0 after    17022 us
+[DEBUG] Loading dep info for: sdl2-ttf:arm-windows-static libpng:arm-windows-static libjpeg-turbo:arm-windows-static vcpkg-cmake:x64-windows gettext:arm-windows-static vcpkg-cmake-config:x64-windows libogg:arm-windows-static lua:arm-windows-static sdl2-image:arm-windows-static libwebp:arm-windows-static libvorbis:arm-windows-static vcpkg-tool-meson:x64-windows brotli:arm-windows-static vcpkg-cmake-get-vars:x64-windows zlib:arm-windows-static
+[DEBUG] 1008: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\6.vcpkg_dep_info.cmake")
+[DEBUG] 1008: cmd_execute_and_stream_data() returned 0 after    19196 us
+[DEBUG] 1009: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\GitHub\OnscripterYuriRT\vcpkg_installed\vcpkg\blds\0.vcpkg_tags.cmake")
+[DEBUG] 1009: cmd_execute_and_stream_data() returned 0 after    24613 us
+[DEBUG] 1010: CreateProcessW("C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -all -prerelease -legacy -products * -format xml)
+[DEBUG] 1010: cmd_execute_and_stream_data() returned 0 after    18761 us
+Detecting compiler hash for triplet x64-windows...
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Found path: C:\Program Files\PowerShell\7\pwsh.exe
+[DEBUG] command line: cmd /d /c "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary/Build\vcvarsall.bat" -vcvars_ver=14.44.35207 amd64   2>&1 <NUL  & echo cdARN4xjKueKScMy9C6H & set
+[DEBUG] 1011: CreateProcessW(cmd /d /c "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary/Build\vcvarsall.bat" -vcvars_ver=14.44.35207 amd64   2>&1 <NUL  & echo cdARN4xjKueKScMy9C6H & set)
+[DEBUG] 1011: cmd_execute_and_stream_data() returned 0 after  1312114 us
+[DEBUG] **********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.9
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+cdARN4xjKueKScMy9C6H 
+ALLUSERSPROFILE=C:\ProgramData
+APPDATA=C:\Users\Weslie\AppData\Roaming
+CommandPromptType=Native
+CommonProgramFiles=C:\Program Files\Common Files
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+CommonProgramW6432=C:\Program Files\Common Files
+COMPUTERNAME=DKR-GALPALYER3
+ComSpec=C:\WINDOWS\system32\cmd.exe
+DevEnvDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\
+ExtensionSdkDir=C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs
+EXTERNAL_INCLUDE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um
+Framework40Version=v4.0
+FrameworkDir=C:\WINDOWS\Microsoft.NET\Framework64\
+FrameworkDIR64=C:\WINDOWS\Microsoft.NET\Framework64
+FrameworkVersion=v4.0.30319
+FrameworkVersion64=v4.0.30319
+HOMEDRIVE=C:
+HOMEPATH=\Users\Weslie
+INCLUDE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um
+LIB=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\x64;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x64;C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64;C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64
+LIBPATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\x64;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\x86\store\references;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0;C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319
+LOCALAPPDATA=C:\Users\Weslie\AppData\Local
+LOGONSERVER=\\MicrosoftAccount
+NETFXSDKDir=C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\
+NUMBER_OF_PROCESSORS=4
+OS=Windows_NT
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+Platform=x64
+PROCESSOR_ARCHITECTURE=AMD64
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 69 Stepping 1, GenuineIntel
+PROCESSOR_LEVEL=6
+PROCESSOR_REVISION=4501
+ProgramData=C:\ProgramData
+ProgramFiles=C:\Program Files
+ProgramFiles(x86)=C:\Program Files (x86)
+ProgramW6432=C:\Program Files
+PROMPT=$P$G
+PSModulePath=C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\
+PUBLIC=C:\Users\Public
+SystemDrive=C:
+SystemRoot=C:\WINDOWS
+TEMP=C:\Users\Weslie\AppData\Local\Temp
+TMP=C:\Users\Weslie\AppData\Local\Temp
+UCRTVersion=10.0.26100.0
+UniversalCRTSdkDir=C:\Program Files (x86)\Windows Kits\10\
+USERDOMAIN=DKR-GALPALYER3
+USERDOMAIN_ROAMINGPROFILE=DKR-GALPALYER3
+USERNAME=Weslie
+USERPROFILE=C:\Users\Weslie
+VCIDEInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\VC\
+VCINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\
+VCPKG_ROOT=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg
+VCToolsInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\
+VCToolsRedistDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Redist\MSVC\14.44.35112\
+VCToolsVersion=14.44.35207
+VisualStudioVersion=17.0
+VS170COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\
+VSCMD_ARG_app_plat=Desktop
+VSCMD_ARG_HOST_ARCH=x64
+VSCMD_ARG_TGT_ARCH=x64
+VSCMD_ARG_VCVARS_VER=14.44.35207
+VSCMD_VER=17.14.9
+VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\
+windir=C:\WINDOWS
+PATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\x64\;C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\\x64;C:\Program Files (x86)\Windows Kits\10\bin\\x64;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\\MSBuild\Current\Bin\amd64;C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\;C:\Program Files\PowerShell\7;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\Wbem;C:\WINDOWS\system32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg
+VSLANG=1033
+VSCMD_SKIP_SENDTELEMETRY=1
+VCPKG_COMMAND=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/vcpkg.exe
+VCPKG_FORCE_SYSTEM_BINARIES=1
+WindowsLibPath=C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0
+WindowsSdkBinPath=C:\Program Files (x86)\Windows Kits\10\bin\
+WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+WindowsSDKLibVersion=10.0.26100.0\
+WindowsSdkVerBinPath=C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\
+WindowsSDKVersion=10.0.26100.0\
+WindowsSDK_ExecutablePath_x64=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\x64\
+WindowsSDK_ExecutablePath_x86=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\
+X_VCPKG_RECURSIVE_DATA={
+"vcpkg-root-env": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\vcpkg"
+}
+
+__DOTNET_ADD_64BIT=1
+__DOTNET_PREFERRED_BITNESS=64
+__VSCMD_PREINIT_PATH=C:\Program Files\PowerShell\7;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\Wbem;C:\WINDOWS\system32\WindowsPowerShell\v1.0\
+
+[DEBUG] 1012: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DCURRENT_PORT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/detect_compiler" -DCURRENT_BUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds/detect_compiler -DCURRENT_PACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs/detect_compiler_x64-windows -D_HOST_TRIPLET=x64-windows -DVCPKG_COMPILER_CACHE_FILE=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/compiler-file-hash-cache.json -DCMD=BUILD -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DTARGET_TRIPLET=x64-windows "-DTARGET_TRIPLET_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/triplets/x64-windows.cmake" -DVCPKG_BASE_VERSION=2025-04-01 -DVCPKG_CONCURRENCY=5 -DVCPKG_PLATFORM_TOOLSET=v143 "-DGIT=C:/Program Files/Git/cmd/git.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\scripts\ports.cmake")
+[DEBUG] -- Configuring x64-windows
+[DEBUG] [1/1] "C:/cmake-3.27.9-windows-x86_64/bin/cmake.exe" -E chdir ".." "C:/cmake-3.27.9-windows-x86_64/bin/cmake.exe" "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/detect_compiler" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs/detect_compiler_x64-windows" "-DVCPKG_COMPILER_CACHE_FILE=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/compiler-file-hash-cache.json" "-DBUILD_SHARED_LIBS=ON" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v143" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=dynamic" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=x64" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" "-DZ_VCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF"
+[DEBUG] -- The C compiler identification is MSVC 19.44.35213.0
+[DEBUG] -- The CXX compiler identification is MSVC 19.44.35213.0
+[DEBUG] #COMPILER_HASH#fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+[DEBUG] #COMPILER_C_HASH#ff89972586d4ab227d8b3247a9df66bd3dd90884
+[DEBUG] #COMPILER_C_VERSION#19.44.35213.0
+[DEBUG] #COMPILER_C_ID#MSVC
+[DEBUG] #COMPILER_C_PATH#C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+[DEBUG] #COMPILER_CXX_HASH#ff89972586d4ab227d8b3247a9df66bd3dd90884
+[DEBUG] #COMPILER_CXX_VERSION#19.44.35213.0
+[DEBUG] #COMPILER_CXX_ID#MSVC
+[DEBUG] #COMPILER_CXX_PATH#C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+[DEBUG] -- Configuring done (0.9s)
+[DEBUG] -- Generating done (0.0s)
+[DEBUG] CMake Warning:
+[DEBUG]   Manually-specified variables were not used by the project:
+[DEBUG] 
+[DEBUG]     BUILD_SHARED_LIBS
+[DEBUG]     CMAKE_INSTALL_BINDIR
+[DEBUG]     CMAKE_INSTALL_LIBDIR
+[DEBUG]     _VCPKG_ROOT_DIR
+[DEBUG] 
+[DEBUG] 
+[DEBUG] -- Build files have been written to: C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds/detect_compiler/x64-windows-rel
+[DEBUG] 
+[DEBUG] 1012: cmd_execute_and_stream_data() returned 0 after  1143904 us
+[DEBUG] Detected compiler hash for triplet x64-windows: fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+Compiler found: C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+[DEBUG] <abientries for vcpkg-cmake-config:x64-windows>
+[DEBUG]   cmake|0
+[DEBUG]   copyright|04b60f99a43bfd7fefdc8364b24aac704a2160cef969b75ba6a38b62dc4c4b70
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|832b34e63f5af41ad1b2e4aa79c5bfa507a005b120b51548e674accc706837d7
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|x64-windows
+[DEBUG]   triplet_abi|4556164a2cd3dd6f4742101eabb46def7e71b6e5856faa88e5d005aac12a803c-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+[DEBUG]   vcpkg-port-config.cmake|72bc3093337e633bdd19fe5d4dd1f38ca1918def49608d676a9c98c686d38b1e
+[DEBUG]   vcpkg.json|3964c3d0e6b39c7f42cebd5949cccdc7eb6feb83ee434fe73756c954b173c5c2
+[DEBUG]   vcpkg_cmake_config_fixup.cmake|f3880578674f1bdbc54b67c5fc3787aaab8ee8bcf4e3e6e008204bf4ab67aa0b
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG] </abientries>
+[DEBUG] <abientries for vcpkg-cmake:x64-windows>
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|a711531b7f13b7da16fa1f25d7c5737a423d4a126465dc9e6689a0f043fcc1aa
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|x64-windows
+[DEBUG]   triplet_abi|4556164a2cd3dd6f4742101eabb46def7e71b6e5856faa88e5d005aac12a803c-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+[DEBUG]   vcpkg-port-config.cmake|f0a30f77c8f5e3ac40436fe2518a61ad067f2955c7ef3be6d6a0ca4b81cd2a45
+[DEBUG]   vcpkg.json|6fd546b781a1aa5df572bdd31672cf222e55698aa5bf7d3e5c11abf1ae56a45b
+[DEBUG]   vcpkg_add_to_path|5f5ae75cf37b2a58d1a8561ca96496b64cd91ec9a0afab0b976c3e5d59030bfe
+[DEBUG]   vcpkg_cmake_build.cmake|6d1c27080fe3e768b5e7b968d6a28a37db154ebcb214297de25f10b6713511e1
+[DEBUG]   vcpkg_cmake_configure.cmake|a8bc92be2faf621d6183ed1f3eb2ac3b103f4418b95f8695cf0dc7f7c5e8f724
+[DEBUG]   vcpkg_cmake_install.cmake|3ae7886dc8434fac6f1e61190cc355fdec5fbd4f60758e2de20423cf49c91369
+[DEBUG]   vcpkg_configure_cmake|9dfd362bd20613eaa83af55eb0f98c8cb50fd4826a65da74a0f1641da73497c2
+[DEBUG]   vcpkg_execute_build_process|4976d00fc7d25ad07984f282490121a09aa44a49c5dae627ca68355affd929d0
+[DEBUG]   vcpkg_execute_required_process|2df167e6e7f37c8038e02a3ebbfb239fa55de0b384ed4532d33f5483710a608b
+[DEBUG]   vcpkg_find_acquire_program|03722d714d388b19731f5c0be35996c25a47d5b35dd6a09669ea1e599a56e005
+[DEBUG]   vcpkg_find_acquire_program(NINJA)|ac757f414eae2c678cd541840807a2145bb84b4693f2ec5e46a630309e480c91
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG] </abientries>
+Detecting compiler hash for triplet arm-windows-static...
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] command line: cmd /d /c "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary/Build\vcvarsall.bat" -vcvars_ver=14.44.35207 amd64_arm   2>&1 <NUL  & echo cdARN4xjKueKScMy9C6H & set
+[DEBUG] 1013: CreateProcessW(cmd /d /c "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary/Build\vcvarsall.bat" -vcvars_ver=14.44.35207 amd64_arm   2>&1 <NUL  & echo cdARN4xjKueKScMy9C6H & set)
+[DEBUG] 1013: cmd_execute_and_stream_data() returned 0 after  1407984 us
+[DEBUG] **********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.9
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64_arm'
+cdARN4xjKueKScMy9C6H 
+ALLUSERSPROFILE=C:\ProgramData
+APPDATA=C:\Users\Weslie\AppData\Roaming
+CommandPromptType=Cross
+CommonProgramFiles=C:\Program Files\Common Files
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+CommonProgramW6432=C:\Program Files\Common Files
+COMPUTERNAME=DKR-GALPALYER3
+ComSpec=C:\WINDOWS\system32\cmd.exe
+DevEnvDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\
+ExtensionSdkDir=C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs
+EXTERNAL_INCLUDE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um
+Framework40Version=v4.0
+FrameworkDir=C:\WINDOWS\Microsoft.NET\Framework64\
+FrameworkDIR64=C:\WINDOWS\Microsoft.NET\Framework64
+FrameworkVersion=v4.0.30319
+FrameworkVersion64=v4.0.30319
+HOMEDRIVE=C:
+HOMEPATH=\Users\Weslie
+INCLUDE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um
+LIB=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\ARM;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\arm;C:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\ucrt\arm;C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\arm
+LIBPATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\ARM;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\lib\x86\store\references;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0;C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319
+LOCALAPPDATA=C:\Users\Weslie\AppData\Local
+LOGONSERVER=\\MicrosoftAccount
+NETFXSDKDir=C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\
+NUMBER_OF_PROCESSORS=4
+OS=Windows_NT
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+Platform=arm
+PreferredToolArchitecture=x64
+PROCESSOR_ARCHITECTURE=AMD64
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 69 Stepping 1, GenuineIntel
+PROCESSOR_LEVEL=6
+PROCESSOR_REVISION=4501
+ProgramData=C:\ProgramData
+ProgramFiles=C:\Program Files
+ProgramFiles(x86)=C:\Program Files (x86)
+ProgramW6432=C:\Program Files
+PROMPT=$P$G
+PSModulePath=C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\
+PUBLIC=C:\Users\Public
+SystemDrive=C:
+SystemRoot=C:\WINDOWS
+TEMP=C:\Users\Weslie\AppData\Local\Temp
+TMP=C:\Users\Weslie\AppData\Local\Temp
+UCRTVersion=10.0.22621.0
+UniversalCRTSdkDir=C:\Program Files (x86)\Windows Kits\10\
+USERDOMAIN=DKR-GALPALYER3
+USERDOMAIN_ROAMINGPROFILE=DKR-GALPALYER3
+USERNAME=Weslie
+USERPROFILE=C:\Users\Weslie
+VCIDEInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\VC\
+VCINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\
+VCPKG_ROOT=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg
+VCToolsInstallDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\
+VCToolsRedistDir=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Redist\MSVC\14.44.35112\
+VCToolsVersion=14.44.35207
+VisualStudioVersion=17.0
+VS170COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\
+VSCMD_ARG_app_plat=Desktop
+VSCMD_ARG_HOST_ARCH=x64
+VSCMD_ARG_TGT_ARCH=arm
+VSCMD_ARG_VCVARS_VER=14.44.35207
+VSCMD_VER=17.14.9
+VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\
+windir=C:\WINDOWS
+PATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\bin\HostX64\ARM;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\x64\;C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\\x64;C:\Program Files (x86)\Windows Kits\10\bin\\x64;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\\MSBuild\Current\Bin\amd64;C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\;C:\Program Files\PowerShell\7;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\Wbem;C:\WINDOWS\system32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg
+VSLANG=1033
+VSCMD_SKIP_SENDTELEMETRY=1
+VCPKG_COMMAND=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/vcpkg.exe
+VCPKG_FORCE_SYSTEM_BINARIES=1
+WindowsLibPath=C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0
+WindowsSdkBinPath=C:\Program Files (x86)\Windows Kits\10\bin\
+WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\
+WindowsSDKLibVersion=10.0.26100.0\
+WindowsSdkVerBinPath=C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\
+WindowsSDKVersion=10.0.26100.0\
+WindowsSDK_ExecutablePath_x64=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\x64\
+WindowsSDK_ExecutablePath_x86=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\
+X_VCPKG_RECURSIVE_DATA={
+"vcpkg-root-env": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\vcpkg"
+}
+
+__DOTNET_ADD_64BIT=1
+__DOTNET_PREFERRED_BITNESS=64
+__VSCMD_PREINIT_PATH=C:\Program Files\PowerShell\7;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\Wbem;C:\WINDOWS\system32\WindowsPowerShell\v1.0\
+
+[DEBUG] 1014: CreateProcessW("C:\cmake-3.27.9-windows-x86_64\bin\cmake.exe" "-DCURRENT_PORT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/detect_compiler" -DCURRENT_BUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds/detect_compiler -DCURRENT_PACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs/detect_compiler_arm-windows-static -D_HOST_TRIPLET=arm-windows-static -DVCPKG_COMPILER_CACHE_FILE=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/compiler-file-hash-cache.json -DCMD=BUILD -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DTARGET_TRIPLET=arm-windows-static "-DTARGET_TRIPLET_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/triplets/community/arm-windows-static.cmake" -DVCPKG_BASE_VERSION=2025-04-01 -DVCPKG_CONCURRENCY=5 -DVCPKG_PLATFORM_TOOLSET=v143 "-DGIT=C:/Program Files/Git/cmd/git.exe" "-DVCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" -DPACKAGES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs -DBUILDTREES_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds -D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed -DDOWNLOADS=C:/Users/Weslie/AppData/Local/vcpkg/downloads -DVCPKG_MANIFEST_INSTALL=OFF -P "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\vcpkg\scripts\ports.cmake")
+[DEBUG] -- Configuring arm-windows-static
+[DEBUG] [1/1] "C:/cmake-3.27.9-windows-x86_64/bin/cmake.exe" -E chdir ".." "C:/cmake-3.27.9-windows-x86_64/bin/cmake.exe" "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/detect_compiler" "-G" "Ninja" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/pkgs/detect_compiler_arm-windows-static" "-DVCPKG_COMPILER_CACHE_FILE=C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/compiler-file-hash-cache.json" "-DBUILD_SHARED_LIBS=OFF" "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/toolchains/windows.cmake" "-DVCPKG_TARGET_TRIPLET=arm-windows-static" "-DVCPKG_SET_CHARSET_FLAG=ON" "-DVCPKG_PLATFORM_TOOLSET=v143" "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON" "-DCMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY=ON" "-DCMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP=TRUE" "-DCMAKE_VERBOSE_MAKEFILE=ON" "-DVCPKG_APPLOCAL_DEPS=OFF" "-DCMAKE_TOOLCHAIN_FILE=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DCMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION=ON" "-DVCPKG_CXX_FLAGS=" "-DVCPKG_CXX_FLAGS_RELEASE=" "-DVCPKG_CXX_FLAGS_DEBUG=" "-DVCPKG_C_FLAGS=" "-DVCPKG_C_FLAGS_RELEASE=" "-DVCPKG_C_FLAGS_DEBUG=" "-DVCPKG_CRT_LINKAGE=static" "-DVCPKG_LINKER_FLAGS=" "-DVCPKG_LINKER_FLAGS_RELEASE=" "-DVCPKG_LINKER_FLAGS_DEBUG=" "-DVCPKG_TARGET_ARCHITECTURE=arm" "-DCMAKE_INSTALL_LIBDIR:STRING=lib" "-DCMAKE_INSTALL_BINDIR:STRING=bin" "-D_VCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" "-DZ_VCPKG_ROOT_DIR=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg" "-D_VCPKG_INSTALLED_DIR=C:/GitHub/OnscripterYuriRT/vcpkg_installed" "-DVCPKG_MANIFEST_INSTALL=OFF"
+[DEBUG] -- The C compiler identification is MSVC 19.44.35213.0
+[DEBUG] -- The CXX compiler identification is MSVC 19.44.35213.0
+[DEBUG] #COMPILER_HASH#d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG] #COMPILER_C_HASH#c2098fec07fdc01d346484279804750d0fa9a67b
+[DEBUG] #COMPILER_C_VERSION#19.44.35213.0
+[DEBUG] #COMPILER_C_ID#MSVC
+[DEBUG] #COMPILER_C_PATH#C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/arm/cl.exe
+[DEBUG] #COMPILER_CXX_HASH#c2098fec07fdc01d346484279804750d0fa9a67b
+[DEBUG] #COMPILER_CXX_VERSION#19.44.35213.0
+[DEBUG] #COMPILER_CXX_ID#MSVC
+[DEBUG] #COMPILER_CXX_PATH#C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/arm/cl.exe
+[DEBUG] -- Configuring done (0.6s)
+[DEBUG] -- Generating done (0.0s)
+[DEBUG] CMake Warning:
+[DEBUG]   Manually-specified variables were not used by the project:
+[DEBUG] 
+[DEBUG]     BUILD_SHARED_LIBS
+[DEBUG]     CMAKE_INSTALL_BINDIR
+[DEBUG]     CMAKE_INSTALL_LIBDIR
+[DEBUG]     _VCPKG_ROOT_DIR
+[DEBUG] 
+[DEBUG] 
+[DEBUG] -- Build files have been written to: C:/GitHub/OnscripterYuriRT/vcpkg_installed/vcpkg/blds/detect_compiler/arm-windows-static-rel
+[DEBUG] 
+[DEBUG] 1014: cmd_execute_and_stream_data() returned 0 after   832160 us
+[DEBUG] Detected compiler hash for triplet arm-windows-static: d8b893564e6cf5eff0c8b321310e29addd515c13
+Compiler found: C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/arm/cl.exe
+[DEBUG] <abientries for bzip2:arm-windows-static>
+[DEBUG]   CMakeLists.txt|4f14b283a0be8ae8ad8a6c6db288ff5ffe3af6d82506fac266532b11ea9a8a33
+[DEBUG]   bzip2.pc.in|ec5bae2705896aa6f2ac5eb2b02c5512568203808c8427484b5eef1da670df91
+[DEBUG]   cmake|0
+[DEBUG]   features|core;tool
+[DEBUG]   fix-import-export-macros.patch|38918c1257c884cc5cde39d9f4235d0e71574f20c7e5ec686a506612f647495e
+[DEBUG]   portfile.cmake|ffef2f051e412a3fd1ef78cd18439c113f8ae4d0d49e581f19697704331661de
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|75d339011fc11a43ee5093142ca1e8cb5e54db2ac93822abc5de694cda5a9881
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|1e3d45a5e6f560a0c49bfba02296c497b7f8d2d0c86006eca511357efe7b86c8
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_download_distfile|5b22c0d0a397f4fdd0aa1c054afc84c20c91591d669027688b7c11334c3e4d0e
+[DEBUG]   vcpkg_extract_source_archive|9c733832f8b58b05e6c329ae8b6ad1cfa858224fdc06d4a2d08b428e31de1a51
+[DEBUG]   vcpkg_extract_source_archive_ex|ab9f5bd71a8e1ca4a56d5c09f248c2bc10ff8df3b600c3efb6cca34cba9ec3b7
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG] </abientries>
+[DEBUG] <abientries for libjpeg-turbo:arm-windows-static>
+[DEBUG]   add-options-for-exes-docs-headers.patch|c22dd3b553b5c32923e7c9ecbcc3ec78a1cd03f209b6180b15f95abdd398c73b
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|f97da56851d5944755f3ccf29c4d0fc628f6a781ef9591f7ad37b2ca7c045f9c
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|8c5a4b0af430bd3d4ae08106707916069059e1a9aab835ffb0839c900f73208f
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg-cmake-wrapper.cmake|d257c0a541dd60c4b6eb6f46a5e9f128a64a6ec40f3b8b5bc8ab753e7a935c61
+[DEBUG]   vcpkg.json|2f0d6df886a5f5d3cd34717e52bf2a10546ec3259ee58198f7598c91dcfb0f10
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_find_acquire_program|03722d714d388b19731f5c0be35996c25a47d5b35dd6a09669ea1e599a56e005
+[DEBUG]   vcpkg_find_acquire_program(NASM)|ff801b330d90fb0a43f4588e55c37df774e2cf2304e784dc09e5388a9a17dfba
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG]   workaround_cmake_system_processor.patch|78e2731ad82e1eac0fa1e3b414301b00ca622c39852d32813cb0e0ddb53836e7
+[DEBUG] </abientries>
+[DEBUG] <abientries for libogg:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|762b64c76e35cccff9f09744103a7c8d2fa644f6fb57935ac7bce4410aa5d025
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|69a1984849545acf0c732337909abf2b387f62b377ec778e4bc13bd19b7d2623
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_gitlab|5bbb6c56a4be11c0d10d488d95af91a37b15f520eba862254a24c6665dd39588
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG] </abientries>
+[DEBUG] <abientries for lua:arm-windows-static>
+[DEBUG]   CMakeLists-cpp.txt|8d23b78b1ae4512461e37e1bfcfe8dba4eb188e2ec66b0f6fc0ab16f4d7c571f
+[DEBUG]   CMakeLists.txt|e7b060e9064607a4dcd765c5d556bfa2c5015c4842cd72363a38eff4d5bd07cd
+[DEBUG]   COPYRIGHT|32a2adbaf0d6ae5b0cdd56afe4ee5059d58c540a2f9ad90a346f31cb4b3fa3ef
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   fix-ios-system.patch|3b2ec115199b26abd7f2c2f41a43c83eeea1d10c05629197230b8a849a0e9607
+[DEBUG]   portfile.cmake|1c7a1422993bd32c1e864efd39cdf17570bf0d1c70e23cbe3a7c5b4fa55fd810
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|c1f56c49c43a9527201dea187308f8dcc2985c8ad0e695f7a8cc24e30adb6340
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg-cmake-wrapper.cmake.in|dbc75194351701504936ad14b25cc23d376a3168438eb5e159ec438faf2e78ee
+[DEBUG]   vcpkg.json|ac94a50717af922fcd9c7e64b4c1938abc1844257c9e476d6cfdc68a0e66c934
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_copy_tools|3d45ff761bddbabe8923b52330168dc3abd295fa469d3f2e47cb14dce85332d5
+[DEBUG]   vcpkg_download_distfile|5b22c0d0a397f4fdd0aa1c054afc84c20c91591d669027688b7c11334c3e4d0e
+[DEBUG]   vcpkg_extract_source_archive|9c733832f8b58b05e6c329ae8b6ad1cfa858224fdc06d4a2d08b428e31de1a51
+[DEBUG]   vcpkg_extract_source_archive_ex|ab9f5bd71a8e1ca4a56d5c09f248c2bc10ff8df3b600c3efb6cca34cba9ec3b7
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG]   vs2015-impl-c99.patch|9a11d224499b562688f8b2b15c1131bca8f287764050e8ab8c9344254e88398c
+[DEBUG] </abientries>
+[DEBUG] <abientries for sdl2:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   deps.patch|d429bf68ebd9ebe26a86b1e52406caae8866b7453b8682bacb7de91d22e56d32
+[DEBUG]   features|base;core
+[DEBUG]   portfile.cmake|c86babbbac332553523b8d7a9b93a4d4c7e025ae607813546c781bca863b44c6
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|aabdfa919705cdcc06a6ed59ef2dce9a9425d32661bc498980ff521b27cf674d
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|c059201c0c06bb1211a6f47f98a497a134fcb01f16a3ddf8cb0c5b271c37f1a9
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_minimum_required|4da8ab803b83c8f1c7b6272298108b9f62a7cd0618e563242c8e584692534171
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG] </abientries>
+[DEBUG] <abientries for libwebp:arm-windows-static>
+[DEBUG]   0002-cmake-config.patch|55567849c38d3231032cb0aff6c067e1e2ca1c6515823880a6c4a885780c0ba3
+[DEBUG]   0003-simd.patch|4ca73353afbfefc31147d62d7f035e151b981f9cda6636151a84a3ca51cd39d9
+[DEBUG]   0008-sdl.patch|2f05c20f07165ac556ef7c67c25af0e461d3cbd8539d5769296ace52b37b9311
+[DEBUG]   cmake|0
+[DEBUG]   features|core;libwebpmux;nearlossless;simd;unicode
+[DEBUG]   portfile.cmake|651dcac16db26c84ae4b7e2212d50069e03f23e109dd8305f81aa35293c1fbf6
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|4898bdd3351dcd0868d2f0786ab114c8b161dda8db6cd84f7fe93bf0639f08d1
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|61517a4a97695720af7a44a18676ebdd5114b474a2f99777bf188eb01352dbab
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_copy_tools|3d45ff761bddbabe8923b52330168dc3abd295fa469d3f2e47cb14dce85332d5
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG] </abientries>
+[DEBUG] <abientries for zlib:arm-windows-static>
+[DEBUG]   0001-Prevent-invalid-inclusions-when-HAVE_-is-set-to-0.patch|750b9542cb55e6328cca01d3ca997f1373b9530afa95e04213168676936e7bfa
+[DEBUG]   0002-build-static-or-shared-not-both.patch|dd4945e8af55d9feb65af706cb0254a6925dc4ac12789586c0d28acf323ad075
+[DEBUG]   0003-android-and-mingw-fixes.patch|63e62c9bae3952b8cca832e01aa96ef3b2696b21976c5031d6d6d79937d8d54c
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|b14cee469c2da06e036e63293c0b6e6509924462e9b341b317986df46b281695
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|be22662327df993eebc437495add75acb365ab18d37c7e5de735d4ea4f5d3083
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-wrapper.cmake|5d49ef2ee6448479c2aad0e5f732e2676eaba0411860f9bebabe6002d66f57d1
+[DEBUG]   vcpkg.json|8ad7072167e1bf56d2ed531e43ecc95026d5b305ed0393140d5ec78f5c6b6c00
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG] </abientries>
+[DEBUG] <abientries for libpng:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   cmake.patch|adde8deb5db8500448b1e1abae4d58e29c411db01b9057fac7839346f8ee293c
+[DEBUG]   features|core
+[DEBUG]   libpng-config.cmake|24086e8ff194402a0f2d68e9f992ca7a6899a194883a9df0054818e42d41c246
+[DEBUG]   portfile.cmake|ba5f027e5b962e2cd2bfb78db5a19ffe8eeee1a4a0b3508130965afec5e2ab0d
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|6fd48b8b809e924a7d632e656853c67b391b9dcfbb0e27e867254ae0755e363e
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg-cmake-wrapper.cmake|4267e69abf185f2228a4cc012e3fe87d5de21a187c75950b5a7615f41c3f6371
+[DEBUG]   vcpkg.json|4c8c221a175603f65e9269fb1abc288ce0bca6a60c6cdf26224ced3d7250ed14
+[DEBUG]   vcpkg_acquire_msys|251a30badbb2082236811ba6975680d0d012a20dd55db7e39ccbc6cc49d67287
+[DEBUG]   vcpkg_add_to_path|5f5ae75cf37b2a58d1a8561ca96496b64cd91ec9a0afab0b976c3e5d59030bfe
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_copy_tools|3d45ff761bddbabe8923b52330168dc3abd295fa469d3f2e47cb14dce85332d5
+[DEBUG]   vcpkg_download_distfile|5b22c0d0a397f4fdd0aa1c054afc84c20c91591d669027688b7c11334c3e4d0e
+[DEBUG]   vcpkg_execute_required_process|2df167e6e7f37c8038e02a3ebbfb239fa55de0b384ed4532d33f5483710a608b
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG]   zlib|73e15264437c8254d29d269f3b1055b0717d451dd5162092581995195a35bb1e
+[DEBUG] </abientries>
+[DEBUG] <abientries for sdl2-image:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   features|core;libjpeg-turbo;libwebp
+[DEBUG]   fix-findwebp.patch|e0d39a18bf09e06c9a433ae9a28a4bdff30be16181691c818cda0241bc5519e5
+[DEBUG]   fix-pkgconfig.patch|691bac91e7992bc8d3679bfff58f78c726734ef3bb01b47f89ec95c26545f4cf
+[DEBUG]   libjpeg-turbo|44d2f2c9f60c1f9d4d0ecf55909afc1effddbacf75197dc142f4287279c195fb
+[DEBUG]   libpng|609adf32005fbb91c6e1950474a43b529fbe31725a5e57863c965357d18ac32a
+[DEBUG]   libwebp|18812929014c9385e8ea5131e6a8728c6e65b2af6157ac42a5e2addb41ee3e78
+[DEBUG]   portfile.cmake|127717de2300c28cd32fe362e46b7c0be95f4e5908706f95a07204a6e33843af
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   sdl2|15693a1f9cd7df6c1a02d975537f936acfb5f0c4be6b0018b839236e7ef0a5da
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|d78ce4ac61e158f4a5056753dd2bd7e3b11e7ded1f10a36c8e749029940e651f
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|ada95c89b47456a245c147722dbaeb93fb0916b9a7e73e9bdc886ad3d8b1a926
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG] </abientries>
+[DEBUG] <abientries for libvorbis:arm-windows-static>
+[DEBUG]   0001-Dont-export-vorbisenc-functions.patch|f0166ffd98153f2b04124caae3b5e6ee9f98a3204c5419e0a7a7690fea44590f
+[DEBUG]   0002-Fixup-pkgconfig-libs.patch|01267e7be79a1a6034c2fea8f1221e3d44c71ac6995be1a76fe2bb9872954659
+[DEBUG]   0003-def-mingw-compat.patch|44c998bdbc4bc8f581d25fbe81d006b68c243485eec826caf1716ad335a7f888
+[DEBUG]   0004-ogg-find-dependency.patch|5007ec749c29f63e4f9ac3acaa2b09ecb569d108ed01c028790efe6fe44ec6a0
+[DEBUG]   cmake|0
+[DEBUG]   features|core
+[DEBUG]   libogg|535ce3c0b6ee6846b67166fb43a54349ba8ff5bde198158d6343c49e2d432f1c
+[DEBUG]   portfile.cmake|5e6204f69acfd3be187b7533efc3176e10bcdece44446029779b7f69e3e56362
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|9131092ab8cdc9994318607cf888aff9601f1688a918a28d68c0704942c902d4
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|378f896e7211f65035f85cd6d3c8db035712107d60994f5f6e67e056b6c7b5d6
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG] </abientries>
+[DEBUG] <abientries for sdl2-mixer:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   features|core;libvorbis;nativemidi
+[DEBUG]   fix-deps-link.patch|43259ea98ff6ab777edfbc4a2eea7ff78f948dea8ee7b96ab378f0d7fd72dafe
+[DEBUG]   fix-missing-find-opusfile.patch|0c757c48c021d6864e3a6bc0106a5d97e51ab2ec512ad1fd2683e9670931b138
+[DEBUG]   fix-pkg-prefix.patch|0ff10db1302b8223fc5d4bce74fd5f0b0111c6935587c300fdca5d5045922516
+[DEBUG]   fix-pkgconfig.patch|5999197fae098c2c2b7837e75f6fb7b67d219a4e098865264be42dbd69e2bf53
+[DEBUG]   fix-windows-static-findfluidsynth.patch|625c19f0035dc54290ed9f8ff54e4366169bf9cfa3820681fbf49636df478cf8
+[DEBUG]   libvorbis|1a91b6862745edb3ce753ca26d215243f6fa8d14fc37968485db367b0b80d772
+[DEBUG]   portfile.cmake|e027c05f9674b8441044d794cdeba7ec73f7df0079a646038568bd12ce0b0559
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   sdl2|15693a1f9cd7df6c1a02d975537f936acfb5f0c4be6b0018b839236e7ef0a5da
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|03cd8f41347811ffd68422887573aaac82c130d058db4c2f494e5e0c46af5c7b
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|184a8a9926dbcd5ccccdb44c92c911032da6db073aa6739b3022a71510bac68c
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG] </abientries>
+[DEBUG] <abientries for brotli:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   emscripten.patch|416ffaeb778323dd210a34b93d02efc2820b794c98c28f0ac5f5d82799cb50fd
+[DEBUG]   features|core
+[DEBUG]   fix-arm-uwp.patch|c9038ac61297ac59aa34bf0c93e3f2cea9d5f053e65ce5e4ad0207db47594720
+[DEBUG]   install.patch|2945ebec5e350e275e1c0076a2b5bd4bd7bae4a9c6f1cef2a19988b739f4b75e
+[DEBUG]   pkgconfig.patch|a678ab71351fbf8ed2b80ca3c6934a332f74af9c6c0ee6d7ea1b0a598b8c8d08
+[DEBUG]   portfile.cmake|f95cbfbd877b11da6e6dd4411c7d9744a8c7ea99cc77e9c967c4d9418a265310
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|2fc37651df1d64d9134a1aa6597de5f927efe1b5138a243bb87ba746aca04416
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|98b60e394a4b54e250ddf315d319ff17bae4057c7ab7bf14790e57e437731417
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_copy_tools|3d45ff761bddbabe8923b52330168dc3abd295fa469d3f2e47cb14dce85332d5
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG] </abientries>
+[DEBUG] <abientries for freetype:arm-windows-static>
+[DEBUG]   0003-Fix-UWP.patch|e0e04364e1d674ce1f04a23be7d260a25a7c335c037ca0a5296bcd0a80c1054b
+[DEBUG]   brotli|9876c80ba62398c0dd92ab1f18ed4ad9b5936479a9934680d0c7948f5bde8469
+[DEBUG]   brotli-static.patch|170a70c878924a780affe0b365efad68777cdef1cffbdd6954af6fbdba3e0862
+[DEBUG]   bzip2|ffb20cd185aa8ffeeb52b3d8152ddd14c3c033ad5afc00c55306271e35981c9e
+[DEBUG]   bzip2.patch|f5d451ce5819f75591d8cc4afe6f735c07bc54d90ed788219fb632915809d8a9
+[DEBUG]   cmake|0
+[DEBUG]   features|brotli;bzip2;core;png;zlib
+[DEBUG]   fix-exports.patch|9db1a8a9bcf470eeffd085bffd6c4f1522177cf0cc0456e7d125ef9cf6fbb8d7
+[DEBUG]   libpng|609adf32005fbb91c6e1950474a43b529fbe31725a5e57863c965357d18ac32a
+[DEBUG]   portfile.cmake|bb01ffcba667f059c2551d1ed0e6ef0a16e3c68457514038f830412086387d65
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   subpixel-rendering.patch|c406a21a3e10baee68ad353b658f3abb4d70f92d0195ce579e97d9ce64a92b17
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|c577198dfb4d9afc3a18d2fac2bd2c006eaf0db611fef82dd55b1eb229bc0f51
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg-cmake-wrapper.cmake|2279d50899549ac61331b080fa765d43064d97c1ea32f33c1ba024f36ecc0d63
+[DEBUG]   vcpkg.json|ecd02245a50543938b6d608d38f2379a336cc3298d4e3edfb0599c36ab6b5773
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_gitlab|5bbb6c56a4be11c0d10d488d95af91a37b15f520eba862254a24c6665dd39588
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG]   zlib|73e15264437c8254d29d269f3b1055b0717d451dd5162092581995195a35bb1e
+[DEBUG] </abientries>
+[DEBUG] <abientries for vcpkg-cmake-get-vars:x64-windows>
+[DEBUG]   cmake|0
+[DEBUG]   cmake_get_vars\CMakeLists.txt|3fda8c6435ffe8cb481ac9eda466cc29e3843d0a5e0b11c8158842ea25580225
+[DEBUG]   features|core
+[DEBUG]   portfile.cmake|bbcf9d6b88dd539617f4cfc1f76acbbe9a6e31fc373d79c1c626278768ea2e2a
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|x64-windows
+[DEBUG]   triplet_abi|4556164a2cd3dd6f4742101eabb46def7e71b6e5856faa88e5d005aac12a803c-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-port-config.cmake|4fd4c2e909bbdf069eb3c59b4b847b0b386cdb41840714e12b34b7eff41f9e22
+[DEBUG]   vcpkg.json|f69b04b13a19ccd0124aebafe180915143d96b73df98163cb7bd2f9a800a03db
+[DEBUG]   vcpkg_cmake_get_vars.cmake|da894e0dafa6ef0acdc641f12b02633f273322d86a6d2e7065dc56134478cea3
+[DEBUG] </abientries>
+[DEBUG] <abientries for vcpkg-tool-meson:x64-windows>
+[DEBUG]   adjust-args.patch|a1c243f02b678100cfe34d3503a93f4a36750288b68140332349fb0145a599bd
+[DEBUG]   adjust-python-dep.patch|b334a262ff9687da0d39a7b1aceda866db9fe9229964263939f37edcb2006bc7
+[DEBUG]   cmake|0
+[DEBUG]   execute_process|66a937b9c074422643135c319d1abadaa45484a664f1b160d4c163efb444a446
+[DEBUG]   features|core
+[DEBUG]   install.cmake|f7f6e1bc2c4573d60db625ea9cd7d68b90d20856402cfde7edacfa7dbd99d338
+[DEBUG]   meson-intl.patch|f4a9ef5f1f25ba8a496aa5379cda5c20562500ba237af38eba687d0c37bc37cd
+[DEBUG]   meson.template.in|8d48025a72e03c52058c43964b436a837e83a35be5f569111f0686d8dc53a495
+[DEBUG]   portfile.cmake|3344668dc4f4ef5c2be9e1bf14860d8afea2321aef0a3cec6ef8ea44b01568f0
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   remove-freebsd-pcfile-specialization.patch|ac3482e0dcbab04eb53c8c4cd5ed75dae9ee387908d45e185b6e262aeb502c37
+[DEBUG]   triplet|x64-windows
+[DEBUG]   triplet_abi|4556164a2cd3dd6f4742101eabb46def7e71b6e5856faa88e5d005aac12a803c-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-fba57f7bbd8178e2972189b6e3b4df4913f6cc67
+[DEBUG]   vcpkg-cmake-get-vars|54c2a98f7f3f42cd246f0c27767adc8015f1e07f3d70517cfe23a3ed250b9bb4
+[DEBUG]   vcpkg-port-config.cmake|03e1afb2c4c27baf3d6b4003aa4761c421d659795220fa426dcfe1841cf12e1c
+[DEBUG]   vcpkg.json|0e333b75f240692157a18b712477711cf931cef892e5b73535282bda8f64e963
+[DEBUG]   vcpkg_add_to_path|5f5ae75cf37b2a58d1a8561ca96496b64cd91ec9a0afab0b976c3e5d59030bfe
+[DEBUG]   vcpkg_apply_patches|4c123ce6f9bf0c46adc8287b7bd6a40b5f5e8daa83623dd21bb8c568ad4421fc
+[DEBUG]   vcpkg_configure_meson|ee93cbbf7c8d52f4a401a158dfc0613ef9516ddb4dd03bc944d2d1351288961c
+[DEBUG]   vcpkg_configure_meson.cmake|a30278bc5be8f8bd18cddb241eede6ad2eb43be1093695fc9875a84cdb91c86e
+[DEBUG]   vcpkg_download_distfile|5b22c0d0a397f4fdd0aa1c054afc84c20c91591d669027688b7c11334c3e4d0e
+[DEBUG]   vcpkg_execute_in_download_mode|75a3cabe04d6bbaf1f73555516dd3c492edbed22cea204835c3620db5d948851
+[DEBUG]   vcpkg_execute_required_process|2df167e6e7f37c8038e02a3ebbfb239fa55de0b384ed4532d33f5483710a608b
+[DEBUG]   vcpkg_find_acquire_program|03722d714d388b19731f5c0be35996c25a47d5b35dd6a09669ea1e599a56e005
+[DEBUG]   vcpkg_find_acquire_program(MESON)|b39aa03a7f091406f39101eadd5ede4f893f01cc2a825422be9b7ad537e64a69
+[DEBUG]   vcpkg_find_acquire_program(NINJA)|ac757f414eae2c678cd541840807a2145bb84b4693f2ec5e46a630309e480c91
+[DEBUG]   vcpkg_find_acquire_program(PKGCONFIG)|12bca5c33b8bb8e2edf92ffc410313fd7b7dbe2433e61d018fe51df2599ea7e3
+[DEBUG]   vcpkg_find_acquire_program(PYTHON3)|756bad24d5fd0c492537f544a8f716356b4e70113ae3fb350c38b296204b108e
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_install_meson|cc77e0248f5e935134c9061e5d424bc6533b561eeeac6f72d1788837cd5d0384
+[DEBUG]   vcpkg_install_meson.cmake|cc77e0248f5e935134c9061e5d424bc6533b561eeeac6f72d1788837cd5d0384
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG]   z_vcpkg_apply_patches|aed81b9cb2c44e2736e6e912445044a2f0512c041ecbb72ffb3154e44b0044ba
+[DEBUG]   z_vcpkg_function_arguments|11721a8a42a2aa2f6f285d485b21aed55834c2029140661bd8e2f0b709288d77
+[DEBUG] </abientries>
+[DEBUG] <abientries for harfbuzz:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   features|core;freetype
+[DEBUG]   fix-build-ffmpeg-failed.patch|23db47cc16f280152c29eafa4849a45310f14c5b4d84902838e7d89db72615b3
+[DEBUG]   fix-win32-build.patch|2e26ac288c58a8b43f0b5bf14bb27e1a8955692e62216890f3658ae5244e7b18
+[DEBUG]   freetype|948841b2e7e9a9cf8ba64d0a89d5ff20635638a734001e688350fa5d14b92d97
+[DEBUG]   harfbuzzConfig.cmake.in|2d316d965af13db5455dacdbc2cce641ef9bcf0fc1c9c0c2ed107890558af188
+[DEBUG]   portfile.cmake|caaa9b95328e619ff443fa80cea62b6a13d67c4a9c39650b61e8c685dd78369d
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|945d50ddeb6598c624387728b8e947fda0bcbaa32a5c3999c424a49f947fb84a
+[DEBUG]   vcpkg-tool-meson|226a4556270f7a2daa6ce74db2f666f9147325af20461b0a1becb3b27546771e
+[DEBUG]   vcpkg.json|394ce0f86beec6917971154557c6788e61308b9852cb5e3a80b42a4bbb7f4cbb
+[DEBUG]   vcpkg_configure_meson|ee93cbbf7c8d52f4a401a158dfc0613ef9516ddb4dd03bc944d2d1351288961c
+[DEBUG]   vcpkg_copy_pdbs|d15c2f2822d93ecb9023af44803328e491c5374136e0813600289582a72d196d
+[DEBUG]   vcpkg_copy_tools|3d45ff761bddbabe8923b52330168dc3abd295fa469d3f2e47cb14dce85332d5
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG]   vcpkg_install_copyright|ba6c169ab4e59fa05682e530cdeb883767de22c8391f023d4e6844a7ec5dd3d2
+[DEBUG]   vcpkg_install_meson|cc77e0248f5e935134c9061e5d424bc6533b561eeeac6f72d1788837cd5d0384
+[DEBUG]   vcpkg_list|f5de3ebcbc40a4db90622ade9aca918e2cf404dc0d91342fcde457d730e6fa29
+[DEBUG]   vcpkg_replace_string|b450deb79207478b37119743e00808ebc42de0628e7b98c14ab24728bd5c78b8
+[DEBUG] </abientries>
+[DEBUG] <abientries for sdl2-ttf:arm-windows-static>
+[DEBUG]   cmake|0
+[DEBUG]   features|core;harfbuzz
+[DEBUG]   fix-pkgconfig.patch|28461455ce5f6d65fbc9177b65285283a84dde0677b8eeeee7dbe9429167e7bf
+[DEBUG]   freetype|948841b2e7e9a9cf8ba64d0a89d5ff20635638a734001e688350fa5d14b92d97
+[DEBUG]   harfbuzz|fd5d5bf873852c9ef2bedd219d275d88cd45cce012a63cca9c65dbf7eaf49262
+[DEBUG]   portfile.cmake|d6753f228cb3e60f5c45b746c7dd9e6a35333b2ebf99fdb53e558e199330b70e
+[DEBUG]   ports.cmake|84f06fdac1e8cac9845a5a46fb6411de87b1748ca5b7b77c9b62fb1b8f7d2e0b
+[DEBUG]   post_build_checks|2
+[DEBUG]   powershell|0
+[DEBUG]   sdl2|15693a1f9cd7df6c1a02d975537f936acfb5f0c4be6b0018b839236e7ef0a5da
+[DEBUG]   triplet|arm-windows-static
+[DEBUG]   triplet_abi|c5c4cc3c0ff8d147279bc7c1bd757b3fc72e1c529b480902b9806c3f2a718726-1d3d767ab10b488977977b83f6c2da7e06afd80b1e375a2a41c60c343e7b3f94-d8b893564e6cf5eff0c8b321310e29addd515c13
+[DEBUG]   usage|db9e5e8218b487ea8a4ba3e851afdb97bb050b38702519b606e3724cb35ef49b
+[DEBUG]   vcpkg-cmake|9bd25060a3c85631719a91946071b4c9d1914d79e0734e678955613e88724080
+[DEBUG]   vcpkg-cmake-config|48bc718d294c083f6c2285e3d9c4161753b12f380a72a69f9f71036e847bcebd
+[DEBUG]   vcpkg.json|d28b849c4bdf8f947a582f0a19a9c88719aff9c78131cc32a9bcfdcf683c112f
+[DEBUG]   vcpkg_check_features|943b217e0968d64cf2cb9c272608e6a0b497377e792034f819809a79e1502c2b
+[DEBUG]   vcpkg_fixup_pkgconfig|1a15f6c6d8e2b244d83a7514a0412d339127d2217d1df60ad1388b546c85f777
+[DEBUG]   vcpkg_from_git|96ed81968f76354c00096dd8cd4e63c6a235fa969334a11ab18d11c0c512ff58
+[DEBUG]   vcpkg_from_github|b743742296a114ea1b18ae99672e02f142c4eb2bef7f57d36c038bedbfb0502f
+[DEBUG] </abientries>
+All requested packages are currently installed.
+[DEBUG] Default binary cache path is: C:\Users\Weslie\AppData\Local\vcpkg\archives
+[DEBUG] Could not use IsWow64Process2, trying IsWow64Process
+[DEBUG] Found path: C:\Program Files\7-Zip\7z.exe
+Total install time: 1.81 ms
+The package bzip2 is compatible with built-in CMake targets:
+
+    find_package(BZip2 REQUIRED)
+    target_link_libraries(main PRIVATE BZip2::BZip2)
+
+The package libjpeg-turbo is compatible with built-in CMake targets:
+
+    find_package(JPEG REQUIRED)
+    target_link_libraries(main PRIVATE ${JPEG_LIBRARIES})
+    target_include_directories(main PRIVATE ${JPEG_INCLUDE_DIR})
+
+libogg provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(Ogg CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE Ogg::ogg)
+
+libogg provides pkg-config modules:
+
+  # ogg is a library for manipulating ogg bitstreams
+  ogg
+
+Use this package via the module FindLua that comes with CMake. To use in your CMakeLists.txt:
+
+    find_package(Lua REQUIRED)
+    target_include_directories(main PRIVATE ${LUA_INCLUDE_DIR})
+    target_link_libraries(main PRIVATE ${LUA_LIBRARIES})
+
+sdl2 provides CMake targets:
+
+    find_package(SDL2 CONFIG REQUIRED)
+    target_link_libraries(main
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    )
+
+sdl2-image provides CMake targets:
+
+    find_package(SDL2_image CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
+
+sdl2-mixer provides CMake targets:
+
+    find_package(SDL2_mixer CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+
+sdl2-ttf provides CMake targets:
+
+    find_package(SDL2_ttf CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+
+[DEBUG] D:\a\_work\1\s\src\vcpkg\commands.set-installed.cpp(311): 
+[DEBUG] Time in subprocesses: 4992562us
+[DEBUG] Time in parsing JSON: 105169us
+[DEBUG] Time in JSON reader: 4951us
+[DEBUG] Time in filesystem: 82428us
+[DEBUG] Time in loading ports: 4715us
+[DEBUG] Exiting after 5.3 s (5258444us)
