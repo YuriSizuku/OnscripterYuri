@@ -203,90 +203,90 @@ jobs:
   #       artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
   #       allowUpdates: "true"
   #       token: ${{secrets.GITHUB_TOKEN}}
-  build_arm32:
-    runs-on: windows-2022
-    env:
-      BUILD_TYPE: Release
-      VCPKG_TRIPLET: arm-windows-static
-      CMAKE_ARCH: ARM
-      WINSDK_VERSION: 10.0.22621.0
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}
-        shell: cmd
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  # build_arm32:
+  #   runs-on: windows-2022
+  #   env:
+  #     BUILD_TYPE: Release
+  #     VCPKG_TRIPLET: arm-windows-static
+  #     CMAKE_ARCH: ARM
+  #     WINSDK_VERSION: 10.0.22621.0
+  #   defaults:
+  #     run:
+  #       working-directory: ${{github.workspace}}
+  #       shell: cmd
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
   
-    - name: Setup ARM32 environment
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm %WINSDK_VERSION%
+  #   - name: Setup ARM32 environment
+  #     run: |
+  #       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm %WINSDK_VERSION%
         
-        :: 设置环境变量
-        setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
-        setx WindowsSdkVersion %WINSDK_VERSION%
-        setx WindowsTargetPlatformVersion %WINSDK_VERSION%
-        setx CMAKE_SYSTEM_VERSION 10.0.22621.0
-        set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10
-        set WindowsSdkVersion=%WINSDK_VERSION%
-        set WindowsTargetPlatformVersion=%WINSDK_VERSION%
-        set CMAKE_SYSTEM_VERSION=10.0.22621.0
+  #       :: 设置环境变量
+  #       setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
+  #       setx WindowsSdkVersion %WINSDK_VERSION%
+  #       setx WindowsTargetPlatformVersion %WINSDK_VERSION%
+  #       setx CMAKE_SYSTEM_VERSION 10.0.22621.0
+  #       set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10
+  #       set WindowsSdkVersion=%WINSDK_VERSION%
+  #       set WindowsTargetPlatformVersion=%WINSDK_VERSION%
+  #       set CMAKE_SYSTEM_VERSION=10.0.22621.0
 
-        where cl
+  #       where cl
         
-        set VCPKG_KEEP_ENV_VARS=VCINSTALLDIR;WindowsSDKVersion;CMAKE_SYSTEM_VERSION;VCToolsVersion
+  #       set VCPKG_KEEP_ENV_VARS=VCINSTALLDIR;WindowsSDKVersion;CMAKE_SYSTEM_VERSION;VCToolsVersion
 
-        rem dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
+  #       rem dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
 
-        :: 使用覆盖三元组参数
-        vcpkg install --triplet %VCPKG_TRIPLET% --clean-after-build ^
-          --overlay-triplets=triplets ^
-          --allow-unsupported
+  #       :: 使用覆盖三元组参数
+  #       vcpkg install --triplet %VCPKG_TRIPLET% --clean-after-build ^
+  #         --overlay-triplets=triplets ^
+  #         --allow-unsupported
   
-    - name: Configure CMake
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm %WINSDK_VERSION%
+  #   - name: Configure CMake
+  #     run: |
+  #       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64_arm %WINSDK_VERSION%
           
-        :: 设置环境变量
-        setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
-        setx WindowsSdkVersion %WINSDK_VERSION%
-        setx WindowsTargetPlatformVersion %WINSDK_VERSION%
-        set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10
-        set WindowsSdkVersion=%WINSDK_VERSION%
-        set WindowsTargetPlatformVersion=%WINSDK_VERSION%
+  #       :: 设置环境变量
+  #       setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
+  #       setx WindowsSdkVersion %WINSDK_VERSION%
+  #       setx WindowsTargetPlatformVersion %WINSDK_VERSION%
+  #       set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10
+  #       set WindowsSdkVersion=%WINSDK_VERSION%
+  #       set WindowsTargetPlatformVersion=%WINSDK_VERSION%
         
-        :: 验证环境
-        echo VCINSTALLDIR=%VCINSTALLDIR%
-        dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
-        cmake -B build -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
-          -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake" ^
-          -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
-          -DCMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION=%WINSDK_VERSION% ^
-          -G "Visual Studio 17 2022" -A %CMAKE_ARCH% ^
-          -DCMAKE_SYSTEM_VERSION=%WINSDK_VERSION% ^
+  #       :: 验证环境
+  #       echo VCINSTALLDIR=%VCINSTALLDIR%
+  #       dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
+  #       cmake -B build -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
+  #         -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake" ^
+  #         -DVCPKG_TARGET_TRIPLET=%VCPKG_TRIPLET% ^
+  #         -DCMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION=%WINSDK_VERSION% ^
+  #         -G "Visual Studio 17 2022" -A %CMAKE_ARCH% ^
+  #         -DCMAKE_SYSTEM_VERSION=%WINSDK_VERSION% ^
 
   
-    - name: Build project
-      run: cmake --build build --config %BUILD_TYPE%
+  #   - name: Build project
+  #     run: cmake --build build --config %BUILD_TYPE%
   
-    # ...后续步骤不变...
-    - name: Prepare release artifact
-      run: |
-        copy build\%BUILD_TYPE%\onsyuri.exe onsyuri_${{github.ref_name}}_arm_win.exe
+  #   # ...后续步骤不变...
+  #   - name: Prepare release artifact
+  #     run: |
+  #       copy build\%BUILD_TYPE%\onsyuri.exe onsyuri_${{github.ref_name}}_arm_win.exe
   
-    - name: Upload artifact
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: onsyuri-arm32
-        path: |
-          ${{github.workspace}}/build/${{env.BUILD_TYPE}}
-          C:\vcpkg\buildtrees\**\*.log
-          C:\vcpkg\buildtrees\**\*.txt
+  #   - name: Upload artifact
+  #     if: always()
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: onsyuri-arm32
+  #       path: |
+  #         ${{github.workspace}}/build/${{env.BUILD_TYPE}}
+  #       # C:\vcpkg\buildtrees\**\*.log
+  #       # C:\vcpkg\buildtrees\**\*.txt
     
-    - name: Create release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
-        allowUpdates: true
-        token: ${{secrets.GITHUB_TOKEN}}
+  #   - name: Create release
+  #     uses: ncipollo/release-action@v1
+  #     with:
+  #       artifacts: ${{github.workspace}}/onsyuri_${{github.ref_name}}_arm_win.exe
+  #       allowUpdates: true
+  #       token: ${{secrets.GITHUB_TOKEN}}

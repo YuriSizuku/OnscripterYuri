@@ -1,117 +1,117 @@
-name: build windows x86, x64
-on:
-  push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
-  pull_request: 
+# name: build windows x86, x64
+# on:
+#   push: {tags:  ['v*']} #  Push events to matching v*, i.e. v1.0, v20.15.10
+#   pull_request: 
   
-permissions:
-  contents: write 
+# permissions:
+#   contents: write 
 
-jobs:
-  install_thirdparty_build:
-    runs-on: ubuntu-22.04 # default batch, powershell
-    steps:
-    - uses: actions/checkout@v3
+# jobs:
+#   install_thirdparty_build:
+#     runs-on: ubuntu-22.04 # default batch, powershell
+#     steps:
+#     - uses: actions/checkout@v3
     
-    - name: check or download thirdparty_build cache
-      id: check_thirdparty_build
-      uses: actions/cache@v3
-      with: 
-        path: ./thirdparty
-        key: thirdparty_build
+#     - name: check or download thirdparty_build cache
+#       id: check_thirdparty_build
+#       uses: actions/cache@v3
+#       with: 
+#         path: ./thirdparty
+#         key: thirdparty_build
     
-    # this should be fixed to download the inital commit thirdparty
-    - name: download thirdparty_build
-      if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
-      run: |
-        curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
-        tar xvzf thirdparty_build.tar.gz
+#     # this should be fixed to download the inital commit thirdparty
+#     - name: download thirdparty_build
+#       if: steps.check_thirdparty_build.outputs.cache-hit != 'true'
+#       run: |
+#         curl -fsSL https://github.com/YuriSizuku/OnscripterYuri/releases/download/v0.6/thirdparty_build.tar.gz -O
+#         tar xvzf thirdparty_build.tar.gz
 
-  build_win:
-    strategy:
-      matrix: 
-       # arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}]
+#   build_win:
+#     strategy:
+#       matrix: 
+#        # arch: [{suffix2: 32, suffix: x86}, {suffix2: 64, suffix: x64}]
 
-        arch: [
-          {suffix2: 32, suffix: i686, msystem: MINGW32},
-          {suffix2: 64, suffix: x86_64, msystem: MINGW64}
-        ]
+#         arch: [
+#           {suffix2: 32, suffix: i686, msystem: MINGW32},
+#           {suffix2: 64, suffix: x86_64, msystem: MINGW64}
+#         ]
         
-    # runs-on: ubuntu-22.04
-    runs-on: windows-2022
-    needs: install_thirdparty_build
-    steps:
-    - uses: actions/checkout@v3
+#     # runs-on: ubuntu-22.04
+#     runs-on: windows-2022
+#     needs: install_thirdparty_build
+#     steps:
+#     - uses: actions/checkout@v3
     
-    - name: get thirdparty_build cache
-      uses: actions/cache@v3
-      with: 
-        key: thirdparty_build
-        path: ./thirdparty
+#     - name: get thirdparty_build cache
+#       uses: actions/cache@v3
+#       with: 
+#         key: thirdparty_build
+#         path: ./thirdparty
     
-    # - name: Set up MinGW
-    #   uses: egor-tensin/setup-mingw@v2
-    #   with:
-    #     platform: ${{ matrix.arch.suffix }}
+#     # - name: Set up MinGW
+#     #   uses: egor-tensin/setup-mingw@v2
+#     #   with:
+#     #     platform: ${{ matrix.arch.suffix }}
 
-    - name: Set up MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: >-
-          base-devel
-          git
-          mingw-w64-${{ matrix.arch.suffix }}-gcc
-          mingw-w64-${{ matrix.arch.suffix }}-headers
-          mingw-w64-${{ matrix.arch.suffix }}-crt
-          mingw-w64-${{ matrix.arch.suffix }}-windows-default-manifest
-          mingw-w64-${{ matrix.arch.suffix }}-winpthreads
-          mingw-w64-${{ matrix.arch.suffix }}-tools
-          mingw-w64-${{ matrix.arch.suffix }}-SDL2
-          mingw-w64-${{ matrix.arch.suffix }}-bzip2
-          mingw-w64-${{ matrix.arch.suffix }}-cmake
-          mingw-w64-${{ matrix.arch.suffix }}-libjpeg-turbo
-          mingw-w64-${{ matrix.arch.suffix }}-libwebp
-          mingw-w64-${{ matrix.arch.suffix }}-lua
-          mingw-w64-${{ matrix.arch.suffix }}-libogg
-          mingw-w64-${{ matrix.arch.suffix }}-harfbuzz
-          mingw-w64-${{ matrix.arch.suffix }}-libvorbis
-          mingw-w64-${{ matrix.arch.suffix }}-sdl2_image
-          mingw-w64-${{ matrix.arch.suffix }}-SDL2_mixer
-          mingw-w64-${{ matrix.arch.suffix }}-SDL2_ttf
+#     - name: Set up MSYS2
+#       uses: msys2/setup-msys2@v2
+#       with:
+#         update: true
+#         install: >-
+#           base-devel
+#           git
+#           mingw-w64-${{ matrix.arch.suffix }}-gcc
+#           mingw-w64-${{ matrix.arch.suffix }}-headers
+#           mingw-w64-${{ matrix.arch.suffix }}-crt
+#           mingw-w64-${{ matrix.arch.suffix }}-windows-default-manifest
+#           mingw-w64-${{ matrix.arch.suffix }}-winpthreads
+#           mingw-w64-${{ matrix.arch.suffix }}-tools
+#           mingw-w64-${{ matrix.arch.suffix }}-SDL2
+#           mingw-w64-${{ matrix.arch.suffix }}-bzip2
+#           mingw-w64-${{ matrix.arch.suffix }}-cmake
+#           mingw-w64-${{ matrix.arch.suffix }}-libjpeg-turbo
+#           mingw-w64-${{ matrix.arch.suffix }}-libwebp
+#           mingw-w64-${{ matrix.arch.suffix }}-lua
+#           mingw-w64-${{ matrix.arch.suffix }}-libogg
+#           mingw-w64-${{ matrix.arch.suffix }}-harfbuzz
+#           mingw-w64-${{ matrix.arch.suffix }}-libvorbis
+#           mingw-w64-${{ matrix.arch.suffix }}-sdl2_image
+#           mingw-w64-${{ matrix.arch.suffix }}-SDL2_mixer
+#           mingw-w64-${{ matrix.arch.suffix }}-SDL2_ttf
           
           
           
-        msystem: MINGW${{ matrix.arch.suffix2 }}
+#         msystem: MINGW${{ matrix.arch.suffix2 }}
 
     
-    # - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
-    #   shell: bash
-    #   run: |
-    #     if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
-    #       sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
-    #     fi
-    #     cd script 
-    #     SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
+#     # - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
+#     #   shell: bash
+#     #   run: |
+#     #     if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
+#     #       sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
+#     #     fi
+#     #     cd script 
+#     #     SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
     
-    - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
-      shell: msys2 {0}  # 让它根据上面的 msystem=MINGW32 自动选择 mingw32 shell
-      run: |
-        if [ -z "$(echo ${{ github.ref_name }} | grep merge)" ]; then 
-          sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{ github.ref_name }}"/g' src/onsyuri/version.h
-        fi
-        cd script 
-        SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
+#     - name: build onsyuri_${{ matrix.arch.suffix }}_win.exe
+#       shell: msys2 {0}  # 让它根据上面的 msystem=MINGW32 自动选择 mingw32 shell
+#       run: |
+#         if [ -z "$(echo ${{ github.ref_name }} | grep merge)" ]; then 
+#           sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{ github.ref_name }}"/g' src/onsyuri/version.h
+#         fi
+#         cd script 
+#         SKIP_PORTS=yes bash cross_mingw${{ matrix.arch.suffix2 }}.sh
 
-    - name: prepare release
-      if: github.event_name == 'push'
-      run: |
-        cd build_mingw${{ matrix.arch.suffix2 }}
-        mv onsyuri.exe onsyuri_${{  github.ref_name }}_${{ matrix.arch.suffix }}_win.exe
+#     - name: prepare release
+#       if: github.event_name == 'push'
+#       run: |
+#         cd build_mingw${{ matrix.arch.suffix2 }}
+#         mv onsyuri.exe onsyuri_${{  github.ref_name }}_${{ matrix.arch.suffix }}_win.exe
       
-    - name: create release
-      uses: ncipollo/release-action@v1
-      if: github.event_name == 'push'
-      with:
-        artifacts: "build_mingw${{ matrix.arch.suffix2 }}/onsyuri_*.exe"
-        allowUpdates: "true"
-        token: ${{ secrets.GITHUB_TOKEN }}
+#     - name: create release
+#       uses: ncipollo/release-action@v1
+#       if: github.event_name == 'push'
+#       with:
+#         artifacts: "build_mingw${{ matrix.arch.suffix2 }}/onsyuri_*.exe"
+#         allowUpdates: "true"
+#         token: ${{ secrets.GITHUB_TOKEN }}

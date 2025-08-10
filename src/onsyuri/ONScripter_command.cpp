@@ -3419,7 +3419,7 @@ int ONScripter::captionCommand()
 #if USE_TOAST
 		ToastParam param = { L"Press Alt + Enter for fit\nor F10 for stretch", FALSE };
 		if (EnsureShortcutWithAppID(wm_title_string, archive_path) && IsWindows8OrGreater()) {
-			SetCurrentProcessExplicitAppUserModelID(L"YuriShizuku.OnscripterYuri");
+			SetCurrentProcessExplicitAppUserModelID(L"YuriSizuku.OnscripterYuri");
 			// CreateThread(nullptr, 0, SendToast, const_cast<LPVOID>(static_cast<const void*>(L"Press Alt + Enter for fit\nor F10 for stretch")), 0, nullptr);
 			HANDLE h = CreateThread(nullptr, 0, ThreadToast, &param, 0, nullptr);
 			WaitForSingleObject(h, INFINITE);
@@ -4341,7 +4341,7 @@ BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path=""
 	//wchar_t* wide_str = new wchar_t[wide_len + 1];
 	//MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, wide_str, wide_len);
 	puts(archive_path);
-	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriShizuku.OnscripterYuri", archive_path);
+	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriSizuku.OnscripterYuri", archive_path);
 	return FALSE;
 	//delete[] wide_str;
 }
@@ -4425,7 +4425,7 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	}
 
 	// 设置 AppUserModelID（必须）
-	const wchar_t* appId = L"YuriShizuku.OnscripterYuri";
+	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	SetCurrentProcessExplicitAppUserModelID(appId);
 
 	// 创建字符串用于获取 ToastNotificationManager
@@ -4619,7 +4619,7 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	}
 
 	// 设置应用 ID
-	const wchar_t* appId = L"YuriShizuku.OnscripterYuri";
+	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	::SetCurrentProcessExplicitAppUserModelID(appId);
 
 	// 获取 Toast 管理器
