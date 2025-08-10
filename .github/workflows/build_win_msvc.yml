@@ -226,22 +226,22 @@ jobs:
         setx WindowsSdkDir "C:\Program Files (x86)\Windows Kits\10"
         setx WindowsSdkVersion %WINSDK_VERSION%
         setx WindowsTargetPlatformVersion %WINSDK_VERSION%
+        setx CMAKE_SYSTEM_VERSION 10.0.22621.0
         set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10
         set WindowsSdkVersion=%WINSDK_VERSION%
         set WindowsTargetPlatformVersion=%WINSDK_VERSION%
-        
+        set CMAKE_SYSTEM_VERSION=10.0.22621.0
+
         where cl
+        
+        set VCPKG_KEEP_ENV_VARS=VCINSTALLDIR;WindowsSDKVersion;CMAKE_SYSTEM_VERSION;VCToolsVersion
 
-        set VCPKG_KEEP_ENV_VARS=VCINSTALLDIR;WindowsSDKVersion
-
-        :: 验证环境
-        echo VCINSTALLDIR=%VCINSTALLDIR%
-        dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
+        rem dir "%WindowsSdkDir%\Lib\%WINSDK_VERSION%\um\arm\kernel32.lib"
 
         :: 使用覆盖三元组参数
         vcpkg install --triplet %VCPKG_TRIPLET% --clean-after-build ^
-          --overlay-triplets="${{ github.workspace }}/triplets" ^
-          --allow-unsupported --overlay-triplets=triplets
+          --overlay-triplets=triplets ^
+          --allow-unsupported
   
     - name: Configure CMake
       run: |
