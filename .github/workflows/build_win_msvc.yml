@@ -275,11 +275,15 @@ jobs:
         copy build\%BUILD_TYPE%\onsyuri.exe onsyuri_${{github.ref_name}}_arm_win.exe
   
     - name: Upload artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: onsyuri-arm32
-        path: ${{github.workspace}}/build/${{env.BUILD_TYPE}}
-  
+        path: |
+          ${{github.workspace}}/build/${{env.BUILD_TYPE}}
+          C:\vcpkg\buildtrees\**\*.log
+          C:\vcpkg\buildtrees\**\*.txt
+    
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
