@@ -58,7 +58,7 @@
 // #include <winstring.h>
 #include <combaseapi.h>
 // #include <corewrappers.h>
-#define USE_TOAST 0
+#define USE_TOAST 1
 
 BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text);
 BOOL EnsureShortcutWithAppID(char *title, char *archive_path);
