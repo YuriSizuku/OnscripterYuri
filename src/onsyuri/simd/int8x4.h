@@ -25,8 +25,13 @@
 #endif
 #include <stdint.h>
 
+#ifdef USE_BTXH_CODE
+#undef USE_BTXH_CODE
+#endif
+#define USE_BTXH_CODE 0
+
 namespace simd {
-  class uint8x4 {
+	 class uint8x4 {
 #ifdef USE_SIMD_X86_SSE2
     __m128i v_;
 #elif USE_SIMD_ARM_NEON
@@ -37,10 +42,18 @@ namespace simd {
     uint8x4(const uint8x4&) = default;
     uint8x4 &operator=(const uint8x4&) = default;
 #ifdef USE_SIMD_X86_SSE2
-    uint8x4(__m128i v) : v_(v) {};
+#if USE_BTXH_CODE
+    uint8x4(__m128i &v) : v_(v) {};
+#else
+	uint8x4(__m128i v) : v_(v) {};
+#endif
     operator __m128i() const { return v_; }
     static uint8x4 cvt2vec(uint32_t rm) { return _mm_cvtsi32_si128(rm);  /* MOVD xmm, r32 */ }
-    static uint32_t cvt2i32(uint8x4 a) { return _mm_cvtsi128_si32(a);  /* MOVD r32, xmm */ }
+#if USE_BTXH_CODE
+    static uint32_t cvt2i32(uint8x4 &a) { return _mm_cvtsi128_si32(a);  /* MOVD r32, xmm */ }
+#else
+	static uint32_t cvt2i32(uint8x4 a) { return _mm_cvtsi128_si32(a);  /* MOVD r32, xmm */ }
+#endif
 #elif USE_SIMD_ARM_NEON
     uint8x4(uint8x8_t v) : v_(v) {};
     operator uint8x8_t() const { return v_; }

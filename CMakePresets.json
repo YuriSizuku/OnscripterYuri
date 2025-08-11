@@ -1,0 +1,71 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 4
+  },
+  "configurePresets": [
+    {
+      "name": "vs2015-debug",
+      "displayName": "VS2015 Debug with vcpkg",
+      "description": "使用 Visual Studio 2015 和 vcpkg (x64-windows)，Debug 构建",
+      "generator": "Visual Studio 14 2015",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "architecture": {
+        "value": "x64"
+      },
+      "toolset": {
+        "value": "v140"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    },
+    {
+        "name": "vs2015-debug-x86",
+        "displayName": "VS2015 Debug with vcpkg",
+        "description": "使用 Visual Studio 2015 和 vcpkg (x64-windows)，Debug 构建 x86",
+        "generator": "Visual Studio 14 2015",
+        "binaryDir": "${sourceDir}/build/${presetName}",
+        "architecture": {
+          "value": "Win32",
+          "strategy": "set"
+        },
+        "toolset": {
+          "value": "v140"
+        },
+        "cacheVariables": {
+          "CMAKE_GENERATOR_PLATFORM": "Win32", 
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_TOOLCHAIN_FILE": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x86-windows"
+        }
+      },
+      {
+          "name": "vs2015-debug-arm",
+          "displayName": "VS2015 Debug with vcpkg",
+          "description": "使用 Visual Studio 2015 和 vcpkg (x64-windows)，Debug 构建 ARM",
+          "generator": "Visual Studio 14 2015",
+          "binaryDir": "${sourceDir}/build/${presetName}",
+          "architecture": {
+            "value": "ARM",
+            "strategy": "set"
+          },
+          "toolset": {
+            "value": "v140"
+          },
+          "cacheVariables": {
+            "CMAKE_GENERATOR_PLATFORM": "ARM", 
+            "CMAKE_BUILD_TYPE": "Debug",
+            "CMAKE_TOOLCHAIN_FILE": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "VCPKG_TARGET_TRIPLET": "arm-windows-static",
+            "VCPKG_INSTALL_OPTIONS": "--allow-unsupported"
+            
+          }
+        }
+  ]
+  
+}

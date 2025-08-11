@@ -21,6 +21,12 @@
 #pragma once
 #define __SIMD_H__
 
+
+#ifdef USE_BTXH_CODE
+#undef USE_BTXH_CODE
+#endif
+#define USE_BTXH_CODE 1
+
 #ifdef USE_SIMD_X86_AVX2
 #include <immintrin.h>
 #define USE_SIMD_X86_SSSE3 1
@@ -35,6 +41,31 @@
 #include <pmmintrin.h>
 #define USE_SIMD_X86_SSE2 1
 #endif
+#if USE_BTXH_CODE
+
+
+#ifdef USE_SIMD_X86_SSE2
+#ifndef _M_ARM
+#include <emmintrin.h>
+#endif
+#define USE_SIMD_X86_SSE 1
+#endif
+
+#ifdef USE_SIMD_X86_SSE
+#ifndef _M_ARM
+#include <xmmintrin.h>
+#endif
+#endif
+
+#if defined(USE_SIMD_ARM_NEON) || defined(_M_ARM)
+#ifdef _M_ARM64
+#include <arm64_neon.h>
+#else
+#include <arm_neon.h>
+#endif
+#endif
+
+#else
 
 #ifdef USE_SIMD_X86_SSE2
 #include <emmintrin.h>
@@ -45,11 +76,12 @@
 #include <xmmintrin.h>
 #endif
 
-#ifdef USE_SIMD_ARM_NEON
+#if defined(USE_SIMD_ARM_NEON)
 #ifdef _M_ARM64
 #include <arm64_neon.h>
 #else
 #include <arm_neon.h>
+#endif
 #endif
 #endif
 
@@ -71,6 +103,13 @@ namespace simd {
 #endif
   };
 }
+
+#if defined(_M_IX86) && USE_BTXH_CODE
+#define SIMD_ALIGN_16 __declspec(align(16))
+#else
+#define SIMD_ALIGN_16
+#endif
+
 
 #if defined(USE_SIMD_X86_SSE2) || defined(USE_SIMD_ARM_NEON)
 #include "int8x4.h"
