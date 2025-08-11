@@ -32,11 +32,9 @@
 #endif
 #define USE_BTXH_CODE 1
 
-#if USE_BTXH_CODE
-#if defined _WIN32 && defined _MSC_VER
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
 #define NOMINMAX
 #include <Windows.h>
-#endif
 #endif
 #if defined(WEB)
 #include <emscripten.h>

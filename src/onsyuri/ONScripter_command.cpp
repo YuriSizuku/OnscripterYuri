@@ -50,14 +50,12 @@
 #include <iostream>
 #include <shobjidl.h>
 #include <shlguid.h>
-#include <propvarutil.h>     // InitPropVariantFromString
+#include <propvarutil.h>
 #include <propkey.h>
 #include <io.h>
 #include <versionhelpers.h>
 #include <roapi.h>
-// #include <winstring.h>
 #include <combaseapi.h>
-// #include <corewrappers.h>
 #define USE_TOAST 0
 
 BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text);
@@ -4281,7 +4279,6 @@ void ONScripter::stopSMPEG()
 #endif        
 }
 
-
 #if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
 
 BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text) {
@@ -4294,8 +4291,6 @@ BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text) {
 	NOTIFYICONDATA nid = { sizeof(nid) };
 	strcpy_s(nid.szInfoTitle, 64, titleBuf);
 	strcpy_s(nid.szInfo, 256, infoBuf);
-	// puts(nid.szInfoTitle);
-	// puts(nid.szInfo);
 	nid.uFlags = NIF_INFO;
 	nid.dwInfoFlags = NIIF_INFO;
 	return ::Shell_NotifyIcon(NIM_ADD, &nid);
@@ -4309,7 +4304,6 @@ BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path=""
 	folderPath += "\\Microsoft\\Windows\\Start Menu\\Programs\\OnscripterYuri";
 	DWORD attributes = GetFileAttributesA(folderPath.c_str());
 	if (attributes == INVALID_FILE_ATTRIBUTES || !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
-
 		if (CreateDirectoryA(folderPath.c_str(), NULL)) {
 			std::cout << "Successfully created: " << folderPath << std::endl;
 		}
@@ -4326,7 +4320,6 @@ BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path=""
 	else {
 		std::cout << "Folder already exists: " << folderPath << std::endl;
 	}
-
 	std::string shortcutPath = folderPath;
 	shortcutPath += "\\";
 	shortcutPath += title;
@@ -4338,13 +4331,9 @@ BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path=""
 	char exePath[MAX_PATH];
 	GetModuleFileName(nullptr, exePath, MAX_PATH);
 
-	//int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, nullptr, 0);
-	//wchar_t* wide_str = new wchar_t[wide_len + 1];
-	//MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, wide_str, wide_len);
 	puts(archive_path);
 	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriSizuku.OnscripterYuri", archive_path);
 	return FALSE;
-	//delete[] wide_str;
 }
 
 HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPath, const char* exePath, const wchar_t* appId, char *archive_path)
@@ -4352,9 +4341,6 @@ HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPath, const char* e
 	Microsoft::WRL::ComPtr<IShellLink> shellLink;
 	HRESULT hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&shellLink));
 	if (FAILED(hr)) return hr;
-	//int acp_len = WideCharToMultiByte(CP_ACP, 0, exePathW, -1, nullptr, 0, nullptr, nullptr);
-	//char* exePath = new char[acp_len + 1];
-	//WideCharToMultiByte(CP_ACP, 0, exePathW, -1, exePath, acp_len, nullptr, nullptr);
 	shellLink->SetPath(exePath);
 	puts(exePath);
 	int archive_path_arg_len = strlen(archive_path) + 6;
@@ -4388,9 +4374,6 @@ HRESULT CreateShortcutWithAppUserModelID(const char* shortcutPath, const char* e
 	Microsoft::WRL::ComPtr<IPersistFile> persistFile;
 	hr = shellLink.As(&persistFile);
 	if (FAILED(hr)) return hr;
-	//int acp_len = WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, nullptr, 0, nullptr, nullptr);
-	//char* shortcutPath = new char[acp_len + 1];
-	//WideCharToMultiByte(CP_ACP, 0, shortcutPathW, -1, shortcutPath, acp_len, nullptr, nullptr);
 	puts(shortcutPath);
 	int wide_len = MultiByteToWideChar(CP_ACP, 0, shortcutPath, -1, nullptr, 0);
 	wchar_t* shortcutPathW = new wchar_t[wide_len + 1];
@@ -4405,31 +4388,26 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	// 动态加载 combase.dll（包含 RoInitialize 等函数）
 	HMODULE hCombase = LoadLibraryW(L"combase.dll");
 	if (!hCombase) return false;
-
 	// 获取函数指针
 	auto pRoInitialize = (decltype(&RoInitialize))GetProcAddress(hCombase, "RoInitialize");
 	auto pRoUninitialize = (decltype(&RoUninitialize))GetProcAddress(hCombase, "RoUninitialize");
 	auto pRoGetActivationFactory = (decltype(&RoGetActivationFactory))GetProcAddress(hCombase, "RoGetActivationFactory");
 	auto pWindowsCreateString = (decltype(&WindowsCreateString))GetProcAddress(hCombase, "WindowsCreateString");
 	auto pWindowsDeleteString = (decltype(&WindowsDeleteString))GetProcAddress(hCombase, "WindowsDeleteString");
-
 	if (!pRoInitialize || !pRoUninitialize || !pRoGetActivationFactory || !pWindowsCreateString || !pWindowsDeleteString) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	// 初始化 WinRT
 	HRESULT hr = pRoInitialize(RO_INIT_MULTITHREADED);
 	if (FAILED(hr)) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
-	// 设置 AppUserModelID（必须）
+	// 设置 AppUserModelID，要不然 Toast 不被显示
 	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	SetCurrentProcessExplicitAppUserModelID(appId);
-
-	// 创建字符串用于获取 ToastNotificationManager
+	// 创建字符串用来获取 ToastNotificationManager
 	HSTRING hToastMgrClass = nullptr;
 	hr = pWindowsCreateString(
 		RuntimeClass_Windows_UI_Notifications_ToastNotificationManager,
@@ -4440,7 +4418,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	// 获取 IToastNotificationManagerStatics 接口
 	ABI::Windows::UI::Notifications::IToastNotificationManagerStatics* toastManager = nullptr;
 	hr = pRoGetActivationFactory(hToastMgrClass, __uuidof(toastManager), (void**)&toastManager);
@@ -4450,8 +4427,7 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
-	// 获取 Toast XML 模板
+	// 获取一个 Toast XML 模板
 	ABI::Windows::Data::Xml::Dom::IXmlDocument* toastXml = nullptr;
 	hr = toastManager->GetTemplateContent(
 		ABI::Windows::UI::Notifications::ToastTemplateType_ToastText01, &toastXml);
@@ -4462,7 +4438,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	// 获取文本节点
 	ABI::Windows::Data::Xml::Dom::IXmlNodeList* textNodes = nullptr;
 	HSTRING tagName = nullptr;
@@ -4478,7 +4453,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	ABI::Windows::Data::Xml::Dom::IXmlNode* textNode = nullptr;
 	hr = textNodes->Item(0, &textNode);
 	if (FAILED(hr) || !textNode) {
@@ -4490,7 +4464,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	// 创建文本节点
 	ABI::Windows::Data::Xml::Dom::IXmlText* xmlText = nullptr;
 	HSTRING data;
@@ -4508,7 +4481,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	ABI::Windows::Data::Xml::Dom::IXmlNode* textNodeAppend = nullptr;
 	xmlText->QueryInterface(&textNodeAppend);
 	if (!textNodeAppend) {
@@ -4522,7 +4494,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	ABI::Windows::Data::Xml::Dom::IXmlNode* appended = nullptr;
 	hr = textNode->AppendChild(textNodeAppend, &appended);
 	if (FAILED(hr)) {
@@ -4537,7 +4508,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 		FreeLibrary(hCombase);
 		return false;
 	}
-
 	// 创建 Toast 通知对象
 	ABI::Windows::UI::Notifications::IToastNotificationFactory* toastFactory = nullptr;
 	HSTRING hToastClass = nullptr;
@@ -4547,18 +4517,14 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	hr = pRoGetActivationFactory(hToastClass, __uuidof(toastFactory), (void**)&toastFactory);
 	if (FAILED(hr) || !toastFactory) {
 		pWindowsDeleteString(hToastClass);
-		// 清理略
 		return false;
 	}
-
 	ABI::Windows::UI::Notifications::IToastNotification* toast = nullptr;
 	hr = toastFactory->CreateToastNotification(toastXml, &toast);
 	if (FAILED(hr)) {
 		toastFactory->Release();
-		// 清理略
 		return false;
 	}
-
 	ABI::Windows::UI::Notifications::IToastNotifier* notifier = nullptr;
 	HSTRING applicationId;
 	WindowsCreateString(appId, wcslen(appId), &applicationId);
@@ -4568,14 +4534,10 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	if (FAILED(hr)) {
 		toast->Release();
 		toastFactory->Release();
-		// 清理略
 		return false;
 	}
-
-	// 显示通知
 	hr = notifier->Show(toast);
-
-	// 清理
+	// 完了都释放掉
 	notifier->Release();
 	toast->Release();
 	toastFactory->Release();
@@ -4590,7 +4552,6 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	pWindowsDeleteString(hToastClass);
 	pRoUninitialize();
 	FreeLibrary(hCombase);
-
 	return SUCCEEDED(hr);
 }
 
@@ -4599,31 +4560,21 @@ DWORD WINAPI ThreadToast(LPVOID lpParam) {
 	p->result = TrySendToastDynamic(p->message);
 	return 0;
 }
-
-
 DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	const wchar_t* message = static_cast<const wchar_t*>(messageParam);
-
 	if (_isatty(_fileno(stdout))) {
 		::SetConsoleTextAttribute(::GetStdHandle(STD_OUTPUT_HANDLE),
 			FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
 	}
-
 	std::wcout << L"Sending toast: " << message << std::endl;
-
-	// 初始化 WinRT
 	Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 	if (FAILED(initialize)) {
 		std::wcerr << L"RoInitialize failed: 0x" << std::hex << initialize << std::endl;
 		return 1;
 	}
-
-	// 设置应用 ID
 	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	::SetCurrentProcessExplicitAppUserModelID(appId);
-
-	// 获取 Toast 管理器
 	Microsoft::WRL::ComPtr<ABI::Windows::UI::Notifications::IToastNotificationManagerStatics> toastManager;
 	HRESULT hr = Windows::Foundation::GetActivationFactory(
 		Microsoft::WRL::Wrappers::HStringReference(
@@ -4633,8 +4584,6 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to get ToastManager: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 获取模板内容
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlDocument> toastXml;
 	hr = toastManager->GetTemplateContent(
 		ABI::Windows::UI::Notifications::ToastTemplateType_ToastText01,
@@ -4643,8 +4592,6 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to get template content: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 获取文本节点
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlNodeList> textNodes;
 	hr = toastXml->GetElementsByTagName(
 		Microsoft::WRL::Wrappers::HStringReference(L"text").Get(),
@@ -4653,22 +4600,18 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to get text nodes: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
 	UINT32 nodeCount;
 	hr = textNodes->get_Length(&nodeCount);
 	if (FAILED(hr) || nodeCount == 0) {
 		std::wcerr << L"No text nodes found" << std::endl;
 		return 1;
 	}
-
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlNode> textNode;
 	hr = textNodes->Item(0, &textNode);
 	if (FAILED(hr)) {
 		std::wcerr << L"Failed to get first text node: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 创建文本内容
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlText> xmlText;
 	hr = toastXml->CreateTextNode(
 		Microsoft::WRL::Wrappers::HStringReference(message).Get(),
@@ -4677,22 +4620,18 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to create text node: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlNode> textNodeAppend;
 	hr = xmlText.As(&textNodeAppend);
 	if (FAILED(hr)) {
 		std::wcerr << L"Failed to get text node interface: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
 	Microsoft::WRL::ComPtr<ABI::Windows::Data::Xml::Dom::IXmlNode> appendedNode;
 	hr = textNode->AppendChild(textNodeAppend.Get(), &appendedNode);
 	if (FAILED(hr)) {
 		std::wcerr << L"Failed to append text: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 创建 Toast 对象
 	Microsoft::WRL::ComPtr<ABI::Windows::UI::Notifications::IToastNotificationFactory> toastFactory;
 	hr = Windows::Foundation::GetActivationFactory(
 		Microsoft::WRL::Wrappers::HStringReference(
@@ -4702,15 +4641,12 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to get toast factory: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
 	Microsoft::WRL::ComPtr<ABI::Windows::UI::Notifications::IToastNotification> toast;
 	hr = toastFactory->CreateToastNotification(toastXml.Get(), &toast);
 	if (FAILED(hr)) {
 		std::wcerr << L"Failed to create toast: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 创建通知器
 	Microsoft::WRL::ComPtr<ABI::Windows::UI::Notifications::IToastNotifier> notifier;
 	hr = toastManager->CreateToastNotifierWithId(
 		Microsoft::WRL::Wrappers::HStringReference(appId).Get(),
@@ -4719,14 +4655,11 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 		std::wcerr << L"Failed to create notifier: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
-	// 显示通知
 	hr = notifier->Show(toast.Get());
 	if (FAILED(hr)) {
 		std::wcerr << L"Failed to show toast: 0x" << std::hex << hr << std::endl;
 		return 1;
 	}
-
 	std::wcout << L"Toast displayed successfully" << std::endl;
 	wchar_t* currentAppId = nullptr;
 	::GetCurrentProcessExplicitAppUserModelID(&currentAppId);
@@ -4738,5 +4671,4 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	return 0;
 }
 #endif
-
 #endif
