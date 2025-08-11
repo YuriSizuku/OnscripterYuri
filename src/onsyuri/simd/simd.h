@@ -21,7 +21,6 @@
 #pragma once
 #define __SIMD_H__
 
-
 #ifdef USE_SIMD_X86_AVX2
 #include <immintrin.h>
 #define USE_SIMD_X86_SSSE3 1
@@ -46,7 +45,7 @@
 #include <xmmintrin.h>
 #endif
 
-#if defined(USE_SIMD_ARM_NEON)
+#ifdef USE_SIMD_ARM_NEON
 #ifdef _M_ARM64
 #include <arm64_neon.h>
 #else
