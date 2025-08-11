@@ -1028,9 +1028,7 @@ int ScriptHandler::readScript( char *path )
     }
 
     if (fp == NULL){
-#if USE_BTXH_CODE
-		printf("ScriptHandler::readScript - %s\n",archive_path);
-#if defined _WIN32 && defined _MSC_VER
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
 		MessageBox(NULL,
 			"Can't open any of the following:\n"
 			"0.txt\n00.txt\nnscript.dat\nnscript.___\n"
@@ -1039,7 +1037,6 @@ int ScriptHandler::readScript( char *path )
 			"You can also use -r to specify a resource path, and -f for a TTF font file.",
 			"ONScripterYuri",
 			MB_OK | MB_ICONERROR );
-#endif
 #endif
         utils::printError( "can't open any of 0.txt, 00.txt, nscript.dat and nscript.___\n");
         return -1;

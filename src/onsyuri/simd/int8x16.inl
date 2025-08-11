@@ -23,10 +23,6 @@
 #endif
 #include "int16x8.h"
 
-#ifdef USE_BTXH_CODE
-#undef USE_BTXH_CODE
-#endif
-#define USE_BTXH_CODE 1
 namespace simd {
   //Arithmetic
   inline uint8x16 operator+(uint8x16 a, uint8x16 b){
@@ -108,13 +104,6 @@ namespace simd {
   }
 
   inline void store_u_32(void* m, uint8x16 a) {
-#if USE_BTXH_CODE
-#ifdef USE_SIMD_X86_SSE2
-	  *reinterpret_cast<uint32_t*>(m) = _mm_cvtsi128_si32(a);
-#elif USE_SIMD_ARM_NEON
-	  vst1q_lane_u32(reinterpret_cast<uint32_t*>(m), a, 1);
-#endif
-#else
 #ifdef USE_SIMD_X86_SSE2
 #if !defined(__clang_major__) || __clang_major__ >= 8
     _mm_storeu_si32(reinterpret_cast<__m128i*>(m), a);
@@ -124,7 +113,6 @@ namespace simd {
 #endif
 #elif USE_SIMD_ARM_NEON
     vst1q_lane_u32(reinterpret_cast<uint32_t*>(m), vreinterpretq_u32_u8(a), 1);
-#endif
 #endif
   }
 
