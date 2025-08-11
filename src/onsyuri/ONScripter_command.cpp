@@ -39,7 +39,7 @@
 #include "Utils.h"
 #include <algorithm>
 
-#if defined _WIN32 && USE_BTXH_CODE
+#if defined _WIN32 && defined _MSC_VER && USE_BTXH_CODE
 #define NOMINMAX
 #include <Windows.h>
 #include <Windows.UI.Notifications.h>
@@ -58,7 +58,7 @@
 // #include <winstring.h>
 #include <combaseapi.h>
 // #include <corewrappers.h>
-#define USE_TOAST 1
+#define USE_TOAST 0
 
 BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text);
 BOOL EnsureShortcutWithAppID(char *title, char *archive_path);
@@ -3395,7 +3395,7 @@ int ONScripter::captionCommand()
     delete[] buf2;
 
     setCaption( wm_title_string, wm_icon_string );
-#if defined _WIN32
+#if defined _WIN32 && defined _MSC_VER
 	int wide_len = MultiByteToWideChar(CP_UTF8, 0, wm_title_string, -1, nullptr, 0);
 	wchar_t* wide_str = new wchar_t[wide_len + 1];
 	MultiByteToWideChar(CP_UTF8, 0, wm_title_string, -1, wide_str, wide_len);
@@ -3419,7 +3419,7 @@ int ONScripter::captionCommand()
 #if USE_TOAST
 		ToastParam param = { L"Press Alt + Enter for fit\nor F10 for stretch", FALSE };
 		if (EnsureShortcutWithAppID(wm_title_string, archive_path) && IsWindows8OrGreater()) {
-			SetCurrentProcessExplicitAppUserModelID(L"YuriShizuku.OnscripterYuri");
+			SetCurrentProcessExplicitAppUserModelID(L"YuriSizuku.OnscripterYuri");
 			// CreateThread(nullptr, 0, SendToast, const_cast<LPVOID>(static_cast<const void*>(L"Press Alt + Enter for fit\nor F10 for stretch")), 0, nullptr);
 			HANDLE h = CreateThread(nullptr, 0, ThreadToast, &param, 0, nullptr);
 			WaitForSingleObject(h, INFINITE);
@@ -3432,7 +3432,7 @@ int ONScripter::captionCommand()
 		}
 #endif
 	}
-#if defined _WIN32
+#if defined _WIN32 && defined _MSC_VER
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	wm_title_string = wm_title_string_temp;
@@ -4282,7 +4282,7 @@ void ONScripter::stopSMPEG()
 }
 
 
-#if USE_BTXH_CODE && defined _WIN32
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
 
 BOOL __stdcall SendBalloon(wchar_t* title, wchar_t* text) {
 	char titleBuf[64] = { '\0' };
@@ -4342,7 +4342,7 @@ BOOL EnsureShortcutWithAppID(char *title="OnscripterYuri", char *archive_path=""
 	//wchar_t* wide_str = new wchar_t[wide_len + 1];
 	//MultiByteToWideChar(CP_ACP, 0, shortcutPath.c_str(), -1, wide_str, wide_len);
 	puts(archive_path);
-	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriShizuku.OnscripterYuri", archive_path);
+	CreateShortcutWithAppUserModelID(shortcutPath.c_str(), exePath, L"YuriSizuku.OnscripterYuri", archive_path);
 	return FALSE;
 	//delete[] wide_str;
 }
@@ -4426,7 +4426,7 @@ BOOL TrySendToastDynamic(const wchar_t* message) {
 	}
 
 	// 设置 AppUserModelID（必须）
-	const wchar_t* appId = L"YuriShizuku.OnscripterYuri";
+	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	SetCurrentProcessExplicitAppUserModelID(appId);
 
 	// 创建字符串用于获取 ToastNotificationManager
@@ -4620,7 +4620,7 @@ DWORD WINAPI SendToast(LPVOID messageParam = LPVOID(L"")) {
 	}
 
 	// 设置应用 ID
-	const wchar_t* appId = L"YuriShizuku.OnscripterYuri";
+	const wchar_t* appId = L"YuriSizuku.OnscripterYuri";
 	::SetCurrentProcessExplicitAppUserModelID(appId);
 
 	// 获取 Toast 管理器

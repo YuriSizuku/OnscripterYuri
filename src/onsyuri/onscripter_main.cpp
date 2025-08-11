@@ -36,7 +36,7 @@
 #include "stdlib.h"
 
 #if USE_BTXH_CODE
-#ifdef _WIN32
+#if defined _WIN32 && defined _MSC_VER
  // Use version 6.0 manifest in order to use Windows 8 like MessageBox Style
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #define NOMINMAX
@@ -105,7 +105,7 @@ void optionHelp()
 		"      --key-exe file\tset a file (*.EXE) that includes a key table\n"
 		"      --fontcache\tcache default font\n"
 		;
-#ifdef _WIN32
+#if defined _WIN32 && defined _MSC_VER
 	if(!_isatty(_fileno(stdout)) ) MessageBox(NULL, helpText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
 #else
 	if(0) printf(helpText);
@@ -159,7 +159,7 @@ void optionVersion()
                 (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n"
 		"This is free software; see the source for copying conditions.\n"
 		;
-#ifdef _WIN32
+#if defined _WIN32 && defined _MSC_VER
 	if (!_isatty(_fileno(stdout))) MessageBox(NULL, versionText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
 #else
 	if(0) printf(versionText);

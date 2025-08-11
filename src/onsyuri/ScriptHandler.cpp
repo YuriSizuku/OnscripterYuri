@@ -33,7 +33,7 @@
 #define USE_BTXH_CODE 1
 
 #if USE_BTXH_CODE
-#ifdef _WIN32
+#if defined _WIN32 && defined _MSC_VER
 #define NOMINMAX
 #include <Windows.h>
 #endif
@@ -1032,7 +1032,7 @@ int ScriptHandler::readScript( char *path )
     if (fp == NULL){
 #if USE_BTXH_CODE
 		printf("ScriptHandler::readScript - %s\n",archive_path);
-#ifdef _WIN32
+#if defined _WIN32 && defined _MSC_VER
 		MessageBox(NULL,
 			"Can't open any of the following:\n"
 			"0.txt\n00.txt\nnscript.dat\nnscript.___\n"
