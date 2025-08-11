@@ -3412,7 +3412,7 @@ int ONScripter::captionCommand()
 	::SetConsoleTextAttribute(::GetStdHandle(STD_OUTPUT_HANDLE),
 		FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);	
 	printf("Width: %d  Height: %d\n", screen_device_width, screen_device_height);
-#endif
+
 	puts(wm_title_string);
 
 	if (screen_device_width >= 1280 || screen_device_height >= 720) {
@@ -3432,7 +3432,7 @@ int ONScripter::captionCommand()
 		}
 #endif
 	}
-#if defined _WIN32 && defined _MSC_VER
+
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	wm_title_string = wm_title_string_temp;

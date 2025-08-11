@@ -108,9 +108,9 @@ void optionHelp()
 #if defined _WIN32 && defined _MSC_VER
 	if(!_isatty(_fileno(stdout)) ) MessageBox(NULL, helpText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
 #else
-	if(0) printf(helpText);
+	if(0) puts(helpText);
 #endif
-	else printf(helpText);
+	else puts(helpText);
 #else
     printf( "Usage: onsyuri [option ...]\n" );
     printf( "  -h, --help\t\tshow this help and exit\n");
@@ -162,9 +162,9 @@ void optionVersion()
 #if defined _WIN32 && defined _MSC_VER
 	if (!_isatty(_fileno(stdout))) MessageBox(NULL, versionText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
 #else
-	if(0) printf(versionText);
+	if(0) puts(versionText);
 #endif
-	else printf(versionText);
+	else puts(versionText);
 #else
     printf("Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n");
     printf("Copyright (c) 2001-2018 Ogapee.\n\

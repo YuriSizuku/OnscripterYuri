@@ -36,6 +36,7 @@ New features :
   - [x] windows
     - [x] x86, x64 (local or cross compile by mingw, static link)  
     - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
+    - [ ] arm32 (local msvc, vcpkg, WIP)
     - [x] video by system player
   - [x] linux
     - [x] x86, x64 (local compile, static or dynamic link)

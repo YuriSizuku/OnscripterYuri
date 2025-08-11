@@ -46,11 +46,9 @@ extern "C" void waveCallback(int channel);
 #endif
 #define USE_BTXH_CODE 1
 
-#if USE_BTXH_CODE
-#if defined _WIN32 && defined _MSC_VER && defined _MSC_VER
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER && defined _MSC_VER
 #define NOMINMAX
 #include <Windows.h>
-#endif
 #include <io.h>
 #endif
 
@@ -496,25 +494,17 @@ void ONScripter::setArchivePath(const char *path)
 	int wide_len = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
 	wchar_t* wide_str = new wchar_t[wide_len + 1];
 	MultiByteToWideChar(CP_UTF8, 0, path, -1, wide_str, wide_len);
-	/*printf("wide_len = %d\n", wide_len);
-	printf("%ws", wide_str);
-	puts("");*/
 
 	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
-	//printf("acp_len = %d\n", acp_len);
 	char* acp_str = new char[acp_len + 1];
 	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
 	delete[] wide_str;
-	//printf("acp_str = %s\n", acp_str);
 	const char* path_temp = path;
 	path = acp_str;
 #endif
-	// printf("ONScripter::setArchivePath - %s\n", path);
     if (archive_path) delete[] archive_path;
     archive_path = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( archive_path, RELATIVEPATH "%s%c", path, DELIMITER );
-
-	// printf("ONScripter::setArchivePath - %s\n", archive_path);
     g_stdoutpath = std::string(archive_path) + "stdout.txt";
     g_stderrpath = std::string(archive_path) + "stderr.txt";
 #if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
