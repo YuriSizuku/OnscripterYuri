@@ -22,17 +22,17 @@
 #include "coding2utf16.h"
 
 
-char Coding2UTF16::space[4] = "„ÄÄ";
-char Coding2UTF16::minus[4] = "Ôºç";
-char Coding2UTF16::bracket[8] = "„Äê„Äë";
+char Coding2UTF16::space[4] = "°°";
+char Coding2UTF16::minus[4] = "£≠";
+char Coding2UTF16::bracket[8] = "°æ°ø";
 char Coding2UTF16::num_str[24] = "0123456789";
-char Coding2UTF16::DEFAULT_START_KINSOKU[40] = "„Äç„ÄèÔºâÔºΩÔΩù„ÄÅ„ÄÇÔºåÔºé„ÄÇÔºüÔºÅ„Éº" ;
-char Coding2UTF16::DEFAULT_END_KINSOKU[12] = "„Äå„ÄéÔºà";
-char Coding2UTF16::DEFAULT_SAVE_MENU_NAME[12] = "ÔºúsaveÔºû";
-char Coding2UTF16::DEFAULT_LOAD_MENU_NAME[12] = "ÔºúloadÔºû";
+char Coding2UTF16::DEFAULT_START_KINSOKU[40] = "°π°ª£©£›£˝°¢°££¨£Æ°££ø£°©`" ;
+char Coding2UTF16::DEFAULT_END_KINSOKU[12] = "°∏°∫£®";
+char Coding2UTF16::DEFAULT_SAVE_MENU_NAME[12] = "£ºsave£æ";
+char Coding2UTF16::DEFAULT_LOAD_MENU_NAME[12] = "£ºload£æ";
 char Coding2UTF16::DEFAULT_SAVE_ITEM_NAME[8] = "data";
-char Coding2UTF16::MESSAGE_SAVE_EXIST[24] = "%s%s %s/%s‚Äî%s:%s";
-char Coding2UTF16::MESSAGE_SAVE_EMPTY[32] = "%s%s ‚Äî‚Äî‚Äî‚Äî‚Äî‚Äî‚Äî‚Äî";
+char Coding2UTF16::MESSAGE_SAVE_EXIST[24] = "%s%s %s/%s°™%s:%s";
+char Coding2UTF16::MESSAGE_SAVE_EMPTY[32] = "%s%s °™°™°™°™°™°™°™°™";
 char Coding2UTF16::MESSAGE_SAVE_CONFIRM[40] = "`Save slot %s%s?";
 char Coding2UTF16::MESSAGE_LOAD_CONFIRM[40] = "`Load slot %s%s?";
 char Coding2UTF16::MESSAGE_RESET_CONFIRM[36] = "`Return Title?";
