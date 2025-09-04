@@ -126,13 +126,22 @@ You can either download the prebuild static elf from the [release](https://githu
 
 ![onsyuri_mo2_linuxtest](screenshot/onsyuri_mo2_linuxtest.jpg)  
 
-- Arch User Repository
-  
-  [aur onscripter-yuri](https://aur.archlinux.org/packages/onscripter-yuri)
+- Arch Linux
+  - [Arch User Repository](https://aur.archlinux.org/packages/onscripter-yuri)
 
 ``` sh
-# for Arch based distributions, install directly from AUR.
+# Install with your AUR helper
 yay -S onscripter-yuri
+```
+
+- Gentoo
+  - [gentoo-zh Overlay](https://github.com/microcai/gentoo-zh/tree/master/games-emulation/onscripter-yuri)
+
+``` sh
+# Enable gentoo-zh overlay (use 'repository' subcommamd for 'eselect' need install 'app-eselect/eselect-repository' first):
+eselect repository enable gentoo-zh
+# Install onscripter-yuri:
+emerge --ask games-emulation/onscripter-yuri
 ```
 
 ### (3) web
@@ -396,3 +405,4 @@ sudo apt-get install qemu-user-static binfmt-support
 
 - ~~video support (future plan)~~  partly finish by invoke system player  
 - ~~web preloading (future plan)~~ might not need ? lazyload partly solved  
+
