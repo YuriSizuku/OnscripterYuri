@@ -861,7 +861,13 @@ void ONScripter::flushDirect( SDL_Rect &rect, int refresh_mode )
     if (AnimationInfo::doClipping(&dst_rect, &screen_rect) || (dst_rect.w == 2 && dst_rect.h == 2)) return;
     refreshSurface(accumulation_surface, &rect, refresh_mode);
     SDL_LockSurface(accumulation_surface);
-    SDL_UpdateTexture(texture, &rect, (unsigned char*)accumulation_surface->pixels+accumulation_surface->pitch*rect.y+rect.x*sizeof(ONSBuf), accumulation_surface->pitch);
+    int offset = accumulation_surface->pitch * rect.y + rect.x * sizeof(ONSBuf);
+    if (offset >= 0) // need to check for update texture
+    {
+        SDL_UpdateTexture(texture, &rect,
+            (unsigned char*)accumulation_surface->pixels + offset,
+            accumulation_surface->pitch);
+    }
     SDL_UnlockSurface(accumulation_surface);
 
     screen_dirty_flag = false;
