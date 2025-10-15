@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build_i386:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       BUILD_TYPE: Release
       VCPKG_TRIPLET: x86-windows-static
@@ -52,7 +52,7 @@ jobs:
         token: ${{secrets.GITHUB_TOKEN}}
 
   build_amd64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       BUILD_TYPE: Release
       VCPKG_TRIPLET: x64-windows-static
@@ -97,7 +97,7 @@ jobs:
         token: ${{secrets.GITHUB_TOKEN}}
 
   build_arm64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       BUILD_TYPE: Release
       VCPKG_TRIPLET: arm64-windows-static

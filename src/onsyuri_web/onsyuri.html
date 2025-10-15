@@ -172,6 +172,9 @@
                 if(gamedir[gamedir.length-1] =="/" ) 
                     gamedir=gamedir.substring(0, gamedir.length-1);
 
+                if(urlbase[urlbase.length-1] == "/")
+                    urlbase=urlbase.substring(0, urlbase.length-1);
+
                 for(i in files) {
                     var path = files[i].path;
                     var url = files[i].url;
@@ -181,9 +184,12 @@
                     var filedir = path.substring(0, j);
                     var basedir = gamedir + "/" + filedir;
                     if(basedir[basedir.length-1]!="/") basedir+="/";
-                    if(url==undefined) url = urlbase + "/" + path;
-                    else if (url.length==0) url = urlbase + "/" + path;
-                    
+                    if(url==undefined || url.length==0)
+                    {
+                        if (path[0]=="/") url = urlbase + path;
+                        else url = urlbase + "/" + path;
+                    }
+
                     // console.log(path, url, file_lazyload);
                     em_mkdirs(_FS, basedir);
                     if(file_lazyload==undefined) file_lazyload = lazyload;
