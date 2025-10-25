@@ -36,6 +36,7 @@ New features :
   - [x] windows
     - [x] x86, x64 (local or cross compile by mingw, static link)  
     - [x] amd64, arm64 (local msvc, vcpkg, contributed by [ryank231231](https://github.com/YuriSizuku/OnscripterYuri/pull/3))
+    - [ ] arm32 (local msvc, vcpkg, only available in releases, while GitHub Actions workflow is still WIP due to the difficulty of making GitHub Actions Runner use Windows 11 SDK 10.0.22621.0 instead of 10.0.26100.x which removed ARM support)
     - [x] video by system player
   - [x] linux
     - [x] x86, x64 (local compile, static or dynamic link)

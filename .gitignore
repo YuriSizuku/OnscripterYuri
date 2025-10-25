@@ -9,6 +9,11 @@ thirdparty/**
 script/*.json
 save
 
+# vcpkg + CMake
+vcpkg/**
+vcpkg_installed/
+CMakePresets.json
+
 # android
 local.properties
 sign.properties

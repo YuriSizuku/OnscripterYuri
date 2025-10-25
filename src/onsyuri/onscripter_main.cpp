@@ -23,12 +23,27 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifdef USE_BTXH_CODE
+#undef USE_BTXH_CODE
+#endif
+#define USE_BTXH_CODE 1
+
 #include "ONScripter.h"
 #include "Utils.h"
 #include "gbk2utf16.h"
 #include "sjis2utf16.h"
 #include "version.h"
 #include "stdlib.h"
+
+#if USE_BTXH_CODE
+#if defined _WIN32 && defined _MSC_VER
+ // Use version 6.0 manifest in order to use Windows 8 like MessageBox Style
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#define NOMINMAX
+#include <Windows.h>
+#include <io.h>
+#endif
+#endif
 
 ONScripter ons;
 Coding2UTF16 *coding2utf16 = NULL;
@@ -54,6 +69,49 @@ std::string g_stderrpath = "stderr.txt";
 
 void optionHelp()
 {
+#if USE_BTXH_CODE
+	char helpText[] =
+		"Usage: onsyuri [option ...]\n"
+		"  -h, --help\t\tshow this help and exit\n"
+		"  -v, --version\t\tshow the version information and exit\n\n"
+
+		" load options: \n"
+		"  -f, --font file\tset a TTF font file\n"
+		"  -r, --root path\tset the root path to the archives\n"
+		"      --save-dir\tset save dir\n"
+		"      --debug:1\t\tprint debug info\n"
+		"      --enc:sjis\tuse sjis coding script\n\n"
+
+		" render options: \n"
+		"      --window\t\tstart in windowed mode\n"
+		"      --width 1280\tforce window width\n"
+		"      --height 720\tforce window height\n"
+		"      --fullscreen\tstart in fullscreen mode (alt+f4 or f11)\n"
+		"      --fullscreen2\tstart in fullscreen mode with stretch (f10)\n"
+		"      --sharpness 3.1 \t use gles to make image sharp\n"
+		"      --no-video\tdo not decode video\n"
+		"      --no-vsync\tturn off vsync\n\n"
+
+		" other options: \n"
+		"      --cdaudio\t\tuse CD audio if available\n"
+		"      --cdnumber no\tchoose the CD-ROM drive number\n"
+		"      --registry file\tset a registry file\n"
+		"      --dll file\tset a dll file\n"
+		"      --enable-wheeldown-advance\tadvance the text on mouse wheel down\n"
+		"      --disable-rescale\tdo not rescale the images in the archives\n"
+		"      --force-button-shortcut\tignore useescspc and getenter command\n"
+		"      --render-font-outline\trender the outline of a text instead of casting a shadow\n"
+		"      --edit\t\tenable online modification of the volume and variables when 'z' is pressed\n"
+		"      --key-exe file\tset a file (*.EXE) that includes a key table\n"
+		"      --fontcache\tcache default font\n"
+		;
+#if defined _WIN32 && defined _MSC_VER
+	if(!_isatty(_fileno(stdout)) ) MessageBox(NULL, helpText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#else
+	if(0) puts(helpText);
+#endif
+	else puts(helpText);
+#else
     printf( "Usage: onsyuri [option ...]\n" );
     printf( "  -h, --help\t\tshow this help and exit\n");
     printf( "  -v, --version\t\tshow the version information and exit\n\n");
@@ -87,16 +145,33 @@ void optionHelp()
     printf( "      --edit\t\tenable online modification of the volume and variables when 'z' is pressed\n");
     printf( "      --key-exe file\tset a file (*.EXE) that includes a key table\n");
     printf( "      --fontcache\tcache default font\n");
+#endif
     exit(0);
 }
 
 void optionVersion()
 {
+#if USE_BTXH_CODE
+	char versionText[] =
+		"Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n"
+		"Copyright (c) 2001-2018 Ogapee.\n\
+                (c) 2014-2018 jh10001<jh10001@live.cn>\n\
+                (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n"
+		"This is free software; see the source for copying conditions.\n"
+		;
+#if defined _WIN32 && defined _MSC_VER
+	if (!_isatty(_fileno(stdout))) MessageBox(NULL, versionText, "OnscripterYuri", MB_ICONINFORMATION | MB_OK);
+#else
+	if(0) puts(versionText);
+#endif
+	else puts(versionText);
+#else
     printf("Written by Ogapee <ogapee@aqua.dti2.ne.jp>\n\n");
     printf("Copyright (c) 2001-2018 Ogapee.\n\
                 (c) 2014-2018 jh10001<jh10001@live.cn>\n\
                 (c) 2022-2023 yurisizuku <https://github.com/YuriSizuku>\n");
     printf("This is free software; see the source for copying conditions.\n");
+#endif
     exit(0);
 }
 

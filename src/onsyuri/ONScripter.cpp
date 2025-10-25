@@ -22,6 +22,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifdef USE_BTXH_CODE
+#undef USE_BTXH_CODE
+#endif
+#define USE_BTXH_CODE 1
 
 #include "ONScripter.h"
 #include "Utils.h"
@@ -36,6 +40,18 @@
 
 extern Coding2UTF16 *coding2utf16;
 extern "C" void waveCallback(int channel);
+
+#ifdef USE_BTXH_CODE
+#undef USE_BTXH_CODE
+#endif
+#define USE_BTXH_CODE 1
+
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER && defined _MSC_VER
+#define NOMINMAX
+#include <Windows.h>
+#include <io.h>
+#endif
+
 
 #define DEFAULT_AUDIOBUF  4096
 
@@ -414,36 +430,112 @@ void ONScripter::setCDNumber(int cdrom_drive_number)
 
 void ONScripter::setFontFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&default_font, filename);
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setRegistryFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&registry_file, filename);
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setDLLFile(const char *filename)
 {
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* filename_temp = filename;
+	filename = acp_str;
+#endif
     setStr(&dll_file, filename);
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	filename = filename_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setArchivePath(const char *path)
 {
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, path, -1, wide_str, wide_len);
+
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* path_temp = path;
+	path = acp_str;
+#endif
     if (archive_path) delete[] archive_path;
     archive_path = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( archive_path, RELATIVEPATH "%s%c", path, DELIMITER );
     g_stdoutpath = std::string(archive_path) + "stdout.txt";
     g_stderrpath = std::string(archive_path) + "stderr.txt";
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	path = path_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setSaveDir(const char *path)
 {
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	int wide_len = MultiByteToWideChar(CP_UTF8, 0, path, -1, nullptr, 0);
+	wchar_t* wide_str = new wchar_t[wide_len + 1];
+	MultiByteToWideChar(CP_UTF8, 0, path, -1, wide_str, wide_len);
+	int acp_len = WideCharToMultiByte(CP_ACP, 0, wide_str, -1, nullptr, 0, nullptr, nullptr);
+	char* acp_str = new char[acp_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, wide_str, -1, acp_str, acp_len, nullptr, nullptr);
+	delete[] wide_str;
+	const char* path_temp = path;
+	path = acp_str;
+#endif
     if (save_dir) delete[] save_dir;
     save_dir = new char[ RELATIVEPATHLENGTH + strlen(path) + 2 ];
     sprintf( save_dir, RELATIVEPATH "%s%c", path, DELIMITER );
     script_h.setSaveDir(save_dir);
     g_stdoutpath = std::string(save_dir) + "stdout.txt";
     g_stderrpath = std::string(save_dir) + "stderr.txt";
+#if USE_BTXH_CODE && defined _WIN32 && defined _MSC_VER
+	path = path_temp;
+	delete[] acp_str;
+#endif
 }
 
 void ONScripter::setFullscreenMode(int mode)
@@ -678,9 +770,44 @@ int ONScripter::init()
     }
 
     if ( sentence_font.openFont( font_file, screen_ratio1, screen_ratio2 ) == NULL ){
-        utils::printError("can't open font file: %s\n", font_file);
-        return -1;
-    }
+#if USE_BTXH_CODE 
+		std::string font_file_alternative=std::string(archive_path) + std::string(font_file);
+		char* font_file_alternative_c_str = new char[font_file_alternative.length() + 1];
+#ifdef _MSC_VER
+		strcpy_s(
+			font_file_alternative_c_str, 
+			font_file_alternative.length() + 1, 
+			font_file_alternative.c_str()
+		);
+#else
+		strcpy(
+			font_file_alternative_c_str,
+			font_file_alternative.c_str()
+		);
+#endif
+		if (sentence_font.openFont(font_file_alternative_c_str, screen_ratio1, screen_ratio2) == NULL) {
+			delete[] font_file_alternative_c_str;
+#if defined _WIN32 && defined _MSC_VER
+			std::string fontErrorPromptString;
+			fontErrorPromptString = "Can't open font file: "
+				+ std::string(font_file)
+				+ "\n"
+				+ "Check if \"-f\" parameter is missing from the command.";
+			MessageBox(NULL,
+				LPCSTR(fontErrorPromptString.c_str()),
+				"ONScripterYuri",
+				MB_OK | MB_ICONERROR);
+#endif
+#else
+		if(1) {
+#endif
+			utils::printError("can't open font file: %s\n", font_file);
+			return -1;
+		}
+#if USE_BTXH_CODE
+		delete[] font_file_alternative_c_str;
+#endif
+	}
     
     return 0;
 }
