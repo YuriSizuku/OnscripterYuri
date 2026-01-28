@@ -14,16 +14,22 @@ jobs:
    
     - uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         cache: gradle
-
+    
     - name: build onsyuri_android
       env:
         SIGN_KEY_ALIAS: ${{ secrets.SIGN_KEY_ALIAS }}
         SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
         SIGN_STORE_PASS: ${{ secrets.SIGN_STORE_PASS }}
+        SIGN_JKS_BASE64: ${{ secrets.SIGN_JKS_BASE64 }}
       run: |
+        # openssl base64 < sign.jks | tr -d '\n' | tee sign.txt
+        if [ -n "$SIGN_JKS_BASE64" ]; then
+          echo "$SIGN_JKS_BASE64" | base64 --decode > src/onsyuri_android/app/sign.jks
+          ls -la src/onsyuri_android/app
+        fi
         if [ -z "$(echo ${{  github.ref_name }} | grep merge)" ]; then 
           sed -i -E 's/#define ONS_YURI_VERSION "(.+?)"/#define ONS_YURI_VERSION "${{  github.ref_name }}"/g' src/onsyuri/version.h
         fi

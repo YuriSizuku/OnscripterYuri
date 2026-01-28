@@ -34,31 +34,3 @@ jobs:
           artifacts: "./build_darwin/onsyuri_${{  github.ref_name }}_aarch64_darwin"
           allowUpdates: "true"
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  build_darwin_x86-64:
-    runs-on: macos-13
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: |
-          brew install sdl2 sdl2_ttf sdl2_image sdl2_mixer lua bzip2
-
-      - name: Build
-        run: |
-          cd script
-          bash ./local_darwin.sh
-
-      - name: prepare release
-        if: github.event_name == 'push'
-        run: |
-          cd build_darwin
-          mv onsyuri onsyuri_${{  github.ref_name }}_x86-64_darwin
-
-      - name: create release
-        uses: ncipollo/release-action@v1
-        if: github.event_name == 'push'
-        with:
-          artifacts: "./build_darwin/onsyuri_${{  github.ref_name }}_x86-64_darwin"
-          allowUpdates: "true"
-          token: ${{ secrets.GITHUB_TOKEN }}

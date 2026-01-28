@@ -16,30 +16,36 @@ set(BZ2_DIR ${THIRDPARTY_PORT}/bzip2-1.0.8)
 set(ANDROID TRUE)
 set(CMAKE_SYSTEM_NAME Linux)
 add_subdirectory(${SDL2_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2)
+target_link_options(SDL2 PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build sdl2_image
 set(SDL2IMAGE_INSTALL off)
 set(SDL2IMAGE_SAMPLES off)
 add_subdirectory(${SDL2IMAGE_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2image)
+target_link_options(SDL2_image PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build sdl2_ttf
 set(SDL2TTF_SAMPLES off)
 set(SDL2TTF_INSTALL off)
 set(SDL2TTF_VENDORED on) # use external ttf in source code
 add_subdirectory(${SDL2TTF_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2ttf)
+target_link_options(SDL2_ttf PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build sdl2 mixer
 set(SDL2MIXER_SAMPLES off)
 set(SDL2MIXER_INSTALL off)
 set(SDL2MIXER_OPUS off)
 set(SDL2MIXER_FLAC off)
+set(SDL2MIXER_MOD off)
 set(SDL2MIXER_VORBIS_STB on)
 set(SDL2MIXER_VENDORED on)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-dev")
 add_subdirectory(${SDL2MIXER_DIR} ${ONSYURI_DIR}/build_android/thirdparty/sdl2mixer)
+target_link_options(SDL2_mixer PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build jpeg
 add_subdirectory(${JPEG_DIR} ${ONSYURI_DIR}/build_android/thirdparty/jpeg)
+target_link_options(jpeg PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build lua
 set(LUASRC_DIR ${LUA_DIR}/src)
@@ -54,6 +60,7 @@ set(LUA_CODE
 )
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 add_library(lua SHARED ${LUA_CODE})
+target_link_options(lua PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build bz2
 set(BZ2SRC_DIR ${BZ2_DIR})
@@ -63,6 +70,7 @@ set(BZ2_CODE
 )
 add_library(bz2 SHARED ${BZ2_CODE})
 target_compile_options(bz2 PRIVATE -D_FILE_OFFSET_BITS=64)
+target_link_options(bz2 PRIVATE "-Wl,-z,max-page-size=16384")
 
 # build onsyuri_android
 set(CMAKE_SYSTEM_NAME Android)
@@ -72,3 +80,4 @@ include_directories(
     ${LUASRC_DIR}
 )
 add_subdirectory(${ONSYURI_DIR} ${ONSYURI_DIR}/build_android)
+target_link_options(onsyuri PRIVATE "-Wl,-z,max-page-size=16384")
