@@ -260,7 +260,9 @@ extern "C" void playVideoIOS(const char *filename, bool click_flag, bool loop_fl
 #if defined(WEB)
 #include <emscripten.h>
 
+#if !defined(WEB_OPFS)
 #undef fopen
+#endif
 
 /*
 * fetch the file from server beforce fopen for lazyload
@@ -347,6 +349,23 @@ extern "C" void playVideoWeb(const char *path, bool click_flag, bool loop_flag)
     {
         SDL_Delay(5);
     }
+}
+#endif
+#if defined(WEB_OPFS)
+#ifndef OPFS_MOUNT_PATH
+#define OPFS_MOUNT_PATH "/opfs"
+#endif
+
+#include <emscripten/wasmfs.h>
+void init_opfs(void) {
+    backend_t wasmfs_backend = wasmfs_create_opfs_backend();
+
+    int err = wasmfs_create_directory(OPFS_MOUNT_PATH, 777, wasmfs_backend);
+    if (err && errno != EEXIST) {
+        utils::printError("OPFS initialization failed: %d (errno: %d)\n", err, errno);
+        return;
+    }
+    utils::printInfo("OPFS initialized at '" OPFS_MOUNT_PATH "'\n");
 }
 #endif
 
@@ -532,6 +551,10 @@ int main(int argc, char *argv[])
 #if defined(RENDER_FONT_OUTLINE)
     ons.renderFontOutline();
 #endif
+#endif
+
+#if defined(WEB_OPFS)
+    init_opfs();
 #endif
 
     // ----------------------------------------
