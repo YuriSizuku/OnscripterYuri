@@ -47,7 +47,6 @@ public:
     size_t putFile( FILE *fp, int no, size_t offset, size_t length, size_t original_length, int compression_type, bool modified_flag, unsigned char *buffer );
     
 private:
-    bool sar_flag;
     int nsa_offset;
     int archive_type;
     int num_of_nsa_archives;

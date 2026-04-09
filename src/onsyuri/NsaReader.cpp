@@ -31,7 +31,6 @@
 NsaReader::NsaReader( unsigned int nsa_offset, char *path, int archive_type, const unsigned char *key_table )
         :SarReader( path, key_table )
 {
-    sar_flag = true;
     this->nsa_offset = nsa_offset;
     this->archive_type = archive_type;
     num_of_nsa_archives = 0;
@@ -57,8 +56,6 @@ int NsaReader::open( const char *nsa_path )
     char archive_name[256], archive_name2[250];
 
     if ( !SarReader::open( "arc.sar" ) ) archive_found = true;
-    
-    sar_flag = false;
 
     if (archive_type & ARCHIVE_TYPE_NS2){
         for ( i=0 ; i<MAX_NS2_ARCHIVE ; i++ ){
@@ -104,7 +101,6 @@ int NsaReader::open( const char *nsa_path )
 
 int NsaReader::openForConvert( char *nsa_name, int archive_type, unsigned int nsa_offset )
 {
-    sar_flag = false;
     if ( ( archive_info.file_handle = ::fopen( nsa_name, "rb" ) ) == NULL ){
         utils::printError( "can't open file %s\n", nsa_name );
         return -1;
@@ -162,31 +158,27 @@ size_t NsaReader::getFileLengthSub( ArchiveInfo *ai, const char *file_name )
 
 size_t NsaReader::getFileLength( const char *file_name )
 {
-    if ( sar_flag ) return SarReader::getFileLength( file_name );
-
     size_t ret;
     int i;
-    
+
     if ( ( ret = DirectReader::getFileLength( file_name ) ) ) return ret;
-    
+
     for ( i=0 ; i<num_of_ns2_archives ; i++ ){
         if ( (ret = getFileLengthSub( &archive_info_ns2[i], file_name )) ) return ret;
     }
-    
+
     if ( ( ret = getFileLengthSub( &archive_info, file_name )) ) return ret;
 
     for ( i=0 ; i<num_of_nsa_archives ; i++ ){
         if ( (ret = getFileLengthSub( &archive_info2[i], file_name )) ) return ret;
     }
 
-    return 0;
+    return SarReader::getFileLength( file_name );
 }
 
 size_t NsaReader::getFile( const char *file_name, unsigned char *buffer, int *location )
 {
     size_t ret;
-
-    if ( sar_flag ) return SarReader::getFile( file_name, buffer, location );
 
     if ( ( ret = DirectReader::getFile( file_name, buffer, location ) ) ) return ret;
 
@@ -209,7 +201,9 @@ size_t NsaReader::getFile( const char *file_name, unsigned char *buffer, int *lo
         }
     }
 
-    return 0;
+    ret = SarReader::getFile( file_name, buffer, location );
+    if ( !ret && location ) *location = ARCHIVE_TYPE_NONE;
+    return ret;
 }
 
 NsaReader::FileInfo NsaReader::getFileByIndex( unsigned int index )
