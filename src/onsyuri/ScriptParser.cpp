@@ -238,6 +238,7 @@ void ScriptParser::reset()
     /* ---------------------------------------- */
     /* Effect related variables */
     effect_blank = 10;
+    effect_skip_flag = 1;
     effect_cut_flag = false;
 
     window_effect.effect = 1;

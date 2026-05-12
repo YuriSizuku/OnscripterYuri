@@ -454,7 +454,8 @@ bool ONScripter::doEffect( EffectLink *effect, bool clear_dirty_region )
     if ( !((automode_flag || autoclick_time > 0) ||
            (usewheel_flag  && current_button_state.button == -5) ||
            (!usewheel_flag && current_button_state.button == -2)) ){
-        effect_counter = effect_duration; // interrupted
+        if ( effect_skip_flag )
+            effect_counter = effect_duration; // interrupted
     }
 
     if ( effect_counter < effect_duration && effect_no != 1 ){

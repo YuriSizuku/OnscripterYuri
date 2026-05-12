@@ -1222,6 +1222,13 @@ int ScriptParser::effectblankCommand()
     return RET_CONTINUE;
 }
 
+int ScriptParser::effectskipCommand()
+{
+    effect_skip_flag = script_h.readInt();
+
+    return RET_CONTINUE;
+}
+
 int ScriptParser::effectCommand()
 {
     EffectLink *elink;
