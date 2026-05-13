@@ -151,6 +151,7 @@ public:
     int englishCommand();
     int effectcutCommand();
     int effectblankCommand();
+    int effectskipCommand();
     int effectCommand();
     int divCommand();
     int dimCommand();
@@ -308,6 +309,7 @@ protected:
     EffectLink root_effect_link, *last_effect_link, window_effect, tmp_effect;
     
     int effect_blank;
+    int effect_skip_flag;
     bool effect_cut_flag;
 
     int readEffect( EffectLink *effect );

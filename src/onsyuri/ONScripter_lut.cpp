@@ -301,6 +301,7 @@ static ONScripter::FuncLUT func_lut[] = {
     {"end",				&ONScripter::endCommand},
     {"effectcut",		&ONScripter::effectcutCommand},
     {"effectblank",		&ONScripter::effectblankCommand},
+    {"effectskip",		&ONScripter::effectskipCommand},
     {"effect",			&ONScripter::effectCommand},
 
     {"dwavestop",		&ONScripter::dwavestopCommand},
