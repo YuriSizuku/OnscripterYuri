@@ -423,18 +423,20 @@ void ONScripter::restoreTextBuffer(SDL_Surface *surface)
 #endif
 
             if (IS_TWO_BYTE(out_text[0])){
+                int additional_bytes;
                 if (coding2utf16->force_utf8) {
-                    int leading = UTF8_N_BYTE(out_text[0]);
-                    for(int j=1; j<leading; j++)
+                    additional_bytes = UTF8_N_BYTE(out_text[0]) - 1;
+                    for(int j=1; j<=additional_bytes; j++)
                     out_text[j] = current_page->text[i+j];
                 }
                 else {
+                    additional_bytes = 1;
                     out_text[1] = current_page->text[i+1];
                 }
                 
                 if ( checkLineBreak( current_page->text+i, &f_info ) )
                     f_info.newLine();
-                i++;
+                i += additional_bytes;
             }
             else{
                 out_text[1] = 0;
