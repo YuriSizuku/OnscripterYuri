@@ -167,15 +167,15 @@ void ONScripter::playCDAudio()
     }
     else{
         char filename[256];
-        sprintf( filename, "cd\\track%2.2d.mp3", current_cd_track );
+        sprintf( filename, "cd/track%2.2d.mp3", current_cd_track );
         int ret = playSound( filename, SOUND_MUSIC, cd_play_loop_flag );
         if (ret == SOUND_MUSIC) return;
 
-        sprintf( filename, "cd\\track%2.2d.ogg", current_cd_track );
+        sprintf( filename, "cd/track%2.2d.ogg", current_cd_track );
         ret = playSound( filename, SOUND_MUSIC, cd_play_loop_flag );
         if (ret == SOUND_MUSIC) return;
 
-        sprintf( filename, "cd\\track%2.2d.wav", current_cd_track );
+        sprintf( filename, "cd/track%2.2d.wav", current_cd_track );
         ret = playSound( filename, SOUND_MUSIC|SOUND_CHUNK, cd_play_loop_flag, MIX_BGM_CHANNEL );
     }
 }
