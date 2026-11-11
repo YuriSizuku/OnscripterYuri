@@ -468,6 +468,10 @@ function(config_platform TARGET_NAME)
                 ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.html ${CMAKE_BINARY_DIR}
             COMMAND ${CMAKE_COMMAND} -E copy 
                 ${CMAKE_SOURCE_DIR}/src/onsyuri_web/*.py ${CMAKE_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+                ${CMAKE_BINARY_DIR}/vendor
+            COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/src/onsyuri_web/vendor/jszip.min.js ${CMAKE_BINARY_DIR}/vendor/jszip.min.js
             COMMAND ${CMAKE_COMMAND} -E copy 
                 ${CMAKE_SOURCE_DIR}/asset/icon1.ico ${CMAKE_BINARY_DIR}/favicon.ico
         )
