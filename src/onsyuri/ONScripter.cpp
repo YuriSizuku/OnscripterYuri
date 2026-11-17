@@ -292,8 +292,10 @@ void ONScripter::initSDL()
     EM_ASM(
         self.g_screen_width = $0;
         self.g_screen_height = $1;
-        let canvas = document.getElementById('canvas');
-        if(scale_full && canvas) scale_full(canvas, self.g_screen_width/self.g_screen_height);
+        if (typeof document !== 'undefined') {
+            let canvas = document.getElementById('canvas');
+            if (scale_full && canvas) scale_full(canvas, self.g_screen_width / self.g_screen_height);
+        }
     , screen_width, screen_height);
 #endif
     dirty_rect.setDimension(screen_width, screen_height);

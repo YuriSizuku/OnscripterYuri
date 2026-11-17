@@ -50,6 +50,19 @@
 #include <smpeg.h>
 #endif    
 
+#if defined(WEB_OPFS)
+#include <emscripten/html5_webgl.h>
+
+static inline void RenderPresentWebglCommit(SDL_Renderer *renderer)
+{
+    SDL_RenderPresent(renderer);
+    emscripten_webgl_commit_frame();
+}
+
+#undef SDL_RenderPresent
+#define SDL_RenderPresent RenderPresentWebglCommit
+#endif
+
 #define DEFAULT_VIDEO_SURFACE_FLAG (SDL_SWSURFACE)
 
 #define DEFAULT_BLIT_FLAG (0)

@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(onsyuri)
 
+option(ONS_WEB_OPFS "Enable OPFS/Ofscreen framebuffer web runtime mode" OFF)
+set(ONSYURI_WEB_DEP_PREFIX "" CACHE PATH "Prefix containing include/ and lib/ for web dependencies")
+set(ONS_WEB_PORTBUILD_ROOT "" CACHE PATH "Legacy alias for ONSYURI_WEB_DEP_PREFIX")
+set(OPFS_MOUNT_PATH "/opfs" CACHE STRING "OPFS mount path for web (requires ONS_WEB_OPFS)")
+
+if(NOT ONSYURI_WEB_DEP_PREFIX)
+    if(ONS_WEB_PORTBUILD_ROOT)
+        set(ONSYURI_WEB_DEP_PREFIX "${ONS_WEB_PORTBUILD_ROOT}")
+    else()
+        set(ONSYURI_WEB_DEP_PREFIX "${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm")
+    endif()
+endif()
+
 function(config_linux TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     install(TARGETS ${TARGET_NAME} RUNTIME)
@@ -373,12 +386,14 @@ endfunction()
 function(config_web TARGET_NAME)
     add_executable(${TARGET_NAME} ${ONSYURI_CODE})
     message("Web enviroment for "  ${TARGET_NAME})
-    target_link_directories(${TARGET_NAME} PRIVATE
-        ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/lib
-    )
-    target_include_directories(${TARGET_NAME} PRIVATE
-        ${PROJECT_SOURCE_DIR}/thirdparty/build/arch_wasm/include
-    )
+    if(ONSYURI_WEB_DEP_PREFIX)
+        target_link_directories(${TARGET_NAME} PRIVATE
+            ${ONSYURI_WEB_DEP_PREFIX}/lib
+        )
+        target_include_directories(${TARGET_NAME} PRIVATE
+            ${ONSYURI_WEB_DEP_PREFIX}/include
+        )
+    endif()
 
     if(CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
         target_compile_options(${TARGET_NAME} PRIVATE "-flto")
@@ -386,13 +401,29 @@ function(config_web TARGET_NAME)
     endif()
 
     # pass flags for emcc
-    set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY -sALLOW_MEMORY_GROWTH=1") # this two is very important! 
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sALLOW_MEMORY_GROWTH=1")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sMODULARIZE -sINVOKE_RUN=0 -sEXPORT_NAME=${TARGET_NAME}")
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,UTF8ToString,FS,PATH,IDBFS") # make as module
+    set(EMCC_FLAGS "${EMCC_FLAGS} -sEXPORTED_RUNTIME_METHODS=callMain,UTF8ToString,FS,PATH") # make as module
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL=2 -sUSE_SDL_TTF=2 -sUSE_BZIP2=1")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS=bmp,png,jpg")
     set(EMCC_FLAGS "${EMCC_FLAGS} -sUSE_SDL_MIXER=2 -sSDL2_MIXER_FORMATS=ogg,mp3,mid -sUSE_OGG=1 -sUSE_VORBIS=1 -sUSE_MPG123=1")
-    set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lidbfs.js --use-preload-plugins")
+
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sASSERTIONS=2")
+    endif()
+
+    if(ONS_WEB_OPFS)
+        target_compile_options(${TARGET_NAME} PRIVATE -pthread -matomics -mbulk-memory)
+        target_link_options(${TARGET_NAME} PRIVATE -pthread -matomics -mbulk-memory)
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sPROXY_TO_PTHREAD=1") # pthread is required for OPFS
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sWASM_WORKERS=1 -sAUDIO_WORKLET=1") # needed for audio
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sOFFSCREEN_FRAMEBUFFER=1") # needed to renderer
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sWASMFS=1 -sFORCE_FILESYSTEM=1 -lopfs.js")
+    else()
+        set(EMCC_FLAGS "-o ${TARGET_NAME}.js -sASYNCIFY") # required in non threaded mode
+        set(EMCC_FLAGS "${EMCC_FLAGS} -sFORCE_FILESYSTEM -lidbfs.js --use-preload-plugins")
+    endif()
+
     set_target_properties(${TARGET_NAME} PROPERTIES LINK_FLAGS ${EMCC_FLAGS})
     target_compile_options(${TARGET_NAME} PRIVATE 
         -Wno-invalid-source-encoding
@@ -403,6 +434,12 @@ function(config_web TARGET_NAME)
         LINUX
         USE_PARALLEL
     )
+    if(ONS_WEB_OPFS)
+        target_compile_definitions(${TARGET_NAME} PRIVATE
+            WEB_OPFS
+            OPFS_MOUNT_PATH="${OPFS_MOUNT_PATH}"
+        )
+    endif()
     target_link_libraries(${TARGET_NAME} PRIVATE
         lua
     )

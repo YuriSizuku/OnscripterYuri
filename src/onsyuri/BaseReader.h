@@ -34,7 +34,7 @@ extern "C" int mkdir_ons(const char *path, mode_t mode);
 #define mkdir mkdir_ons
 #endif
 
-#if defined(WEB)
+#if defined(WEB) && !defined(WEB_OPFS)
 extern "C" FILE *fopen_ons(const char *str, const char *mode);
 #define fopen fopen_ons
 #endif
