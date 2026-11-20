@@ -195,7 +195,7 @@
                     if(file_lazyload==undefined) file_lazyload = lazyload;
                     if(file_lazyload){ // pay attension to the case sensitive!
                         var key = basedir + filename;
-                        filemap[key.toLowerCase()] = {url: url, loaded:false};
+                        filemap[key.toLowerCase()] = {url: url, loaded:false, failed:false};
                     }
                     else {
                         _FS.createPreloadedFile(basedir, filename, url, true, false);
@@ -259,9 +259,11 @@
                         }).then((data)=>{
                             _FS.writeFile(path, new Uint8Array(data));
                             fnode.loaded = true;
+                            fnode.failed = false;
                             res(1);
                         }).catch((err)=>{
-                            console.log("## fetch_file ${path}", err);
+                            console.log(`## fetch_file ${path}`, err);
+                            fnode.failed = true;
                             res(-1);
                         })
                     }
