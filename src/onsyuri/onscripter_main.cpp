@@ -327,7 +327,7 @@ FILE *fopen_ons(const char *path, const char *mode)
         while(!EM_ASM_INT(
             var path = g_onsyuri_module.UTF8ToString($0);
             var key = path.toLowerCase();
-            return g_onsyuri_filemap[key].loaded;, path))
+            return g_onsyuri_filemap[key].loaded || g_onsyuri_filemap[key].failed;, path))
         {
             SDL_Delay(5); // wait for async function
         }

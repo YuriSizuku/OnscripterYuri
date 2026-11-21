@@ -402,6 +402,7 @@ function(config_web TARGET_NAME)
         WEB
         LINUX
         USE_PARALLEL
+        UTF8_FILESYSTEM
     )
     target_link_libraries(${TARGET_NAME} PRIVATE
         lua
