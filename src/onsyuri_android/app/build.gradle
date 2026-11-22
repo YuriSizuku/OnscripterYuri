@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "com.yuri.onscripter"
         minSdk 22
-        targetSdk 36
+        targetSdk 34
         packagingOptions {
             // doNotStrip '**.so' // important for debug so
         }
