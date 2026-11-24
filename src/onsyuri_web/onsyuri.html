@@ -195,7 +195,7 @@
                     if(file_lazyload==undefined) file_lazyload = lazyload;
                     if(file_lazyload){ // pay attension to the case sensitive!
                         var key = basedir + filename;
-                        filemap[key.toLowerCase()] = {url: url, loaded:false, failed:false};
+                        filemap[key.toLowerCase()] = {path: key, url: url, loaded:false, failed:false};
                     }
                     else {
                         _FS.createPreloadedFile(basedir, filename, url, true, false);
@@ -247,22 +247,25 @@
 
             // fetch file from the remote server, and write them to local fs
             async function fetch_file(_FS, path, filemap) {
-                var fnode = filemap[path];
+                var fnode = filemap[path] || filemap[path.toLowerCase()];
                 return new Promise((res)=>{
                     if(!fnode){
                         res(0);
                     }
                     else{
-                        if(fnode.loaded) res(1);
+                        if(fnode.loaded) { res(1); return; }
+                        fnode.failed = false;
+                        var targetPath = fnode.path || path;
                         fetch(fnode.url).then( (resp)=>{
+                            if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
                             return resp.arrayBuffer();
                         }).then((data)=>{
-                            _FS.writeFile(path, new Uint8Array(data));
+                            _FS.writeFile(targetPath, new Uint8Array(data));
                             fnode.loaded = true;
                             fnode.failed = false;
                             res(1);
                         }).catch((err)=>{
-                            console.log(`## fetch_file ${path}`, err);
+                            console.log(`## fetch_file ${targetPath}`, err);
                             fnode.failed = true;
                             res(-1);
                         })
